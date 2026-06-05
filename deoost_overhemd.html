@@ -346,7 +346,7 @@ async function verzend(){
     klant:{naam,email,tel:document.getElementById('k-tel').value,group:document.getElementById('k-group').value,deadline:document.getElementById('k-deadline').value,prevorder:document.getElementById('k-prevorder').value,opmerkingen:document.getElementById('k-opm').value},
     maten:{b_neck:document.getElementById('b-neck').value,b_shoulder:document.getElementById('b-shoulder').value,b_chest:document.getElementById('b-chest').value,b_waist:document.getElementById('b-waist').value,b_hips:document.getElementById('b-hips').value,b_length:document.getElementById('b-length').value,b_biceps:document.getElementById('b-biceps').value,b_forearm:document.getElementById('b-forearm').value,b_armhole:document.getElementById('b-armhole').value,b_wrist_l:document.getElementById('b-wrist-l').value,b_wrist_r:document.getElementById('b-wrist-r').value,b_sleeve_l:document.getElementById('b-sleeve-l').value,b_sleeve_r:document.getElementById('b-sleeve-r').value,f_neck:document.getElementById('f-neck').value,f_chest:document.getElementById('f-chest').value}
   };
-  const encoded=encodeURIComponent(JSON.stringify(orderData));const img=new Image();img.src=WEBHOOK+"?payload="+encoded;await new Promise(r=>setTimeout(r,2000));
+  const encoded2=encodeURIComponent(JSON.stringify(orderData));const img2=new Image();img2.src=WEBHOOK+'?payload='+encoded2;await new Promise(r=>setTimeout(r,2000));
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s8').classList.add('active');
   document.getElementById('successMsg').textContent=`Bedankt ${naam}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
