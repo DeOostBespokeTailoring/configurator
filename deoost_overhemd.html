@@ -275,7 +275,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 </div>
 
 <script>
-const WEBHOOK='https://script.google.com/macros/s/AKfycbzTmEmdZxhAa3cfth6294qjzQHjEhx4lqmr4iKxxekhMSy5QpFlUJmad0gXmzFplgAEsA/exec';
+const WEBHOOK='https://script.google.com/macros/s/AKfycbw7Kd2-wx2_35ullW1s_5kw47dWPEF0iRaZOxkbrYz6Y5zBGolrzSBTNL-_YpTf4PSbfg/exec';
 const STEPS=['Start','Model','Stof','Details','Maten','Gegevens','Controle'];
 const COLLARS=[{id:'A',naam:'Type A',desc:'Klassieke spread'},{id:'B',naam:'Type B',desc:'Semi-spread'},{id:'C',naam:'Type C',desc:'Button-down'},{id:'D',naam:'Type D',desc:'Cutaway'},{id:'E',naam:'Type E',desc:'Staande kraag'}];
 const CUFFS=[{id:'enkel',naam:'Enkelvoudig',desc:'Single cuff'},{id:'dubbel',naam:'Dubbelgeslagen',desc:'French cuff'},{id:'knoop',naam:'Knoop & oog',desc:'Barrel cuff'},{id:'afgerond',naam:'Afgerond',desc:'Rounded cuff'}];
@@ -339,12 +339,24 @@ function renderSummary(){
   if(bm)html+=`<div class="sum-sec"><div class="sum-lbl">Lichaamsmaten (cm)</div><div class="sum-grid">${bm}</div></div>`;
   html+=`</div>`;document.getElementById('summaryContent').innerHTML=html;
 }
+async function postOrder(orderData){
+  const resp=await fetch(WEBHOOK,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(orderData)
+  });
+  const text=await resp.text();
+  let result;
+  try{result=JSON.parse(text);}catch(e){throw new Error('Ongeldige response van server: '+text.slice(0,160));}
+  if(!resp.ok||!(result.ok||result.status==='ok')) throw new Error(result.error||result.message||'Bestelling kon niet worden opgeslagen.');
+  return result;
+}
 async function verzend(){
   const naam=document.getElementById('k-naam').value;const email=document.getElementById('k-email').value;
-  const btn=document.getElementById('verzendBtn');btn.disabled=true;btn.style.opacity='.5';
+  const btn=document.getElementById('verzendBtn');btn.disabled=true;btn.style.opacity='.5';const oldBtnText=btn.innerHTML;btn.innerHTML='Bestelling wordt verstuurd...';
   const embOn=document.getElementById('embCheck').checked;
   const orderData={
-    type:'overhemd',gender,qty,
+    type:'overhemd',source:'deoost_overhemd',clientSubmittedAt:new Date().toISOString(),gender,qty,
     model:{collar:selCollar,cuff:selCuff,placket:selPlacket,collarBones:getR('rg-cb'),cuffBones:getR('rg-mb'),dart:getR('rg-dart'),bottom:getR('rg-bot'),stitching:getR('rg-st'),shoulderL:document.getElementById('sh-l').value,shoulderR:document.getElementById('sh-r').value},
     stoffen:selStoffen,
     embroidery:embOn?{tekst:document.getElementById('emb-text').value,kleur:document.getElementById('emb-colour').value,type:document.getElementById('emb-type').value}:{},
@@ -352,18 +364,17 @@ async function verzend(){
     klant:{naam,email,tel:document.getElementById('k-tel').value,straat:document.getElementById('k-straat').value,postcode:document.getElementById('k-postcode').value,stad:document.getElementById('k-stad').value,land:document.getElementById('k-land').value,group:document.getElementById('k-group').value,deadline:document.getElementById('k-deadline').value,prevorder:document.getElementById('k-prevorder').value,opmerkingen:document.getElementById('k-opm').value},
     maten:{b_neck:document.getElementById('b-neck').value,b_shoulder:document.getElementById('b-shoulder').value,b_chest:document.getElementById('b-chest').value,b_waist:document.getElementById('b-waist').value,b_hips:document.getElementById('b-hips').value,b_length:document.getElementById('b-length').value,b_biceps:document.getElementById('b-biceps').value,b_forearm:document.getElementById('b-forearm').value,b_armhole:document.getElementById('b-armhole').value,b_wrist_l:document.getElementById('b-wrist-l').value,b_wrist_r:document.getElementById('b-wrist-r').value,b_sleeve_l:document.getElementById('b-sleeve-l').value,b_sleeve_r:document.getElementById('b-sleeve-r').value,f_neck:document.getElementById('f-neck').value,f_chest:document.getElementById('f-chest').value}
   };
-  const payload=encodeURIComponent(JSON.stringify(orderData));
-    let sent=false;
-    try{
-      await fetch(WEBHOOK+'?payload='+payload,{method:'GET',mode:'no-cors'});
-      sent=true;
-    }catch(e){
-      try{const img=new Image();img.src=WEBHOOK+'?payload='+payload;await new Promise(r=>setTimeout(r,3000));sent=true;}catch(e2){}
-    }
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s8').classList.add('active');
-  document.getElementById('successMsg').textContent=`Bedankt ${naam}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
-  cur=7;renderSteps();
+  try{
+    const result=await postOrder(orderData);
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s8').classList.add('active');
+    document.getElementById('successMsg').textContent=`Bedankt ${naam}. Uw ordernummer is ${result.orderId||'aangemaakt'}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
+    cur=7;renderSteps();
+  }catch(e){
+    console.error('Webhook error:',e);
+    btn.disabled=false;btn.style.opacity='1';btn.innerHTML=oldBtnText;
+    alert('De bestelling kon niet worden verstuurd: '+e.message);
+  }
 }
 renderSteps();prefillFromUrl();
 </script>
