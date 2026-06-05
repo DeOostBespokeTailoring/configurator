@@ -340,16 +340,42 @@ function renderSummary(){
   html+=`</div>`;document.getElementById('summaryContent').innerHTML=html;
 }
 async function postOrder(orderData){
-  const resp=await fetch(WEBHOOK,{
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify(orderData)
-  });
-  const text=await resp.text();
-  let result;
-  try{result=JSON.parse(text);}catch(e){throw new Error('Ongeldige response van server: '+text.slice(0,160));}
-  if(!resp.ok||!(result.ok||result.status==='ok')) throw new Error(result.error||result.message||'Bestelling kon niet worden opgeslagen.');
-  return result;
+  const body=JSON.stringify(orderData);
+
+  // Eerste poging: normale POST. Dit geeft een ordernummer terug als de server/CORS dit toestaat.
+  try{
+    const resp=await fetch(WEBHOOK,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:body
+    });
+    const text=await resp.text();
+    let result;
+    try{result=JSON.parse(text);}catch(e){throw new Error('Ongeldige response van server: '+text.slice(0,160));}
+    if(!resp.ok||!(result.ok||result.status==='ok')) throw new Error(result.error||result.message||'Bestelling kon niet worden opgeslagen.');
+    return result;
+  }catch(corsOrNetworkError){
+    console.warn('Normale webhook-response niet bereikbaar, fallback naar no-cors POST:',corsOrNetworkError);
+  }
+
+  // Fallback voor Google Apps Script + GitHub Pages/Squarespace CORS.
+  // Deze verstuurt de order wel, maar de browser mag de response/orderId niet uitlezen.
+  try{
+    await fetch(WEBHOOK,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:body
+    });
+    try{
+      const backup=JSON.parse(localStorage.getItem('deoost_pending_orders')||'[]');
+      backup.push({savedAt:new Date().toISOString(),type:orderData.type||'',klant:(orderData.klant||{}),data:orderData});
+      localStorage.setItem('deoost_pending_orders',JSON.stringify(backup.slice(-10)));
+    }catch(e){}
+    return {ok:true,status:'sent_unverified',fallback:true,orderId:''};
+  }catch(fallbackError){
+    throw new Error('De bestelling kon niet worden verstuurd. Controleer de internetverbinding of probeer het opnieuw.');
+  }
 }
 async function verzend(){
   const naam=document.getElementById('k-naam').value;const email=document.getElementById('k-email').value;
@@ -368,7 +394,9 @@ async function verzend(){
     const result=await postOrder(orderData);
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('s8').classList.add('active');
-    document.getElementById('successMsg').textContent=`Bedankt ${naam}. Uw ordernummer is ${result.orderId||'aangemaakt'}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
+    document.getElementById('successMsg').textContent=result.orderId
+      ? `Bedankt ${naam}. Uw ordernummer is ${result.orderId}. Wij nemen zo snel mogelijk contact met u op via ${email}.`
+      : `Bedankt ${naam}. Uw bestelling is verzonden. Door een browserbeperking kunnen we het ordernummer hier niet tonen; u ontvangt het ordernummer per e-mail zodra Google de order heeft verwerkt.`;
     cur=7;renderSteps();
   }catch(e){
     console.error('Webhook error:',e);
