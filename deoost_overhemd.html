@@ -346,7 +346,7 @@ async function verzend(){
     klant:{naam,email,tel:document.getElementById('k-tel').value,group:document.getElementById('k-group').value,deadline:document.getElementById('k-deadline').value,prevorder:document.getElementById('k-prevorder').value,opmerkingen:document.getElementById('k-opm').value},
     maten:{b_neck:document.getElementById('b-neck').value,b_shoulder:document.getElementById('b-shoulder').value,b_chest:document.getElementById('b-chest').value,b_waist:document.getElementById('b-waist').value,b_hips:document.getElementById('b-hips').value,b_length:document.getElementById('b-length').value,b_biceps:document.getElementById('b-biceps').value,b_forearm:document.getElementById('b-forearm').value,b_armhole:document.getElementById('b-armhole').value,b_wrist_l:document.getElementById('b-wrist-l').value,b_wrist_r:document.getElementById('b-wrist-r').value,b_sleeve_l:document.getElementById('b-sleeve-l').value,b_sleeve_r:document.getElementById('b-sleeve-r').value,f_neck:document.getElementById('f-neck').value,f_chest:document.getElementById('f-chest').value}
   };
-  try{await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderData),mode:'no-cors'});}catch(e){console.log('Webhook:',e);}
+  const form=document.createElement('form');form.method='POST';form.action=WEBHOOK;form.target='hidden_iframe';const input=document.createElement('input');input.type='hidden';input.name='payload';input.value=JSON.stringify(orderData);form.appendChild(input);document.body.appendChild(form);form.submit();document.body.removeChild(form);await new Promise(r=>setTimeout(r,1500));
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s8').classList.add('active');
   document.getElementById('successMsg').textContent=`Bedankt ${naam}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
@@ -354,5 +354,6 @@ async function verzend(){
 }
 renderSteps();prefillFromUrl();
 </script>
+<iframe name="hidden_iframe" style="display:none"></iframe>
 </body>
 </html>
