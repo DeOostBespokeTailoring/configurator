@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Oost — Overhemd op maat</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf8f5;padding:2rem 1rem;}
+.wrap{max-width:720px;margin:0 auto;}
+.cfg-header{border-bottom:0.5px solid rgba(74,69,64,.2);padding:1.5rem 0 1rem;margin-bottom:1.5rem;}
+.cfg-header h1{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;letter-spacing:.05em;}
+.cfg-header p{font-size:13px;color:#6b6560;margin-top:4px;}
+.steps-bar{display:flex;margin-bottom:2rem;}
+.step-pill{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.step-num{width:24px;height:24px;border-radius:50%;border:0.5px solid;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:all .3s;}
+.step-label{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#6b6560;text-align:center;}
+.step-pill.active .step-num{border-color:#1a1814;background:#1a1814;color:#faf8f5;}
+.step-pill.done .step-num{border-color:#8B6F47;background:#8B6F47;color:white;}
+.step-pill.future .step-num{border-color:rgba(74,69,64,.2);color:#6b6560;}
+.step-conn{flex:1;height:0.5px;background:rgba(74,69,64,.2);align-self:center;margin-bottom:20px;}
+.screen{display:none;}.screen.active{display:block;animation:fi .3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:#1a1814;margin-bottom:4px;}
+.sec-sub{font-size:13px;color:#6b6560;margin-bottom:1.25rem;}
+.gender-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.gender-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:white;}
+.gender-card:hover{border-color:#4a4540;}
+.gender-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.gc-icon{font-size:28px;margin-bottom:8px;}.gc-label{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:1.25rem;}
+.opt-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:.875rem .75rem;cursor:pointer;transition:all .2s;background:white;text-align:center;}
+.opt-card:hover{border-color:#4a4540;}.opt-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.opt-name{font-size:12px;font-weight:500;margin-bottom:2px;}.opt-desc{font-size:11px;color:#6b6560;line-height:1.3;}
+.r-btn{border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:5px 14px;font-size:12px;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;background:white;}
+.r-btn.sel{background:#1a1814;border-color:#1a1814;color:white;}
+.radio-group{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.875rem;}
+.f-field{display:flex;flex-direction:column;gap:4px;margin-bottom:.875rem;}
+.f-label{font-size:12px;color:#6b6560;}
+.f-field input,.f-field textarea{border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:7px 10px;font-size:13px;font-family:'Jost',sans-serif;background:white;width:100%;}
+.f-field input:focus,.f-field textarea:focus{outline:none;border-color:#8B6F47;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.875rem;}
+.section-block{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;margin-bottom:12px;}
+.section-block-header{padding:.75rem 1rem;background:#f7f4ef;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.section-block-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;}
+.section-block-body{padding:1rem;display:none;}.section-block-body.open{display:block;}
+.maten-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.875rem;}
+.f-btn{border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:4px 12px;font-size:11px;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;background:white;color:#6b6560;}
+.f-btn.active{background:#1a1814;border-color:#1a1814;color:white;}
+.stof-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:1rem;}
+.stof-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s;background:white;}
+.stof-card.selected{border-width:1.5px;border-color:#1a1814;}
+.sw-box{width:100%;aspect-ratio:1;position:relative;}
+.sw-check{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#1a1814;display:none;align-items:center;justify-content:center;}
+.stof-card.selected .sw-check{display:flex;}
+.stof-info{padding:6px;}.stof-nr{font-size:10px;color:#6b6560;}.stof-naam{font-size:11px;font-weight:500;line-height:1.3;}.stof-merk{font-size:10px;color:#6b6560;}
+.tag-b{display:inline-block;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.2);border-radius:3px;padding:1px 5px;font-size:9px;color:#6b6560;margin-top:3px;}
+.ges-bar{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:.875rem 1rem;margin-bottom:1rem;background:#f7f4ef;}
+.ges-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b6560;margin-bottom:6px;}
+.ges-empty{font-size:12px;color:#6b6560;font-style:italic;}
+.klant-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.klant-field{display:flex;flex-direction:column;gap:4px;}.klant-field.full{grid-column:1/-1;}
+.klant-field label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b6560;}
+.klant-field input,.klant-field textarea{border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 10px;font-size:13px;font-family:'Jost',sans-serif;background:white;width:100%;}
+.klant-field input:focus,.klant-field textarea:focus{outline:none;border-color:#8B6F47;}
+.klant-field textarea{resize:vertical;min-height:70px;}
+.prefilled{background:#f7f4ef !important;color:#6b6560 !important;}
+.qty-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
+.qty-btn{width:32px;height:32px;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;background:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.qty-val{font-size:16px;font-weight:500;min-width:24px;text-align:center;}
+.emb-section{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1rem;margin-bottom:1rem;}
+.emb-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.emb-toggle input[type=checkbox]{width:16px;height:16px;accent-color:#8B6F47;cursor:pointer;}
+.emb-fields{margin-top:1rem;display:none;}.emb-fields.open{display:block;}
+.sum-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1.25rem;margin-bottom:10px;background:white;}
+.sum-sec{margin-bottom:.875rem;padding-bottom:.875rem;border-bottom:0.5px solid rgba(74,69,64,.2);}
+.sum-sec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.sum-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b6560;margin-bottom:5px;}
+.sum-val{font-size:13px;}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;}
+.sum-item{font-size:11px;color:#6b6560;}.sum-item span{font-weight:500;color:#1a1814;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);}
+.btn{font-family:'Jost',sans-serif;font-size:12px;font-weight:400;letter-spacing:.06em;text-transform:uppercase;padding:10px 22px;border-radius:4px;cursor:pointer;transition:all .2s;border:none;}
+.btn-ghost{background:transparent;border:0.5px solid rgba(74,69,64,.2);color:#6b6560;}
+.btn-ghost:hover{border-color:#4a4540;color:#1a1814;}
+.btn-primary{background:#1a1814;color:#faf8f5;}.btn-primary:hover{opacity:.85;}
+.btn-accent{background:#8B6F47;color:white;}.btn-accent:hover{background:#7a6040;}
+.note-block{background:#f7f4ef;border-left:2px solid #8B6F47;border-radius:0 4px 4px 0;padding:.75rem 1rem;font-size:12px;color:#6b6560;margin-bottom:1.5rem;line-height:1.6;}
+.val-msg{font-size:12px;color:#c0392b;margin-top:4px;display:none;}
+.success-screen{text-align:center;padding:3rem 1rem;}
+.success-icon{font-size:48px;color:#8B6F47;margin-bottom:1rem;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;margin-bottom:.5rem;}
+.success-sub{font-size:14px;color:#6b6560;}
+.prefill-note{background:#f7f4ef;border-left:2px solid #8B6F47;border-radius:0 4px 4px 0;padding:.75rem 1rem;font-size:12px;color:#6b6560;margin-bottom:1.5rem;display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cfg-header">
+    <h1>Overhemd op maat</h1>
+    <p>De Oost Bespoke Tailoring — Bilderdijkstraat 179H, Amsterdam</p>
+  </div>
+  <div class="steps-bar" id="stepsBar"></div>
+
+  <div id="s1" class="screen active">
+    <p class="sec-title">Voor wie?</p>
+    <p class="sec-sub">Kies geslacht en aantal</p>
+    <div class="gender-grid">
+      <div class="gender-card" onclick="selG('heren')" id="g-h"><div class="gc-icon"><i class="ti ti-man"></i></div><div class="gc-label">Heren</div></div>
+      <div class="gender-card" onclick="selG('dames')" id="g-d"><div class="gc-icon"><i class="ti ti-woman"></i></div><div class="gc-label">Dames</div></div>
+    </div>
+    <div class="f-label" style="margin-bottom:8px">Aantal overhemden</div>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="chQty(-1)">−</button>
+      <span class="qty-val" id="qtyVal">1</span>
+      <button class="qty-btn" onclick="chQty(1)">+</button>
+    </div>
+    <p class="val-msg" id="v1">Kies een geslacht.</p>
+    <div class="nav-row"><div></div><button class="btn btn-primary" onclick="goTo(2)">Volgende →</button></div>
+  </div>
+
+  <div id="s2" class="screen">
+    <p class="sec-title">Modelkeuzes</p>
+    <p class="sec-sub">Kraag, manchet, placket en details</p>
+    <p class="sec-title" style="font-size:15px;margin-bottom:.25rem">Kraag</p>
+    <p class="sec-sub" style="margin-bottom:.75rem">Collar type A t/m E</p>
+    <div class="opt-grid" id="collarGrid"></div>
+    <p class="sec-title" style="font-size:15px;margin-bottom:.25rem;margin-top:1rem">Manchet</p>
+    <p class="sec-sub" style="margin-bottom:.75rem">Cuff type</p>
+    <div class="opt-grid" id="cuffGrid"></div>
+    <p class="sec-title" style="font-size:15px;margin-bottom:.25rem;margin-top:1rem">Placket</p>
+    <p class="sec-sub" style="margin-bottom:.75rem">Knopenlijst</p>
+    <div class="opt-grid" id="placketGrid"></div>
+    <p class="sec-title" style="font-size:15px;margin-bottom:.25rem;margin-top:1rem">Versteviging & details</p>
+    <div class="field-row">
+      <div class="f-field"><span class="f-label">Kraagversteviging (Bones)</span><div class="radio-group" id="rg-cb"><div class="r-btn" onclick="selR(this,'rg-cb')">Hard</div><div class="r-btn sel" onclick="selR(this,'rg-cb')">Regular</div><div class="r-btn" onclick="selR(this,'rg-cb')">Soft</div><div class="r-btn" onclick="selR(this,'rg-cb')">Removable</div></div></div>
+      <div class="f-field"><span class="f-label">Manchetversteviging</span><div class="radio-group" id="rg-mb"><div class="r-btn" onclick="selR(this,'rg-mb')">Hard</div><div class="r-btn sel" onclick="selR(this,'rg-mb')">Regular</div><div class="r-btn" onclick="selR(this,'rg-mb')">Soft</div></div></div>
+    </div>
+    <div class="field-row">
+      <div class="f-field"><span class="f-label">Dart (taillenaad)</span><div class="radio-group" id="rg-dart"><div class="r-btn sel" onclick="selR(this,'rg-dart')">Ja</div><div class="r-btn" onclick="selR(this,'rg-dart')">Nee</div></div></div>
+      <div class="f-field"><span class="f-label">Onderkant (bottom)</span><div class="radio-group" id="rg-bot"><div class="r-btn sel" onclick="selR(this,'rg-bot')">Recht</div><div class="r-btn" onclick="selR(this,'rg-bot')">Gebogen</div></div></div>
+    </div>
+    <div class="field-row">
+      <div class="f-field"><span class="f-label">1mm stiksels</span><div class="radio-group" id="rg-st"><div class="r-btn sel" onclick="selR(this,'rg-st')">Nee</div><div class="r-btn" onclick="selR(this,'rg-st')">Ja</div></div></div>
+      <div class="f-field"><span class="f-label">Back curve</span><div class="radio-group" id="rg-bc"><div class="r-btn sel" onclick="selR(this,'rg-bc')">Standaard</div><div class="r-btn" onclick="selR(this,'rg-bc')">Aangepast</div></div></div>
+    </div>
+    <div id="damesExtra" style="display:none">
+      <div class="f-field"><span class="f-label">Upper back height</span><div class="radio-group" id="rg-ubh"><div class="r-btn sel" onclick="selR(this,'rg-ubh')">Standaard</div><div class="r-btn" onclick="selR(this,'rg-ubh')">Aangepast</div></div></div>
+    </div>
+    <div class="field-row">
+      <div class="f-field"><span class="f-label">Shoulder lowering links (mm)</span><input type="number" step="1" min="0" max="30" id="sh-l" placeholder="0"></div>
+      <div class="f-field"><span class="f-label">Shoulder lowering rechts (mm)</span><input type="number" step="1" min="0" max="30" id="sh-r" placeholder="0"></div>
+    </div>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(1)">← Terug</button><button class="btn btn-primary" onclick="goTo(3)">Volgende →</button></div>
+  </div>
+
+  <div id="s3" class="screen">
+    <p class="sec-title">Stofkeuze</p>
+    <p class="sec-sub">Selecteer tot 5 stoffen in volgorde van voorkeur</p>
+    <div class="filter-bar" id="stofFilter"></div>
+    <div class="stof-grid" id="stofGrid"></div>
+    <div class="ges-bar"><div class="ges-label">Geselecteerde stoffen (max. 5)</div><div id="gesStoffen"><span class="ges-empty">Nog geen stof gekozen</span></div></div>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(2)">← Terug</button><button class="btn btn-primary" onclick="goTo(4)">Volgende →</button></div>
+  </div>
+
+  <div id="s4" class="screen">
+    <p class="sec-title">Borduurwerk & knopen</p>
+    <p class="sec-sub">Optionele personalisatie</p>
+    <div class="emb-section">
+      <label class="emb-toggle"><input type="checkbox" id="embCheck" onchange="toggleEmb()"><span style="font-size:13px">Borduurwerk (embroidery) toevoegen</span></label>
+      <div class="emb-fields" id="embFields">
+        <div class="field-row" style="margin-top:.75rem">
+          <div class="f-field"><span class="f-label">Tekst</span><input type="text" id="emb-text" placeholder="initialen of naam"></div>
+          <div class="f-field"><span class="f-label">Kleur</span><input type="text" id="emb-colour" placeholder="navy, wit, goud..."></div>
+        </div>
+        <div class="f-field"><span class="f-label">Type / positie</span><input type="text" id="emb-type" placeholder="linker manchet, borstzak..."></div>
+      </div>
+    </div>
+    <div class="f-field"><span class="f-label">Knoopkleur / -type</span><input type="text" id="btn-type" placeholder="parelmoer, hoorn, marine..."></div>
+    <div class="f-field"><span class="f-label">Overige wensen</span><textarea id="other-req" placeholder="Bijzondere details..."></textarea></div>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(3)">← Terug</button><button class="btn btn-primary" onclick="goTo(5)">Volgende →</button></div>
+  </div>
+
+  <div id="s5" class="screen">
+    <p class="sec-title">Maten</p>
+    <p class="sec-sub">Lichaamsmaten en afgewerkte maten (cm)</p>
+    <div class="note-block">Neem lichaamsmaten over een goed zittend overhemd of direct op het lichaam.</div>
+    <div class="section-block">
+      <div class="section-block-header" onclick="togBlok('mb-body',this)"><span class="section-block-title">Lichaamsmaten (Body)</span><i class="ti ti-chevron-down" style="font-size:16px;color:#6b6560;transition:transform .2s"></i></div>
+      <div class="section-block-body open" id="mb-body">
+        <div class="maten-grid">
+          <div class="f-field"><span class="f-label">Neck / boord cm</span><input type="number" step=".5" min="0" id="b-neck"></div>
+          <div class="f-field"><span class="f-label">Shoulder / schouder cm</span><input type="number" step=".5" min="0" id="b-shoulder"></div>
+          <div class="f-field"><span class="f-label">Chest / borst cm</span><input type="number" step=".5" min="0" id="b-chest"></div>
+          <div id="lcWrap" class="f-field" style="display:none"><span class="f-label">Low chest / lage borst cm</span><input type="number" step=".5" min="0" id="b-lowchest"></div>
+          <div class="f-field"><span class="f-label">Waist / taille cm</span><input type="number" step=".5" min="0" id="b-waist"></div>
+          <div class="f-field"><span class="f-label">Hips / heup cm</span><input type="number" step=".5" min="0" id="b-hips"></div>
+          <div class="f-field"><span class="f-label">Length / lengte cm</span><input type="number" step=".5" min="0" id="b-length"></div>
+          <div class="f-field"><span class="f-label">Biceps cm</span><input type="number" step=".5" min="0" id="b-biceps"></div>
+          <div class="f-field"><span class="f-label">Forearm / onderarm cm</span><input type="number" step=".5" min="0" id="b-forearm"></div>
+          <div class="f-field"><span class="f-label">Armhole / armsgat cm</span><input type="number" step=".5" min="0" id="b-armhole"></div>
+          <div class="f-field"><span class="f-label">Wrist L / pols links cm</span><input type="number" step=".5" min="0" id="b-wrist-l"></div>
+          <div class="f-field"><span class="f-label">Wrist R / pols rechts cm</span><input type="number" step=".5" min="0" id="b-wrist-r"></div>
+          <div class="f-field"><span class="f-label">Sleeve L / mouw links cm</span><input type="number" step=".5" min="0" id="b-sleeve-l"></div>
+          <div class="f-field"><span class="f-label">Sleeve R / mouw rechts cm</span><input type="number" step=".5" min="0" id="b-sleeve-r"></div>
+          <div class="f-field"><span class="f-label">Shoulder half cm</span><input type="number" step=".5" min="0" id="b-shoulder-half"></div>
+          <div class="f-field"><span class="f-label">Shoulder type</span><input type="text" id="b-shoulder-type" placeholder="normaal, breed, smal"></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-block-header" onclick="togBlok('mb-fin',this)"><span class="section-block-title">Afgewerkte maten (Finished)</span><i class="ti ti-chevron-down" style="font-size:16px;color:#6b6560;transition:transform .2s"></i></div>
+      <div class="section-block-body" id="mb-fin">
+        <div class="maten-grid">
+          <div class="f-field"><span class="f-label">Neck cm</span><input type="number" step=".5" min="0" id="f-neck"></div>
+          <div class="f-field"><span class="f-label">Shoulder cm</span><input type="number" step=".5" min="0" id="f-shoulder"></div>
+          <div class="f-field"><span class="f-label">Chest cm</span><input type="number" step=".5" min="0" id="f-chest"></div>
+          <div class="f-field"><span class="f-label">Waist cm</span><input type="number" step=".5" min="0" id="f-waist"></div>
+          <div class="f-field"><span class="f-label">Hips cm</span><input type="number" step=".5" min="0" id="f-hips"></div>
+          <div class="f-field"><span class="f-label">Length cm</span><input type="number" step=".5" min="0" id="f-length"></div>
+          <div class="f-field"><span class="f-label">Biceps cm</span><input type="number" step=".5" min="0" id="f-biceps"></div>
+          <div class="f-field"><span class="f-label">Forearm cm</span><input type="number" step=".5" min="0" id="f-forearm"></div>
+          <div class="f-field"><span class="f-label">Armhole cm</span><input type="number" step=".5" min="0" id="f-armhole"></div>
+          <div class="f-field"><span class="f-label">Wrist L cm</span><input type="number" step=".5" min="0" id="f-wrist-l"></div>
+          <div class="f-field"><span class="f-label">Wrist R cm</span><input type="number" step=".5" min="0" id="f-wrist-r"></div>
+          <div class="f-field"><span class="f-label">Sleeve L cm</span><input type="number" step=".5" min="0" id="f-sleeve-l"></div>
+          <div class="f-field"><span class="f-label">Sleeve R cm</span><input type="number" step=".5" min="0" id="f-sleeve-r"></div>
+          <div class="f-field"><span class="f-label">Shoulder half cm</span><input type="number" step=".5" min="0" id="f-shoulder-half"></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(4)">← Terug</button><button class="btn btn-primary" onclick="goTo(6)">Volgende →</button></div>
+  </div>
+
+  <div id="s6" class="screen">
+    <p class="sec-title">Klantgegevens</p>
+    <p class="sec-sub">Vul uw contactgegevens in</p>
+    <div class="prefill-note" id="prefillNote">Uw gegevens zijn overgenomen uit uw vorige bestelling.</div>
+    <p class="sec-sub" style="margin-bottom:1rem">Alle velden met * zijn verplicht</p>
+    <div class="klant-grid">
+      <div class="klant-field full"><label>Naam *</label><input type="text" id="k-naam" placeholder="Voor- en achternaam"></div>
+      <div class="klant-field"><label>E-mail *</label><input type="email" id="k-email" placeholder="naam@voorbeeld.nl"></div>
+      <div class="klant-field"><label>Telefoon *</label><input type="tel" id="k-tel" placeholder="+31 6..."></div>
+      <div class="klant-field full"><label>Straat en huisnummer *</label><input type="text" id="k-straat" placeholder="Bilderdijkstraat 179H"></div>
+      <div class="klant-field"><label>Postcode *</label><input type="text" id="k-postcode" placeholder="1234 AB"></div>
+      <div class="klant-field"><label>Stad *</label><input type="text" id="k-stad" placeholder="Amsterdam"></div>
+      <div class="klant-field"><label>Land *</label><input type="text" id="k-land" placeholder="Nederland" value="Nederland"></div>
+      <div class="klant-field"><label>Groep</label><input type="text" id="k-group" placeholder="optioneel"></div>
+      <div class="klant-field"><label>Deadline</label><input type="date" id="k-deadline"></div>
+      <div class="klant-field"><label>Vorig ordernummer</label><input type="text" id="k-prevorder" placeholder="optioneel"></div>
+      <div class="klant-field full"><label>Overige wensen</label><textarea id="k-opm" placeholder="Verdere opmerkingen..."></textarea></div>
+    </div>
+    <p class="val-msg" id="v6">Vul alle verplichte velden in (naam, e-mail, telefoon en adres).</p>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(5)">← Terug</button><button class="btn btn-primary" onclick="goTo(7)">Controleer bestelling →</button></div>
+  </div>
+
+  <div id="s7" class="screen">
+    <p class="sec-title">Samenvatting</p>
+    <p class="sec-sub">Controleer uw overhemdbestelling</p>
+    <div id="summaryContent"></div>
+    <div class="note-block">Door te bevestigen gaat u akkoord met de Algemene Voorwaarden van De Oost Bespoke Tailoring B.V., gedeponeerd op 13/12/2017 bij de KvK te Amsterdam.</div>
+    <div class="nav-row"><button class="btn btn-ghost" onclick="goTo(6)">← Aanpassen</button><button class="btn btn-accent" id="verzendBtn" onclick="verzend()"><i class="ti ti-send" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>Bestelling versturen</button></div>
+  </div>
+
+  <div id="s8" class="screen">
+    <div class="success-screen">
+      <div class="success-icon"><i class="ti ti-circle-check"></i></div>
+      <p class="success-title">Overhemdbestelling ontvangen</p>
+      <p class="success-sub" id="successMsg">Wij nemen zo snel mogelijk contact met u op.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const WEBHOOK='https://script.google.com/macros/s/AKfycbw7Kd2-wx2_35ullW1s_5kw47dWPEF0iRaZOxkbrYz6Y5zBGolrzSBTNL-_YpTf4PSbfg/exec';
+const STEPS=['Start','Model','Stof','Details','Maten','Gegevens','Controle'];
+const COLLARS=[{id:'A',naam:'Type A',desc:'Klassieke spread'},{id:'B',naam:'Type B',desc:'Semi-spread'},{id:'C',naam:'Type C',desc:'Button-down'},{id:'D',naam:'Type D',desc:'Cutaway'},{id:'E',naam:'Type E',desc:'Staande kraag'}];
+const CUFFS=[{id:'enkel',naam:'Enkelvoudig',desc:'Single cuff'},{id:'dubbel',naam:'Dubbelgeslagen',desc:'French cuff'},{id:'knoop',naam:'Knoop & oog',desc:'Barrel cuff'},{id:'afgerond',naam:'Afgerond',desc:'Rounded cuff'}];
+const PLACKETS=[{id:'glad',naam:'Glad',desc:'French placket'},{id:'klassiek',naam:'Klassiek',desc:'Standaard'},{id:'verborgen',naam:'Verborgen',desc:'Hidden placket'},{id:'dubbel',naam:'Dubbel',desc:'Double placket'}];
+const STOFFEN=[
+  {nr:'SH-W01',naam:'Wit poplin',merk:'Thomas Mason',cat:'Poplin',kleur:'#f5f5f5'},
+  {nr:'SH-W02',naam:'Gebroken wit poplin',merk:'Thomas Mason',cat:'Poplin',kleur:'#f0ece4'},
+  {nr:'SH-B01',naam:'Lichtblauw poplin',merk:'Thomas Mason',cat:'Poplin',kleur:'#aac8e0'},
+  {nr:'SH-B02',naam:'Middenblauw twill',merk:'Albini',cat:'Twill',kleur:'#5a88b0'},
+  {nr:'SH-B03',naam:'Navy twill',merk:'Albini',cat:'Twill',kleur:'#1e2d50'},
+  {nr:'SH-S01',naam:'Wit satijn',merk:'De Oost',cat:'Satijn',kleur:'#f8f6f0'},
+  {nr:'SH-S02',naam:'Ivoor satijn',merk:'De Oost',cat:'Satijn',kleur:'#ede8d8'},
+  {nr:'SH-O01',naam:'Wit oxford',merk:'Alumo',cat:'Oxford',kleur:'#f2f0ec'},
+  {nr:'SH-O02',naam:'Blauw oxford',merk:'Alumo',cat:'Oxford',kleur:'#8ab0cc'},
+  {nr:'SH-F01',naam:'Wit flanel',merk:'Alumo',cat:'Flanel',kleur:'#e8e4de'},
+  {nr:'SH-F02',naam:'Grijs flanel',merk:'Alumo',cat:'Flanel',kleur:'#b4b0aa'},
+];
+let cur=1,gender=null,qty=1,catFilter='Alle',selStoffen=[],selCollar=null,selCuff=null,selPlacket=null;
+
+function renderSteps(){
+  const bar=document.getElementById('stepsBar');bar.innerHTML='';
+  STEPS.forEach((s,i)=>{const n=i+1,p=document.createElement('div');p.className='step-pill '+(n<cur?'done':n===cur?'active':'future');p.innerHTML=`<div class="step-num">${n<cur?'<i class="ti ti-check" style="font-size:10px"></i>':n}</div><div class="step-label">${s}</div>`;bar.appendChild(p);if(i<STEPS.length-1){const c=document.createElement('div');c.className='step-conn';bar.appendChild(c);}});
+}
+function selG(g){gender=g;document.getElementById('g-h').className='gender-card'+(g==='heren'?' selected':'');document.getElementById('g-d').className='gender-card'+(g==='dames'?' selected':'');document.getElementById('damesExtra').style.display=g==='dames'?'block':'none';document.getElementById('lcWrap').style.display=g==='dames'?'':'none';}
+function chQty(d){qty=Math.max(1,Math.min(20,qty+d));document.getElementById('qtyVal').textContent=qty;}
+function selR(el,gid){document.getElementById(gid).querySelectorAll('.r-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+function getR(gid){const s=document.querySelector('#'+gid+' .r-btn.sel');return s?s.textContent:'';}
+function renderOptGrid(gid,opties,selVar,onSel){const g=document.getElementById(gid);g.innerHTML='';opties.forEach(opt=>{const c=document.createElement('div');c.className='opt-card'+(selVar===opt.id?' selected':'');c.innerHTML=`<div class="opt-name">${opt.naam}</div><div class="opt-desc">${opt.desc}</div>`;c.onclick=()=>{onSel(opt.id);renderOptGrid(gid,opties,opt.id,onSel);};g.appendChild(c);});}
+function renderStofFilter(){const bar=document.getElementById('stofFilter');bar.innerHTML='';['Alle',...new Set(STOFFEN.map(s=>s.cat))].forEach(cat=>{const b=document.createElement('button');b.className='f-btn'+(catFilter===cat?' active':'');b.textContent=cat;b.onclick=()=>{catFilter=cat;renderStofFilter();renderStofGrid();};bar.appendChild(b);});}
+function renderStofGrid(){
+  const g=document.getElementById('stofGrid');const filtered=STOFFEN.filter(s=>catFilter==='Alle'||s.cat===catFilter);g.innerHTML='';
+  filtered.forEach(stof=>{const sel=selStoffen.find(x=>x.nr===stof.nr);const idx=sel?selStoffen.indexOf(sel)+1:0;const c=document.createElement('div');c.className='stof-card'+(sel?' selected':'');c.innerHTML=`<div class="sw-box"><div style="width:100%;height:100%;background:${stof.kleur}"></div><div class="sw-check"><span style="font-size:10px;color:white;font-weight:500">${idx}</span></div></div><div class="stof-info"><div class="stof-nr">${stof.nr}</div><div class="stof-naam">${stof.naam}</div><div class="stof-merk">${stof.merk}</div><span class="tag-b">${stof.cat}</span></div>`;c.onclick=()=>{if(sel)selStoffen=selStoffen.filter(x=>x.nr!==stof.nr);else if(selStoffen.length<5)selStoffen.push(stof);renderStofGrid();updateGes();};g.appendChild(c);});
+}
+function updateGes(){const cont=document.getElementById('gesStoffen');if(!selStoffen.length){cont.innerHTML='<span class="ges-empty">Nog geen stof gekozen</span>';return;}cont.innerHTML=selStoffen.map((s,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:24px;height:24px;border-radius:4px;background:${s.kleur};border:0.5px solid rgba(74,69,64,.2);flex-shrink:0"></div><span style="font-size:12px;font-weight:500">${i+1}. ${s.naam}</span></div>`).join('');}
+function toggleEmb(){const open=document.getElementById('embCheck').checked;document.getElementById('embFields').className='emb-fields'+(open?' open':'');}
+function togBlok(id,hdr){const body=document.getElementById(id);const ch=hdr.querySelector('.ti-chevron-down');if(body.classList.contains('open')){body.classList.remove('open');if(ch)ch.style.transform='rotate(-90deg)';}else{body.classList.add('open');if(ch)ch.style.transform='';}}
+function prefillFromUrl(){
+  const p=new URLSearchParams(window.location.search);
+  const naam=p.get('naam'),email=p.get('email'),deadline=p.get('deadline'),g=p.get('gender');
+  if(naam){document.getElementById('k-naam').value=naam;document.getElementById('k-naam').classList.add('prefilled');}
+  if(email){document.getElementById('k-email').value=email;document.getElementById('k-email').classList.add('prefilled');}
+  if(deadline){document.getElementById('k-deadline').value=deadline;document.getElementById('k-deadline').classList.add('prefilled');}
+  if(naam||email||deadline)document.getElementById('prefillNote').style.display='block';
+  if(g)selG(g);
+}
+function goTo(n){
+  if(n===2){if(!gender){document.getElementById('v1').style.display='block';return;}document.getElementById('v1').style.display='none';renderOptGrid('collarGrid',COLLARS,selCollar,(id)=>{selCollar=id;});renderOptGrid('cuffGrid',CUFFS,selCuff,(id)=>{selCuff=id;});renderOptGrid('placketGrid',PLACKETS,selPlacket,(id)=>{selPlacket=id;});}
+  if(n===3){renderStofFilter();renderStofGrid();}
+  if(n===6){const maatVelden=['b-neck','b-shoulder','b-chest','b-waist','b-hips','b-length','b-biceps','b-forearm','b-armhole','b-wrist-l','b-wrist-r','b-sleeve-l','b-sleeve-r','b-shoulder-half'];const missing=maatVelden.filter(id=>!document.getElementById(id)||!document.getElementById(id).value);if(missing.length>0){alert('Vul alle lichaamsmaten in voordat u verder gaat. Nog '+missing.length+' maten ontbreken.');return;}}
+  if(n===7){const naam=document.getElementById('k-naam').value;const email=document.getElementById('k-email').value;const tel=document.getElementById('k-tel').value;const straat=document.getElementById('k-straat').value;const postcode=document.getElementById('k-postcode').value;const stad=document.getElementById('k-stad').value;const land=document.getElementById('k-land').value;if(!naam||!email||!tel||!straat||!postcode||!stad||!land){document.getElementById('v6').style.display='block';return;}document.getElementById('v6').style.display='none';renderSummary();}
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');cur=n>7?7:n;renderSteps();window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderSummary(){
+  const cn=COLLARS.find(c=>c.id===selCollar)?.naam||'—';const cu=CUFFS.find(c=>c.id===selCuff)?.naam||'—';const pl=PLACKETS.find(p=>p.id===selPlacket)?.naam||'—';
+  const naam=document.getElementById('k-naam').value;const email=document.getElementById('k-email').value;const tel=document.getElementById('k-tel').value;const straat=document.getElementById('k-straat').value;const postcode=document.getElementById('k-postcode').value;const stad=document.getElementById('k-stad').value;const land=document.getElementById('k-land').value;const dl=document.getElementById('k-deadline').value;const prev=document.getElementById('k-prevorder').value;const embOn=document.getElementById('embCheck').checked;
+  const bm=['neck','shoulder','chest','waist','hips','length','biceps','forearm','armhole','wrist-l','wrist-r','sleeve-l','sleeve-r','shoulder-half'].map(k=>{const v=document.getElementById('b-'+k)?.value;return v?`<div class="sum-item">${k}: <span>${v}</span></div>`:''}).join('');
+  let html=`<div class="sum-card"><div class="sum-sec"><div class="sum-lbl">Klant</div><div class="sum-val">${naam}</div><div class="sum-val" style="font-size:12px;color:#6b6560">${email}${tel?' · '+tel:''}</div>${dl?`<div class="sum-val" style="font-size:12px;color:#6b6560">Deadline: ${dl}</div>`:''}${prev?`<div class="sum-val" style="font-size:12px;color:#6b6560">Vorig order: ${prev}</div>`:''}</div><div class="sum-sec"><div class="sum-lbl">Bestelling</div><div class="sum-val">${gender==='heren'?'Heren':'Dames'} overhemd · ${qty}×</div></div><div class="sum-sec"><div class="sum-lbl">Model</div><div class="sum-val">Kraag: ${cn} · Manchet: ${cu} · Placket: ${pl}</div><div class="sum-val" style="font-size:12px;color:#6b6560">Kraagverst.: ${getR('rg-cb')} · Manchetverst.: ${getR('rg-mb')}</div><div class="sum-val" style="font-size:12px;color:#6b6560">Dart: ${getR('rg-dart')} · Onderkant: ${getR('rg-bot')} · Stiksels: ${getR('rg-st')}</div></div>`;
+  if(selStoffen.length){html+=`<div class="sum-sec"><div class="sum-lbl">Stoffen</div>`;selStoffen.forEach((s,i)=>{html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:12px;height:12px;border-radius:2px;background:${s.kleur};border:0.5px solid rgba(74,69,64,.2)"></div><span style="font-size:12px">${i+1}. ${s.naam} <span style="color:#6b6560">${s.nr}</span></span></div>`;});html+=`</div>`;}
+  if(embOn)html+=`<div class="sum-sec"><div class="sum-lbl">Borduurwerk</div><div class="sum-val">${document.getElementById('emb-text').value||'—'} · ${document.getElementById('emb-colour').value||'—'}</div></div>`;
+  if(bm)html+=`<div class="sum-sec"><div class="sum-lbl">Lichaamsmaten (cm)</div><div class="sum-grid">${bm}</div></div>`;
+  html+=`</div>`;document.getElementById('summaryContent').innerHTML=html;
+}
+async function postOrder(orderData){
+  const resp=await fetch(WEBHOOK,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(orderData)
+  });
+  const text=await resp.text();
+  let result;
+  try{result=JSON.parse(text);}catch(e){throw new Error('Ongeldige response van server: '+text.slice(0,160));}
+  if(!resp.ok||!(result.ok||result.status==='ok')) throw new Error(result.error||result.message||'Bestelling kon niet worden opgeslagen.');
+  return result;
+}
+async function verzend(){
+  const naam=document.getElementById('k-naam').value;const email=document.getElementById('k-email').value;
+  const btn=document.getElementById('verzendBtn');btn.disabled=true;btn.style.opacity='.5';const oldBtnText=btn.innerHTML;btn.innerHTML='Bestelling wordt verstuurd...';
+  const embOn=document.getElementById('embCheck').checked;
+  const orderData={
+    type:'overhemd',source:'deoost_overhemd',clientSubmittedAt:new Date().toISOString(),gender,qty,
+    model:{collar:selCollar,cuff:selCuff,placket:selPlacket,collarBones:getR('rg-cb'),cuffBones:getR('rg-mb'),dart:getR('rg-dart'),bottom:getR('rg-bot'),stitching:getR('rg-st'),shoulderL:document.getElementById('sh-l').value,shoulderR:document.getElementById('sh-r').value},
+    stoffen:selStoffen,
+    embroidery:embOn?{tekst:document.getElementById('emb-text').value,kleur:document.getElementById('emb-colour').value,type:document.getElementById('emb-type').value}:{},
+    knoop:document.getElementById('btn-type').value,
+    klant:{naam,email,tel:document.getElementById('k-tel').value,straat:document.getElementById('k-straat').value,postcode:document.getElementById('k-postcode').value,stad:document.getElementById('k-stad').value,land:document.getElementById('k-land').value,group:document.getElementById('k-group').value,deadline:document.getElementById('k-deadline').value,prevorder:document.getElementById('k-prevorder').value,opmerkingen:document.getElementById('k-opm').value},
+    maten:{b_neck:document.getElementById('b-neck').value,b_shoulder:document.getElementById('b-shoulder').value,b_chest:document.getElementById('b-chest').value,b_waist:document.getElementById('b-waist').value,b_hips:document.getElementById('b-hips').value,b_length:document.getElementById('b-length').value,b_biceps:document.getElementById('b-biceps').value,b_forearm:document.getElementById('b-forearm').value,b_armhole:document.getElementById('b-armhole').value,b_wrist_l:document.getElementById('b-wrist-l').value,b_wrist_r:document.getElementById('b-wrist-r').value,b_sleeve_l:document.getElementById('b-sleeve-l').value,b_sleeve_r:document.getElementById('b-sleeve-r').value,f_neck:document.getElementById('f-neck').value,f_chest:document.getElementById('f-chest').value}
+  };
+  try{
+    const result=await postOrder(orderData);
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s8').classList.add('active');
+    document.getElementById('successMsg').textContent=`Bedankt ${naam}. Uw ordernummer is ${result.orderId||'aangemaakt'}. Wij nemen zo snel mogelijk contact met u op via ${email}.`;
+    cur=7;renderSteps();
+  }catch(e){
+    console.error('Webhook error:',e);
+    btn.disabled=false;btn.style.opacity='1';btn.innerHTML=oldBtnText;
+    alert('De bestelling kon niet worden verstuurd: '+e.message);
+  }
+}
+renderSteps();prefillFromUrl();
+</script>
+<iframe name="hidden_iframe" style="display:none"></iframe>
+</body>
+</html>
