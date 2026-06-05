@@ -442,7 +442,17 @@ async function verzend(){
     maten
   };
   try{
-    const encoded=encodeURIComponent(JSON.stringify(orderData));const img=new Image();img.src=WEBHOOK+'?payload='+encoded;await new Promise(r=>setTimeout(r,2000));
+    const payload=encodeURIComponent(JSON.stringify(orderData));
+    const urls=[WEBHOOK+'?payload='+payload];
+    let sent=false;
+    for(const url of urls){
+      try{
+        const resp=await fetch(url,{method:'GET',mode:'no-cors'});
+        sent=true;break;
+      }catch(e){
+        try{const img=new Image();img.src=url;await new Promise(r=>setTimeout(r,3000));sent=true;break;}catch(e2){}
+      }
+    }
   }catch(e){console.log('Webhook error:',e);}
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s8').classList.add('active');
