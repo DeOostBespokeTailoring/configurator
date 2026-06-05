@@ -246,7 +246,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 </div>
 
 <script>
-const WEBHOOK='https://script.google.com/macros/s/AKfycbzyLJNskg2B7r97lr6XXEdMKon63i2nUyAtDY7-MYajwKKsqGf68iHE0dztGONepDRv/exec';
+const WEBHOOK='https://script.google.com/macros/s/AKfycbxe_UzBp3-GUuDa5B2U6H8tISKSZDIB34dYhG3IslbcRKZxu-7aj7Tr5h8EY8FI7j3FfA/exec';
 const OVERHEMD_URL='https://deoostbespoketailoring.github.io/configurator/deoost_overhemd.html';
 const STEPS=['Start','Model/Stof','Stof/Model','Details','Maten','Gegevens','Controle'];
 
@@ -436,7 +436,7 @@ async function verzend(){
     maten
   };
   try{
-    await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(orderData),mode:'no-cors'});
+    const encoded=encodeURIComponent(JSON.stringify(orderData));const img=new Image();img.src=WEBHOOK+'?payload='+encoded;await new Promise(r=>setTimeout(r,2000));
   }catch(e){console.log('Webhook error:',e);}
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s8').classList.add('active');
