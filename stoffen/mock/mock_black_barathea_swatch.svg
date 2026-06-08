@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+<rect width="640" height="420" fill="#050505"/>
+
+<defs><pattern id="b" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 4H14M0 10H14" stroke="#242424" stroke-width="2" opacity=".75"/></pattern></defs><rect width="640" height="420" fill="url(#b)"/><rect width="640" height="420" fill="#000" opacity=".35"/><ellipse cx="430" cy="120" rx="210" ry="90" fill="#fff" opacity=".05"/>
+</svg>
