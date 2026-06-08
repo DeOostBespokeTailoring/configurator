@@ -379,7 +379,7 @@ const GELEGENHEID_GROEPEN = [
 ];
 
 // Flat lijst voor lookups
-const GELEGENHEDEN = GELEGENHEID_GROEPEN.flatMap(g => g.items);
+const GELEGENHEDEN = GELEGENHEID_GROEPEN.flatMap(grp => grp.items);
 
 const KLEDINGSTUKKEN_ALLE = ['Jas','Broek','Gilet','Accessoires'];
 const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
@@ -742,20 +742,20 @@ function renderGelegenheden() {
     // Groep grid
     const groepGrid = document.createElement('div');
     groepGrid.className = 'gelegenheid-groep-grid';
-    groep.items.forEach(g => {
+    groep.items.forEach(gel => {
       const card = document.createElement('div');
-      card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
+      card.className = 'gelegenheid-card' + (gelegenheid === gel.id ? ' selected' : '');
       const imgHtml = g.img
-        ? `<img class="gelegenheid-img" src="${g.img}" alt="${g.naam}" onerror="this.style.display='none'">`
-        : `<div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>`;
+        ? `<img class="gelegenheid-img" src="${gel.img}" alt="${gel.naam}" onerror="this.style.display='none'">`
+        : `<div class="gelegenheid-icon"><i class="ti ${gel.icon}"></i></div>`;
       card.innerHTML = `
         <div>
           ${imgHtml}
-          <div class="gelegenheid-name">${g.naam}</div>
-          <div class="gelegenheid-desc">${g.desc}</div>
+          <div class="gelegenheid-name">${gel.naam}</div>
+          <div class="gelegenheid-desc">${gel.desc}</div>
         </div>`;
       card.onclick = () => {
-        gelegenheid = g.id;
+        gelegenheid = gel.id;
         renderGelegenheden();
       };
       groepGrid.appendChild(card);
@@ -765,7 +765,7 @@ function renderGelegenheden() {
 }
 
 function getGelegenheid() {
-  return GELEGENHEDEN.find(g => g.id === gelegenheid) || null;
+  return GELEGENHEDEN.find(grp => grp.id === gelegenheid) || null;
 }
 
 function startConfiguratie() {
@@ -803,7 +803,7 @@ const BESTELLING_OPTIES = [
 ];
 
 function renderBestellingStap() {
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   const screen = document.getElementById('bestellingScreen');
   
   // Bepaal welke opties beschikbaar zijn op basis van gelegenheid
@@ -844,7 +844,6 @@ function renderBestellingStap() {
   html += `</div>`;
 
   // Referentie ordernummer bij losse stukken
-  const g = getGelegenheid();
   if (g && g.referentie) {
     html += `<div class="referentie-blok">
       <div class="referentie-title">Referentie aan vorige bestelling <span style="font-weight:300;color:#6b6560">(optioneel)</span></div>
@@ -953,7 +952,7 @@ function renderSummaryPanel() {
   const list = document.getElementById('summaryList');
   const stappen = huidigeStappen();
   const items = stappen.filter(s => keuzes[s.id]);
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   if (!items.length && !g) {
     list.innerHTML = '<span class="summary-empty">Nog geen keuzes gemaakt</span>';
     return;
@@ -988,7 +987,7 @@ function renderStep() {
   if (!stap) return;
   const opties = getOpties(stap);
   const content = document.getElementById('stepContent');
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   content.innerHTML = `
     ${g ? `<div class="gelegenheid-badge"><i class="ti ${g.icon}" style="font-size:13px"></i>${g.naam}</div>` : ''}
     <div class="step-header">
@@ -1066,7 +1065,7 @@ function toonSamenvatting() {
   const content = document.getElementById('finalContent');
 
   let html = '';
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   if (g) {
     html += `<div class="sum-kled-block"><div class="sum-kled-title">Type kleding / gelegenheid</div>
       <div class="sum-card" style="max-width:320px">
@@ -1102,7 +1101,7 @@ function toonSamenvatting() {
 
 function getSamenvatting() {
   const result = {};
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   if (g) {
     result.gelegenheid = {
       id: g.id,
@@ -1153,7 +1152,7 @@ function toonMateriaalKeuze(){
 }
 
 function bepaalMateriaalDoel(){
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   if (!g || g.id === 'pak_kostuum') actieveMateriaalDoel = 'hoofdStof';
   else if (g.id === 'tenue_de_ville') actieveMateriaalDoel = materiaalKeuzes.jasStof ? (materiaalKeuzes.broekStof ? 'giletStof' : 'broekStof') : 'jasStof';
   else actieveMateriaalDoel = 'hoofdStof';
@@ -1166,7 +1165,7 @@ function doelLabel(doel){
 function getStof(id){ return STOFFEN.find(s => s.id === id); }
 
 function renderMateriaalKeuze(){
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   const content = document.getElementById('materialContent');
   content.innerHTML = `
     <div class="gelegenheid-badge"><i class="ti ${(g&&g.icon)||'ti-shirt'}"></i>${g ? g.naam : 'Geen gelegenheid gekozen'}</div>
@@ -1192,7 +1191,7 @@ function renderMateriaalKeuze(){
 }
 
 function renderMateriaalSelectieTekst(){
-  const g = getGelegenheid();
+  const gel = getGelegenheid();
   if (g && g.id === 'tenue_de_ville') {
     return ['jasStof','broekStof','giletStof'].map(k => {
       const stof = getStof(materiaalKeuzes[k]);
@@ -1252,7 +1251,7 @@ function setMateriaalFilter(key,val){
 }
 
 function getGefilterdeStoffen(){
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   return STOFFEN.filter(stof => {
     if (g && !stof.geschiktVoor.includes(g.id)) return false;
     if (materiaalMode === 'help') {
@@ -1295,7 +1294,7 @@ function renderStofCard(stof){
 }
 
 function selectStof(id){
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   if (!g || g.id === 'pak_kostuum') {
     materiaalKeuzes.hoofdStof = id;
     materiaalKeuzes.jasStof = id;
@@ -1338,7 +1337,7 @@ function openStofInfo(id,e){
 function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
 
 function toonMateriaalSamenvatting(){
-  const g = getGelegenheid();
+  var g = getGelegenheid();
   let msg = 'Materiaalkeuze\n\n';
   if (g && g.id === 'tenue_de_ville') {
     ['jasStof','broekStof','giletStof'].forEach(k => {
