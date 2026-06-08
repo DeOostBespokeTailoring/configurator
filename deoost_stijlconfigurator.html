@@ -1,828 +1,1528 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>De Oost Stijlconfigurator</title>
-  <style>
-    :root {
-      --do-bg: #f7f4ee;
-      --do-card: #ffffff;
-      --do-text: #1f1f1f;
-      --do-muted: #666;
-      --do-border: rgba(0,0,0,.16);
-      --do-gold: #a8894f;
-      --do-dark: #222;
-      --do-error: #8a1f1f;
-      --do-success: #1f6b3a;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Oost — Stijlconfigurator</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf8f5;padding:1.5rem 1rem;}
+.wrap{max-width:860px;margin:0 auto;}
+.cfg-header{border-bottom:0.5px solid rgba(74,69,64,.2);padding:1.25rem 0 .875rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-end;}
+.cfg-header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;letter-spacing:.05em;}
+.cfg-header p{font-size:12px;color:#6b6560;margin-top:3px;}
 
-    * { box-sizing: border-box; }
+/* LAYOUT: sidebar + main */
+.layout{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:640px){.layout{grid-template-columns:1fr;}}
 
-    body {
-      margin: 0;
-      font-family: Georgia, 'Times New Roman', serif;
-      color: var(--do-text);
-      background: var(--do-bg);
-      line-height: 1.5;
-    }
+/* SIDEBAR NAV */
+.sidebar{position:sticky;top:1rem;}
+.kled-tabs{display:flex;gap:6px;margin-bottom:1rem;}
+.kled-tab{flex:1;padding:7px 4px;text-align:center;font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;cursor:pointer;transition:all .2s;background:white;}
+.kled-tab.active{background:#1a1814;border-color:#1a1814;color:white;}
+.kled-tab:hover:not(.active){border-color:#4a4540;}
+.nav-list{list-style:none;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#6b6560;transition:all .2s;margin-bottom:2px;border:0.5px solid transparent;}
+.nav-item:hover{background:#f0ece4;color:#1a1814;}
+.nav-item.active{background:#1a1814;color:white;}
+.nav-item.done{color:#8B6F47;border-color:rgba(139,111,71,.2);}
+.nav-item.done .nav-check{opacity:1;}
+.nav-check{width:16px;height:16px;border-radius:50%;background:#8B6F47;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity .2s;}
+.nav-icon{font-size:14px;flex-shrink:0;}
+.nav-label{flex:1;line-height:1.3;}
 
-    .do-configurator {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 32px 18px 60px;
-    }
+/* MAIN */
+.main{}
+.step-header{margin-bottom:1.25rem;}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;margin-bottom:4px;}
+.step-sub{font-size:12px;color:#6b6560;line-height:1.5;}
+.step-optional{display:inline-block;background:#f0ece4;border-radius:3px;padding:1px 6px;font-size:10px;color:#8B6F47;margin-left:6px;letter-spacing:.04em;}
 
-    .do-header {
-      margin-bottom: 28px;
-      border-bottom: 2px solid var(--do-border);
-      padding-bottom: 20px;
-    }
+/* OPTIE GRID */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem;}
+.opt-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s;background:white;position:relative;}
+.opt-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.opt-card.selected{border-color:#1a1814;border-width:1.5px;}
+.opt-card.selected::after{content:'✓';position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;}
+.opt-img{width:100%;aspect-ratio:3/4;background:#f7f4ef;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.opt-img img{width:100%;height:100%;object-fit:contain;padding:8px;}
+.opt-zoom{position:absolute;bottom:5px;right:5px;width:22px;height:22px;border-radius:4px;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:12px;color:#1a1814;}
+.opt-img:hover .opt-zoom{opacity:1;}
+.opt-info{padding:8px 8px 10px;}
+.opt-name{font-size:12px;font-weight:500;color:#1a1814;margin-bottom:2px;line-height:1.3;}
+.opt-desc{font-size:11px;color:#6b6560;line-height:1.4;}
 
-    .do-header h1 {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.1;
-      margin: 0 0 12px;
-      font-weight: 600;
-    }
+/* SAMENVATTING SIDEBAR */
+.summary-panel{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1rem;background:white;margin-top:1rem;}
+.summary-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;margin-bottom:.75rem;color:#1a1814;}
+.summary-item{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start;}
+.summary-thumb{width:36px;height:36px;border-radius:4px;background:#f7f4ef;overflow:hidden;flex-shrink:0;}
+.summary-thumb img{width:100%;height:100%;object-fit:contain;}
+.summary-text{flex:1;}
+.summary-cat{font-size:10px;color:#8B6F47;text-transform:uppercase;letter-spacing:.05em;}
+.summary-val{font-size:11px;color:#1a1814;line-height:1.3;}
+.summary-empty{font-size:11px;color:#6b6560;font-style:italic;}
 
-    .do-header p {
-      margin: 0;
-      color: var(--do-muted);
-      max-width: 720px;
-    }
+/* NAV BUTTONS */
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);}
+.btn{font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:.07em;text-transform:uppercase;padding:9px 20px;border-radius:4px;cursor:pointer;transition:all .2s;border:none;}
+.btn-ghost{background:transparent;border:0.5px solid rgba(74,69,64,.2);color:#6b6560;}
+.btn-ghost:hover{border-color:#4a4540;color:#1a1814;}
+.btn-primary{background:#1a1814;color:#faf8f5;}
+.btn-primary:hover{opacity:.85;}
+.btn-accent{background:#8B6F47;color:white;}
+.btn-accent:hover{background:#7a6040;}
+.btn-skip{background:transparent;border:none;font-size:11px;color:#8B6F47;cursor:pointer;letter-spacing:.04em;padding:4px 8px;}
+.btn-skip:hover{text-decoration:underline;}
 
-    .do-progress {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
+/* SAMENVATTING PAGINA */
+.final-summary{display:none;}
+.final-summary.active{display:block;}
+.sum-kled-block{margin-bottom:2rem;}
+.sum-kled-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:0.5px solid rgba(74,69,64,.2);}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:.5rem;}
+.sum-card{border:0.5px solid rgba(74,69,64,.2);border-radius:6px;overflow:hidden;background:white;}
+.sum-card-img{width:100%;aspect-ratio:1;background:#f7f4ef;}
+.sum-card-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.sum-card-info{padding:6px;}
+.sum-card-cat{font-size:9px;color:#8B6F47;text-transform:uppercase;letter-spacing:.05em;}
+.sum-card-val{font-size:11px;color:#1a1814;font-weight:500;}
 
-    .do-progress span {
-      border: 1px solid var(--do-border);
-      padding: 7px 10px;
-      font-size: .9rem;
-      background: rgba(255,255,255,.55);
-    }
+/* LIGHTBOX */
+.lb-overlay{position:fixed;inset:0;background:rgba(10,8,6,.88);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.lb-box{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;}
+.lb-img{max-width:min(560px,88vw);max-height:82vh;object-fit:contain;border-radius:8px;background:#f7f4ef;padding:20px;}
+.lb-caption{margin-top:12px;color:rgba(255,255,255,.8);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;text-align:center;}
+.lb-close{position:absolute;top:-16px;right:-16px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;color:white;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover{background:rgba(255,255,255,.25);}
 
-    .do-progress span.is-active {
-      background: var(--do-dark);
-      color: white;
-      border-color: var(--do-dark);
-    }
+/* PROGRESS */
+.progress-bar{height:2px;background:rgba(74,69,64,.1);border-radius:1px;margin-bottom:1.5rem;overflow:hidden;}
+.progress-fill{height:100%;background:#8B6F47;border-radius:1px;transition:width .3s ease;}
 
-    .do-step {
-      display: none;
-      background: var(--do-card);
-      border: 1px solid var(--do-border);
-      padding: 24px;
-      margin-bottom: 20px;
-    }
 
-    .do-step.is-active { display: block; }
+/* START: gelegenheid/type kleding */
+.start-screen{display:block;}
+.start-intro{max-width:680px;margin:0 auto 1.25rem;text-align:center;}
+.start-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:6px;}
+.start-sub{font-size:13px;color:#6b6560;line-height:1.6;}
+.gelegenheid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+@media(max-width:720px){.gelegenheid-grid{grid-template-columns:1fr;}}
+.gelegenheid-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:pointer;transition:all .2s;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
+.gelegenheid-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.gelegenheid-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.gelegenheid-card.selected::after{content:'✓';position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.gelegenheid-icon{font-size:24px;color:#8B6F47;margin-bottom:.75rem;}
+.gelegenheid-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#1a1814;margin-bottom:6px;line-height:1.2;}
+.gelegenheid-desc{font-size:12px;color:#6b6560;line-height:1.55;}
+.start-actions{display:flex;justify-content:center;margin-top:1rem;}
+.gelegenheid-badge{display:inline-flex;align-items:center;gap:6px;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:5px 12px;font-size:11px;color:#6b6560;margin-bottom:1rem;}
 
-    .do-step h2 {
-      margin: 0 0 8px;
-      font-size: 1.7rem;
-      line-height: 1.2;
-    }
 
-    .do-intro {
-      margin: 0 0 22px;
-      color: var(--do-muted);
-    }
+/* MATERIAAL / STOFKEUZE OPZET */
+.material-screen{display:none;}
+.material-head{margin-bottom:1.25rem;}
+.material-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:4px;}
+.material-sub{font-size:13px;color:#6b6560;line-height:1.55;max-width:680px;}
+.material-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem;}
+@media(max-width:640px){.material-mode-grid{grid-template-columns:1fr;}}
+.material-mode{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;background:white;padding:1rem;cursor:pointer;transition:all .2s;}
+.material-mode:hover{border-color:#4a4540;transform:translateY(-1px);}
+.material-mode.active{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.material-mode-icon{font-size:22px;color:#8B6F47;margin-bottom:6px;}
+.material-mode-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:3px;}
+.material-mode-desc{font-size:12px;color:#6b6560;line-height:1.45;}
+.filter-section{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;background:white;padding:1rem;margin-bottom:1rem;}
+.filter-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:8px;}
+.filter-sub{font-size:12px;color:#6b6560;line-height:1.5;margin-bottom:.75rem;}
+.filter-row{margin-bottom:.875rem;}
+.filter-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b6560;margin-bottom:6px;}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;background:white;color:#6b6560;transition:all .2s;}
+.chip:hover{border-color:#4a4540;color:#1a1814;}
+.chip.active{background:#1a1814;border-color:#1a1814;color:white;}
+.fabric-results-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;margin:1.25rem 0 .75rem;}
+.fabric-results-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;}
+.fabric-results-count{font-size:12px;color:#6b6560;}
+.fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:1.25rem;}
+.fabric-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;background:white;cursor:pointer;transition:all .2s;position:relative;}
+.fabric-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.fabric-card.selected{border-color:#1a1814;border-width:1.5px;}
+.fabric-card.selected::after{content:'✓';position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;z-index:2;}
+.fabric-img{width:100%;aspect-ratio:1;background:#f7f4ef;position:relative;overflow:hidden;}
+.fabric-img img{width:100%;height:100%;object-fit:cover;}
+.fabric-actions{position:absolute;left:6px;right:6px;bottom:6px;display:flex;justify-content:space-between;gap:6px;}
+.fabric-icon-btn{width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,.92);border:0.5px solid rgba(74,69,64,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1814;font-size:13px;}
+.fabric-icon-btn:hover{background:white;border-color:#1a1814;}
+.fabric-info{padding:8px;}
+.fabric-name{font-size:12px;font-weight:500;line-height:1.3;margin-bottom:2px;}
+.fabric-meta{font-size:10px;color:#6b6560;line-height:1.35;}
+.fabric-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
+.fabric-tag{font-size:9px;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.15);border-radius:3px;padding:1px 5px;color:#6b6560;}
+.material-selection-panel{border:0.5px solid rgba(139,111,71,.35);background:#f7f4ef;border-radius:8px;padding:1rem;margin:1rem 0;}
+.material-selection-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:8px;}
+.material-selection-row{font-size:12px;color:#1a1814;margin-bottom:4px;}
+.material-selection-row span{color:#6b6560;}
+.info-overlay{position:fixed;inset:0;background:rgba(10,8,6,.78);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.info-box{background:#faf8f5;border-radius:10px;max-width:620px;width:100%;max-height:90vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.info-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:#1a1814;color:white;cursor:pointer;font-size:18px;line-height:1;}
+.info-media{width:100%;aspect-ratio:16/9;background:#f0ece4;overflow:hidden;border-radius:10px 10px 0 0;}
+.info-media img{width:100%;height:100%;object-fit:cover;}
+.info-content{padding:1.25rem;}
+.info-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:3px;}
+.info-meta{font-size:12px;color:#6b6560;margin-bottom:1rem;}
+.info-section{margin-bottom:1rem;}
+.info-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#8B6F47;margin-bottom:4px;}
+.info-text{font-size:13px;color:#1a1814;line-height:1.6;}
+.info-link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;}
+.info-link{display:inline-flex;align-items:center;gap:6px;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 12px;font-size:12px;color:#1a1814;text-decoration:none;background:white;}
+.info-link:hover{border-color:#1a1814;}
 
-    .do-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin: 18px 0;
-    }
+/* BESTELKEUZE / LOSSE ONDERDELEN */
+.bestel-section{margin-top:1.5rem;padding-top:1.25rem;border-top:0.5px solid rgba(74,69,64,.2);display:none;}
+.bestel-section.active{display:block;animation:fi .25s ease;}
+.bestel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:1rem 0 1.25rem;}
+.bestel-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1rem;background:white;cursor:pointer;transition:all .2s;position:relative;min-height:120px;}
+.bestel-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.bestel-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.bestel-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.bestel-icon{font-size:20px;color:#8B6F47;margin-bottom:.5rem;}
+.bestel-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:4px;color:#1a1814;line-height:1.25;}
+.bestel-desc{font-size:11px;color:#6b6560;line-height:1.45;}
+.prev-order-box{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1rem;background:#fff;margin:1rem 0;display:none;}
+.prev-order-box.active{display:block;}
+.prev-order-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:.75rem;}
+.prev-order-row input{border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 10px;font-size:13px;font-family:'Jost',sans-serif;background:white;width:100%;}
+.prev-order-result{margin-top:1rem;}
+.prev-order-card{display:grid;grid-template-columns:90px 1fr;gap:12px;border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;background:#f7f4ef;}
+.prev-order-img{background:white;min-height:90px;display:flex;align-items:center;justify-content:center;}
+.prev-order-img img{width:100%;height:100%;object-fit:cover;}
+.prev-order-info{padding:10px;}
+.prev-order-title{font-size:13px;font-weight:500;color:#1a1814;margin-bottom:3px;}
+.prev-order-meta{font-size:11px;color:#6b6560;line-height:1.45;}
+.prev-order-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.inline-note{font-size:11px;color:#6b6560;line-height:1.5;margin-top:6px;}
 
-    .do-option {
-      border: 1px solid var(--do-border);
-      background: white;
-      padding: 18px;
-      cursor: pointer;
-      min-height: 112px;
-      transition: border-color .15s ease, box-shadow .15s ease;
-    }
-
-    .do-option:hover,
-    .do-option.is-selected {
-      border-color: var(--do-gold);
-      box-shadow: inset 0 0 0 1px var(--do-gold);
-    }
-
-    .do-option strong {
-      display: block;
-      font-size: 1.08rem;
-      margin-bottom: 6px;
-    }
-
-    .do-option span {
-      display: block;
-      color: var(--do-muted);
-      font-size: .95rem;
-    }
-
-    label {
-      display: block;
-      margin: 14px 0 6px;
-      font-weight: 600;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid var(--do-border);
-      background: #fff;
-      color: var(--do-text);
-      padding: 11px 12px;
-      font: inherit;
-    }
-
-    textarea { min-height: 110px; resize: vertical; }
-
-    .do-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
-
-    .do-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 22px;
-    }
-
-    button, .do-button {
-      border: 1px solid var(--do-dark);
-      background: var(--do-dark);
-      color: #fff;
-      padding: 11px 16px;
-      font: inherit;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    button.secondary {
-      background: transparent;
-      color: var(--do-dark);
-    }
-
-    button.gold {
-      border-color: var(--do-gold);
-      background: var(--do-gold);
-      color: #fff;
-    }
-
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .do-message {
-      border: 1px solid var(--do-border);
-      padding: 14px;
-      margin-top: 16px;
-      background: #fafafa;
-    }
-
-    .do-message.error {
-      border-color: rgba(138,31,31,.35);
-      color: var(--do-error);
-      background: rgba(138,31,31,.06);
-    }
-
-    .do-message.success {
-      border-color: rgba(31,107,58,.35);
-      color: var(--do-success);
-      background: rgba(31,107,58,.06);
-    }
-
-    .do-summary {
-      border-top: 1px solid var(--do-border);
-      margin-top: 18px;
-      padding-top: 18px;
-    }
-
-    .do-summary dl {
-      display: grid;
-      grid-template-columns: minmax(140px, 240px) 1fr;
-      gap: 8px 16px;
-      margin: 0;
-    }
-
-    .do-summary dt { font-weight: 600; }
-    .do-summary dd { margin: 0; color: var(--do-muted); }
-
-    .do-hidden { display: none !important; }
-
-    @media (max-width: 640px) {
-      .do-step { padding: 18px; }
-      .do-summary dl { grid-template-columns: 1fr; }
-    }
-  </style>
+</style>
 </head>
 <body>
-  <main class="do-configurator" id="configurator">
-    <header class="do-header">
+<div class="wrap">
+  <div class="cfg-header">
+    <div>
       <h1>Stijlconfigurator</h1>
-      <p>Stel uw bestelling stap voor stap samen. Bij een extra kledingstuk bij een eerdere order controleren wij veilig uw ordernummer en e-mailadres, zonder klantgegevens publiek op te slaan.</p>
-    </header>
+      <p>De Oost Bespoke Tailoring — configureer uw garderobe stap voor stap</p>
+    </div>
+  </div>
 
-    <nav class="do-progress" aria-label="Voortgang">
-      <span data-progress="1" class="is-active">1. Gelegenheid</span>
-      <span data-progress="2">2. Bestelling</span>
-      <span data-progress="3">3. Stijl</span>
-      <span data-progress="4">4. Materiaal</span>
-      <span data-progress="5">5. Maten</span>
-      <span data-progress="6">6. Gegevens</span>
-      <span data-progress="7">7. Samenvatting</span>
-    </nav>
+  <div id="startScreen" class="start-screen">
+    <div class="start-intro">
+      <div class="start-title">Waarvoor stelt u kleding samen?</div>
+      <div class="start-sub">Kies eerst het type kleding of gelegenheid. Daarna begeleiden we u door de stijlkeuzes voor jas, broek en gilet.</div>
+    </div>
+    <div class="gelegenheid-grid" id="gelegenheidGrid"></div>
 
-    <section class="do-step is-active" data-step="1">
-      <h2>Waarvoor wilt u kleding samenstellen?</h2>
-      <p class="do-intro">Kies eerst de richting. De vervolgstappen worden daarop aangepast.</p>
-
-      <div class="do-grid" data-choice-group="gelegenheid">
-        <div class="do-option" data-value="pak_kostuum">
-          <strong>Pak / kostuum</strong>
-          <span>Jas, vest en broek van één stof.</span>
-        </div>
-        <div class="do-option" data-value="tenue_de_ville">
-          <strong>Tenue de ville</strong>
-          <span>Jas, vest en broek van meerdere stoffen.</span>
-        </div>
-        <div class="do-option" data-value="black_tie">
-          <strong>Black-Tie / Avond- / Galakleding</strong>
-          <span>Smoking, dinner jacket, rokkostuum, jacquet of avondkleding.</span>
-        </div>
+    <div class="bestel-section" id="bestelSection">
+      <div class="start-intro" style="margin-top:1rem">
+        <div class="start-title">Wat wilt u bestellen?</div>
+        <div class="start-sub">Kies of het om een compleet set, een los kledingstuk of een extra onderdeel bij een eerdere bestelling gaat.</div>
       </div>
-
-      <div class="do-actions">
-        <button type="button" onclick="nextStep()">Verder</button>
-      </div>
-    </section>
-
-    <section class="do-step" data-step="2">
-      <h2>Wat wilt u bestellen?</h2>
-      <p class="do-intro">Kies het type bestelling. Bij losse onderdelen tonen we alleen de relevante keuzes.</p>
-
-      <div class="do-grid" data-choice-group="besteltype">
-        <div class="do-option" data-value="pak_2delig">
-          <strong>2-delig pak</strong>
-          <span>Jas en broek.</span>
+      <div class="bestel-grid" id="bestelGrid"></div>
+      <div class="prev-order-box" id="prevOrderBox">
+        <div class="filter-title">Eerdere bestelling refereren</div>
+        <div class="filter-sub">Vul het vorige ordernummer en de niet-persoonlijke stof-/controlecode uit de bevestiging in. De configurator haalt alleen de gekoppelde stof op; er worden geen klantgegevens, maten of adresgegevens teruggegeven.</div>
+        <div class="chip-row" style="margin-top:.75rem">
+          <button class="chip active" id="extraBroekBtn" onclick="setExtraItemType('Broek')">Extra broek</button>
+          <button class="chip" id="extraJasBtn" onclick="setExtraItemType('Jas')">Extra jasje</button>
+          <button class="chip" id="extraGiletBtn" onclick="setExtraItemType('Gilet')">Extra gilet</button>
         </div>
-        <div class="do-option" data-value="pak_3delig">
-          <strong>3-delig pak</strong>
-          <span>Jas, broek en gilet.</span>
-        </div>
-        <div class="do-option" data-value="pak_extra_broek">
-          <strong>Pak met extra broek</strong>
-          <span>Jas met 2 broeken.</span>
-        </div>
-        <div class="do-option" data-value="los_jasje">
-          <strong>Los jasje</strong>
-          <span>Alleen een jas of colbert.</span>
-        </div>
-        <div class="do-option" data-value="losse_broek">
-          <strong>Losse broek</strong>
-          <span>Alleen een broek.</span>
-        </div>
-        <div class="do-option" data-value="los_gilet">
-          <strong>Los gilet</strong>
-          <span>Alleen een vest of waistcoat.</span>
-        </div>
-        <div class="do-option" data-value="extra_bij_eerdere_order">
-          <strong>Extra kledingstuk bij eerdere order</strong>
-          <span>Bijvoorbeeld een tweede broek, extra gilet of vervangend onderdeel.</span>
-        </div>
-      </div>
-
-      <div id="vorigeOrderModule" class="do-hidden">
-        <h2>Vorige bestelling opzoeken</h2>
-        <p class="do-intro">Vul het ordernummer en het e-mailadres van de vorige bestelling in. De configurator toont geen persoonlijke gegevens en haalt geen maten naar de browser.</p>
-
-        <div class="do-row">
+        <div class="prev-order-row">
           <div>
-            <label for="vorigOrdernummer">Vorig ordernummer</label>
-            <input id="vorigOrdernummer" type="text" autocomplete="off" placeholder="Bijvoorbeeld DO-2025-1234">
+            <div class="filter-label">Vorig ordernummer</div>
+            <input type="text" id="prevOrderInput" placeholder="bijv. DO-KL-20240315-123" oninput="vorigeOrdernummer=this.value.trim()">
           </div>
+          <button class="btn btn-primary" onclick="zoekVorigeOrder()">Zoek stof</button>
+        </div>
+        <div class="prev-order-row" style="grid-template-columns:1fr;margin-top:8px">
           <div>
-            <label for="vorigOrderEmail">E-mailadres gebruikt bij die bestelling</label>
-            <input id="vorigOrderEmail" type="email" autocomplete="email" placeholder="naam@example.com">
+            <div class="filter-label">Stof-/controlecode</div>
+            <input type="text" id="prevOrderCodeInput" placeholder="bijv. REF-HS-CRISPAIRE-310012 of controlecode" oninput="vorigeOrderCode=this.value.trim()">
           </div>
         </div>
-
-        <div class="do-actions">
-          <button type="button" class="gold" onclick="controleerVorigeOrder()">Zoek bestelling</button>
-        </div>
-
-        <div id="vorigeOrderResultaat"></div>
+        <div class="prev-order-result" id="prevOrderResult"></div>
       </div>
+    </div>
 
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" onclick="nextStep()">Verder</button>
-      </div>
-    </section>
+    <div class="start-actions">
+      <button class="btn btn-primary" id="startBtn" onclick="startConfiguratie()">Doorgaan naar stijlkeuzes →</button>
+    </div>
+  </div>
 
-    <section class="do-step" data-step="3">
-      <h2>Stijlkeuzes</h2>
-      <p class="do-intro">Deze basisvelden zijn bewust compact gehouden. Je kunt hier later alle detailkeuzes per kledingstuk uitbreiden.</p>
-
-      <div id="jasKeuzes">
-        <h3>Jas</h3>
-        <div class="do-row">
-          <div>
-            <label for="jasModel">Model</label>
-            <select id="jasModel">
-              <option value="">Maak een keuze</option>
-              <option>Single breasted</option>
-              <option>Double breasted</option>
-            </select>
-          </div>
-          <div>
-            <label for="jasRevers">Revers</label>
-            <select id="jasRevers">
-              <option value="">Maak een keuze</option>
-              <option>Notch revers</option>
-              <option>Peak revers</option>
-              <option>Sjaalkraag</option>
-            </select>
-          </div>
+  <div id="mainConfig" style="display:none">
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="kled-tabs" id="kledTabs"></div>
+        <ul class="nav-list" id="navList"></ul>
+        <div class="summary-panel">
+          <div class="summary-title">Uw keuzes</div>
+          <div id="summaryList"><span class="summary-empty">Nog geen keuzes gemaakt</span></div>
         </div>
       </div>
-
-      <div id="broekKeuzes">
-        <h3>Broek</h3>
-        <div class="do-row">
-          <div>
-            <label for="broekPlooien">Plooien</label>
-            <select id="broekPlooien">
-              <option value="">Maak een keuze</option>
-              <option>Geen plooi</option>
-              <option>Enkele plooi</option>
-              <option>Dubbele plooi</option>
-            </select>
-          </div>
-          <div>
-            <label for="broekBand">Broekband</label>
-            <select id="broekBand">
-              <option value="">Maak een keuze</option>
-              <option>Riemlussen</option>
-              <option>Zijverstellers</option>
-              <option>Geen voorkeur</option>
-            </select>
-          </div>
-        </div>
+      <!-- MAIN -->
+      <div class="main">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div id="stepContent"></div>
       </div>
+    </div>
+  </div>
 
-      <div id="giletKeuzes">
-        <h3>Gilet</h3>
-        <div class="do-row">
-          <div>
-            <label for="giletModel">Model</label>
-            <select id="giletModel">
-              <option value="">Maak een keuze</option>
-              <option>Single breasted</option>
-              <option>Double breasted</option>
-            </select>
-          </div>
-          <div>
-            <label for="giletRug">Rugpand</label>
-            <select id="giletRug">
-              <option value="">Maak een keuze</option>
-              <option>Voeringrug</option>
-              <option>Stoffen rug</option>
-            </select>
-          </div>
-        </div>
-      </div>
 
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" onclick="nextStep()">Verder</button>
-      </div>
-    </section>
+  <div id="materialConfig" class="material-screen">
+    <div class="material-head">
+      <div class="material-title">Stof & materiaal kiezen</div>
+      <div class="material-sub">Kies de stof op basis van adviesvragen of blader zelf door de stoffenbibliotheek. Deze opzet is voorbereid op close-ups, informatiepanelen, bloglinks en video’s.</div>
+    </div>
+    <div id="materialContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonSamenvatting()">← Terug naar samenvatting</button>
+      <button class="btn btn-accent" onclick="toonMateriaalSamenvatting()">Materiaalkeuze controleren →</button>
+    </div>
+  </div>
 
-    <section class="do-step" data-step="4">
-      <h2>Stof en materiaal</h2>
-      <p class="do-intro">Kies voorlopig een route. De stofbibliotheek kan later worden gekoppeld aan `stoffen.js`.</p>
+  <div id="finalSummary" style="display:none">
+    <div id="finalContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="document.getElementById('finalSummary').style.display='none';document.getElementById('mainConfig').style.display='block'">← Terug aanpassen</button>
+      <button class="btn btn-accent" onclick="toonMateriaalKeuze()">Doorgaan naar stofkeuze →</button>
+    </div>
+  </div>
+</div>
 
-      <div class="do-grid" data-choice-group="stofRoute">
-        <div class="do-option" data-value="help_mij_kiezen">
-          <strong>Help mij kiezen</strong>
-          <span>Beantwoord enkele vragen over gebruik, uitstraling, kleur en patroon.</span>
-        </div>
-        <div class="do-option" data-value="zelf_bladeren">
-          <strong>Zelf bladeren</strong>
-          <span>Filter op leverancier, collectie, materiaal, kleur, gewicht en formaliteit.</span>
-        </div>
-        <div class="do-option" data-value="stof_vorige_order">
-          <strong>Gebruik stof uit vorige order</strong>
-          <span>Beschikbaar wanneer een vorige bestelling is gevonden.</span>
-        </div>
-      </div>
+<!-- LIGHTBOX -->
+<div id="lb" style="display:none" class="lb-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="lb-box">
+    <button class="lb-close" onclick="document.getElementById('lb').style.display='none'">×</button>
+    <img id="lbImg" class="lb-img" src="" alt="">
+    <div id="lbCaption" class="lb-caption"></div>
+  </div>
+</div>
 
-      <label for="stofOpmerking">Eventuele stofwens of opmerking</label>
-      <textarea id="stofOpmerking" placeholder="Bijvoorbeeld navy flannel, Holland & Sherry Crispaire, off-white dinner jacket, of geen voorkeur."></textarea>
 
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" onclick="nextStep()">Verder</button>
-      </div>
-    </section>
+<!-- MATERIAAL INFO MODAL -->
+<div id="infoModal" style="display:none" class="info-overlay" onclick="if(event.target===this)closeInfoModal()">
+  <div class="info-box">
+    <button class="info-close" onclick="closeInfoModal()">×</button>
+    <div class="info-media" id="infoMedia"></div>
+    <div class="info-content" id="infoContent"></div>
+  </div>
+</div>
 
-    <section class="do-step" data-step="5">
-      <h2>Maten</h2>
-      <p class="do-intro" id="matenIntro">Vul de relevante maten in. Bij een vorige order kunt u kiezen om de eerder geregistreerde maten te gebruiken.</p>
+<script src="stoffen.js"></script>
+<script src="voeringen.js"></script>
+<script src="knopen.js"></script>
+<script src="prijzen.js"></script>
+<script>
+const IMG = 'tekeningen/';
+// Publieke Web App URL voor veilige server-side lookup van vorige orderstoffen.
+// Deze lookup geeft alleen stofgegevens terug, geen klantgegevens of maten.
+const ORDER_LOOKUP_WEBHOOK = 'https://script.google.com/macros/s/AKfycbweMXbyNYC7bn0veCYqTxvkuQsoZ4KL2Ab8aIGHsFj-1BT3KYBVQqDn9qaZo_PoPd4fDw/exec';
 
-      <div id="vorigeMatenKeuze" class="do-hidden do-message success">
-        <strong>Vorige maten gebruiken</strong>
-        <p>Voor deze bestelling is gekozen om de eerder geregistreerde maten te gebruiken. De maten worden niet getoond in de browser.</p>
-      </div>
+const GELEGENHEDEN = [
+  {
+    id: 'pak_kostuum',
+    naam: 'Pak / kostuum',
+    desc: 'Jas, vest en broek van één stof. Geschikt voor een klassiek twee- of driedelig pak.',
+    icon: 'ti-shirt'
+  },
+  {
+    id: 'tenue_de_ville',
+    naam: 'Tenue de ville',
+    desc: 'Jas, vest en broek van meerdere stoffen. Geschikt voor een formelere daggelegenheid of bruiloft.',
+    icon: 'ti-tie'
+  },
+  {
+    id: 'black_tie',
+    naam: 'Black-Tie / Avond- / Galakleding',
+    desc: 'Smoking, dinner jacket of avondkleding. Later kunnen hier specifieke black-tie regels en prijslogica aan gekoppeld worden.',
+    icon: 'ti-moon-stars'
+  }
+];
 
-      <div id="maatvelden">
-        <div class="do-row">
-          <div>
-            <label for="maatLengte">Lengte</label>
-            <input id="maatLengte" type="text" placeholder="Bijvoorbeeld 184 cm">
-          </div>
-          <div>
-            <label for="maatGewicht">Gewicht</label>
-            <input id="maatGewicht" type="text" placeholder="Bijvoorbeeld 82 kg">
-          </div>
-        </div>
-        <div class="do-row">
-          <div>
-            <label for="maatBorst">Borst</label>
-            <input id="maatBorst" type="text">
-          </div>
-          <div>
-            <label for="maatTaille">Taille</label>
-            <input id="maatTaille" type="text">
-          </div>
-          <div>
-            <label for="maatHeup">Heup</label>
-            <input id="maatHeup" type="text">
-          </div>
-        </div>
-        <label for="maatOpmerking">Opmerking over maten of pasvorm</label>
-        <textarea id="maatOpmerking"></textarea>
-      </div>
+const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
 
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" onclick="nextStep()">Verder</button>
-      </div>
-    </section>
+const BESTEL_OPTIES = [
+  {
+    id:'tweedelig',
+    naam:'2-delig pak',
+    desc:'Jas en broek. Bij Pak / kostuum standaard uit één stof.',
+    icon:'ti-shirt',
+    kledingstukken:['Jas','Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'driedelig',
+    naam:'3-delig pak',
+    desc:'Jas, broek en gilet. Bij Pak / kostuum standaard uit één stof.',
+    icon:'ti-layers-intersect',
+    kledingstukken:['Jas','Broek','Gilet'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'pak_extra_broek',
+    naam:'Pak met extra broek',
+    desc:'Jas, broek en een tweede broek. De extra broek gebruikt standaard dezelfde stof.',
+    icon:'ti-copy-plus',
+    kledingstukken:['Jas','Broek'],
+    extraItems:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'los_jasje',
+    naam:'Los jasje',
+    desc:'Alleen een jasje of dinner jacket samenstellen.',
+    icon:'ti-shirt',
+    kledingstukken:['Jas'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'losse_broek',
+    naam:'Losse broek',
+    desc:'Alleen een pantalon of smokingbroek samenstellen.',
+    icon:'ti-layout-bottombar',
+    kledingstukken:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'los_gilet',
+    naam:'Los gilet',
+    desc:'Alleen een gilet samenstellen.',
+    icon:'ti-layers-intersect',
+    kledingstukken:['Gilet'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'extra_bestaande_order',
+    naam:'Extra kledingstuk bij eerdere order',
+    desc:'Bestel een extra broek, jasje of gilet met verwijzing naar een vorige order en dezelfde stof.',
+    icon:'ti-history',
+    kledingstukken:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie'],
+    vereistVorigeOrder:true
+  }
+];
 
-    <section class="do-step" data-step="6">
-      <h2>Klantgegevens</h2>
-      <p class="do-intro">Deze gegevens worden meegestuurd naar de backoffice en niet opgeslagen in publieke bestanden.</p>
+const STAPPEN = {
+  Jas: [
+    {
+      id: 'jas_sluiting', label: 'Single of double breasted', icon: 'ti-shirt', verplicht: true,
+      opties: [
+        {id:'sb', naam:'Single breasted', desc:'Enkele rij knopen', img:'1._jas__1._single_of_double_breasted__single_breasted.png'},
+        {id:'db', naam:'Double breasted', desc:'Dubbele rij knopen', img:'1._jas__1._single_of_double_breasted__double_breasted.png'},
+      ]
+    },
+    {
+      id: 'jas_knopen', label: 'Aantal knopen', icon: 'ti-circle-dot', verplicht: true,
+      conditioneel: (k) => true,
+      opties: (k) => k.jas_sluiting === 'db' ? [
+        {id:'4x2', naam:'4×2', desc:'4 knopen, 2 rijen', img:'1._jas__2._hoveel_knopen__double__4x2.png'},
+        {id:'6x2', naam:'6×2', desc:'6 knopen, 2 rijen', img:'1._jas__2._hoveel_knopen__double__6x2.png'},
+      ] : [
+        {id:'1', naam:'1 knoop', desc:'Minimalistisch', img:'1._jas__2._hoveel_knopen__single__1_knoop.png'},
+        {id:'2', naam:'2 knopen', desc:'Klassiek', img:'1._jas__2._hoveel_knopen__single__2_knopen.png'},
+        {id:'2.5', naam:'2,5 knopen', desc:'Halfknoop', img:'1._jas__2._hoveel_knopen__single__2_5_knopen.png'},
+        {id:'3', naam:'3 knopen', desc:'Traditioneel', img:'1._jas__2._hoveel_knopen__single__3_knopen.png'},
+        {id:'4', naam:'4 knopen', desc:'Langere jaslengte', img:'1._jas__2._hoveel_knopen__single__4_knopen.png'},
+      ]
+    },
+    {
+      id: 'jas_revers', label: 'Revers / kraag', icon: 'ti-chevrons-up', verplicht: true,
+      opties: (k) => k.jas_sluiting === 'db' ? [
+        {id:'notch_db', naam:'Notch revers', desc:'DB notch lapel', img:'1._jas__3._revers__double_breasted__notch.png'},
+        {id:'peak_db', naam:'Peak revers', desc:'DB peak lapel', img:'1._jas__3._revers__double_breasted__peak.png'},
+        {id:'shawl_db', naam:'Shawl kraag', desc:'DB shawl collar', img:'1._jas__3._revers__double_breasted__shawl.png'},
+      ] : [
+        {id:'notch_sb', naam:'Notch revers', desc:'Klassieke V-vorm', img:'1._jas__3._revers__single_breasted__notch.png'},
+        {id:'peak_sb', naam:'Peak revers', desc:'Puntige revers', img:'1._jas__3._revers__single_breasted__peak.png'},
+        {id:'shawl_sb', naam:'Shawl kraag', desc:'Ronde doorlopende kraag', img:'1._jas__3._revers__single_breasted__shawl.png'},
+        {id:'nehru', naam:'Nehru / Mao', desc:'Staande kraag', img:'1._jas__3._revers__single_breasted__nehru.png'},
+      ]
+    },
+    {
+      id: 'jas_belly', label: 'Belly (reversgrootte)', icon: 'ti-arrows-horizontal', verplicht: false,
+      opties: [
+        {id:'geen_belly', naam:'Geen belly', desc:'Rechte revisrand', img:'1._jas__3._revers__belly__geen_belly.png'},
+        {id:'belly', naam:'Belly', desc:'Lichte curve', img:'1._jas__3._revers__belly__belly.png'},
+        {id:'meer_belly', naam:'Meer belly', desc:'Uitgesproken curve', img:'1._jas__3._revers__belly__meer_belly.png'},
+      ]
+    },
+    {
+      id: 'jas_zakken', label: 'Zakken', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'slanted', naam:'Schuine zakken', desc:'Slanted pockets', img:'1._jas__4._zakken__slanted.png'},
+        {id:'slanted_flap', naam:'Schuine zakken + flap', desc:'Slanted flap pockets', img:'1._jas__4._zakken__slanted_flap.png'},
+        {id:'slanted_ticket', naam:'Schuine + ticketzak', desc:'Slanted + ticket pocket', img:'1._jas__4._zakken__slanted_ticket.png'},
+        {id:'slanted_flap_ticket', naam:'Schuine flap + ticket', desc:'Slanted flap + ticket', img:'1._jas__4._zakken__slanted_flap_ticket.png'},
+        {id:'welt', naam:'Paspelzakken', desc:'Welt pockets', img:'1._jas__4._zakken__welt_pocket.png'},
+        {id:'welt_flap', naam:'Paspel + flap', desc:'Welt flap pockets', img:'1._jas__4._zakken__welt_flap.png'},
+        {id:'welt_ticket', naam:'Paspel + ticket', desc:'Welt + ticket pocket', img:'1._jas__4._zakken__welt_ticket_pocket.png'},
+        {id:'welt_flap_ticket', naam:'Paspel flap + ticket', desc:'Welt flap + ticket', img:'1._jas__4._zakken__welt_flap_ticket.png'},
+        {id:'patch', naam:'Patch pockets', desc:'Opgenaaide zakken', img:'1._jas__4._zakken__patch_pockets.png'},
+        {id:'patch_flap', naam:'Patch pockets + flap', desc:'Opgenaaid met flap', img:'1._jas__4._zakken__patch_pockets_flap.png'},
+      ]
+    },
+    {
+      id: 'jas_borstzak', label: 'Borstzak', icon: 'ti-square', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Standaard borstzak', desc:'Rechte paspel', img:'1._jas__8.2_borstzakken__borstzak_normaal.png'},
+        {id:'barchetta', naam:'Barchetta', desc:'Gebogen borstzak', img:'1._jas__8.2_borstzakken__barchetta.png'},
+      ]
+    },
+    {
+      id: 'jas_split', label: 'Split (achterste)', icon: 'ti-layout-distribute-vertical', verplicht: true,
+      opties: [
+        {id:'geen_split', naam:'Geen split', desc:'Gesloten rug', img:'1._jas__6._split__geen_split.png'},
+        {id:'enkele_split', naam:'Enkele split', desc:'Centrale split', img:'1._jas__6._split__enkele_split.png'},
+        {id:'dubbele_split', naam:'Dubbele split', desc:'Twee zijsplits', img:'1._jas__6._split__dubbele_split.png'},
+      ]
+    },
+    {
+      id: 'jas_schouder', label: 'Schoudertype', icon: 'ti-arrows-horizontal', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Normaal', desc:'Klassieke schouder', img:'1._jas__9._schoudertype__normaal.png'},
+        {id:'rollino', naam:'Rollino', desc:'Zachte Napolitaanse stijl', img:'1._jas__9._schoudertype__rollino.png'},
+        {id:'spalla_camicia', naam:'Spalla Camicia', desc:'Hemdsmouw inzet', img:'1._jas__9._schoudertype__spalla_camicia.png'},
+      ]
+    },
+    {
+      id: 'jas_mouw_aantal', label: 'Mouwknopen — aantal', icon: 'ti-circles', verplicht: false,
+      opties: [
+        {id:'geen', naam:'Geen knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__geen_knopen.png'},
+        {id:'3', naam:'3 knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__3_knopen.png'},
+        {id:'4', naam:'4 knopen', desc:'Meest gangbaar', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__4_knopen.png'},
+        {id:'5', naam:'5 knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__5_knopen.png'},
+      ]
+    },
+    {
+      id: 'jas_mouw_plaatsing', label: 'Mouwknopen — plaatsing', icon: 'ti-circles', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Normaal', desc:'Gelijke afstand', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen.png'},
+        {id:'kissing', naam:'Kissing buttons', desc:'Rakend aan elkaar', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen_kissing.png'},
+        {id:'meer_ruimte', naam:'Meer ruimte', desc:'Grotere tussenafstand', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen_meer_ruimte.png'},
+      ]
+    },
+    {
+      id: 'jas_revers_detail', label: 'Revers detail', icon: 'ti-flower', verplicht: false,
+      opties: [
+        {id:'knoopsgat', naam:'Knoopsgat', desc:'Standaard buttonhole', img:'1._jas__8._flowerloop_op_revers_-_stitching__knoopsgat.png'},
+        {id:'flowerloop', naam:'Flowerloop', desc:'Lusje voor bloem', img:'1._jas__8._flowerloop_op_revers_-_stitching__flowerloop.png'},
+        {id:'milanees', naam:'Milanees', desc:'Milanese buttonhole', img:'1._jas__8._flowerloop_op_revers_-_stitching__milanees.png'},
+      ]
+    },
+    {
+      id: 'jas_stitching', label: 'Pick stitching', icon: 'ti-needle-thread', verplicht: false,
+      opties: [
+        {id:'panden', naam:'Panden', desc:'Alleen panden', img:'1._jas__8._pick_stitching__panden.png'},
+        {id:'panden_revers', naam:'Panden + revers', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers.png'},
+        {id:'panden_revers_naden', naam:'Panden + revers + naden', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers_plus_naden.png'},
+        {id:'panden_revers_naden_dik', naam:'Dikker stitching', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers_plus_naden_dikker.png'},
+        {id:'revers', naam:'Alleen revers', desc:'', img:'1._jas__8._pick_stitching__revers.png'},
+      ]
+    },
+    {
+      id: 'jas_swelled_edge', label: 'Swelled edge', icon: 'ti-line', verplicht: false,
+      opties: [
+        {id:'swelled', naam:'Swelled edge', desc:'Brede stiksels op revers', img:'1._jas__10._revers_swelled_edge__swelled_edge.png'},
+        {id:'swelled_panden', naam:'Swelled edge + panden', desc:'Revers én panden', img:'1._jas__10._revers_swelled_edge__swelled_edge_revers_plus_panden.png'},
+      ]
+    },
+    {
+      id: 'jas_binnenzakken', label: 'Binnenzakken', icon: 'ti-box', verplicht: false,
+      opties: [
+        {id:'standaard', naam:'Standaard', desc:'Links binnenzak', img:'1._jas__5._binnenzakken__binnenzakken.png'},
+        {id:'links', naam:'Alleen links', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_links.png'},
+        {id:'rechts', naam:'Alleen rechts', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_rechts.png'},
+        {id:'x2_boven', naam:'2× boven', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_x_2_boven.png'},
+        {id:'onder_x2', naam:'2× onder', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_onder_x_2.png'},
+        {id:'x4plus', naam:'4+ zakken', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_x_4plus.png'},
+        {id:'knoop', naam:'Met knoop', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_met_knoop.png'},
+        {id:'driehoek', naam:'Driehoek flap', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_met_driehoek_flap.png'},
+      ]
+    },
+    {
+      id: 'jas_constructie', label: 'Constructie / canvas', icon: 'ti-layers', verplicht: false,
+      opties: [
+        {id:'canvas', naam:'Full canvas', desc:'Volledige paardenhaar tussenvoering', img:'1._jas__5.1_lining_constructie__canvas.png'},
+        {id:'canvas2', naam:'Half canvas', desc:'Borst canvas', img:'1._jas__5.1_lining_constructie__canvas_2.png'},
+      ]
+    },
+  ],
+  Broek: [
+    {
+      id: 'broek_stijl', label: 'Pijpvorm', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'recht', naam:'Rechte pijp', desc:'Klassiek', img:'2._broek__1._stijl__rechte_pijp.png'},
+        {id:'slim', naam:'Slim fit', desc:'Nauwer model', img:'2._broek__1._stijl__slim.png'},
+        {id:'flared', naam:'Flared', desc:'Uitlopende pijp', img:'2._broek__1._stijl__flared.png'},
+      ]
+    },
+    {
+      id: 'broek_plooi', label: 'Plooien', icon: 'ti-fold', verplicht: true,
+      opties: [
+        {id:'geen', naam:'Geen plooi', desc:'Flat front', img:'2._broek__5._pleats__geen_plooi.png'},
+        {id:'enkele', naam:'Enkele plooi', desc:'Forward pleat', img:'2._broek__5._pleats__enkele_plooi.png'},
+        {id:'enkele2', naam:'Enkele plooi variant', desc:'Reverse pleat', img:'2._broek__5._pleats__enkele_plooi_2.png'},
+        {id:'dubbele', naam:'Dubbele plooi', desc:'Twee plooien', img:'2._broek__5._pleats__dubbele_plooi.png'},
+        {id:'dubbele2', naam:'Dubbele plooi variant', desc:'', img:'2._broek__5._pleats__dubbele_plooi_2.png'},
+      ]
+    },
+    {
+      id: 'broek_band', label: 'Broekband', icon: 'ti-belt', verplicht: true,
+      opties: [
+        {id:'6_wide', naam:'6 brede lussen', desc:'Standard waistband', img:'2._broek__2._broekband__6_wide_loops.png'},
+        {id:'6_double', naam:'6 dubbele lussen', desc:'Double loops', img:'2._broek__2._broekband__6_double_loops.png'},
+        {id:'8_loops', naam:'8 lussen', desc:'Extra lussen', img:'2._broek__2._broekband__8_loops.png'},
+        {id:'no_loops', naam:'Zonder lussen', desc:'No loops', img:'2._broek__2._broekband__no_loops.png'},
+        {id:'side_tabs_2', naam:'Side tabs 2 knopen', desc:'', img:'2._broek__2._broekband__side_tabs_2_buttons.png'},
+        {id:'side_tabs_3', naam:'Side tabs 3 knopen', desc:'', img:'2._broek__2._broekband__side_tabs_3_buttons.png'},
+        {id:'strap_buckle', naam:'Strap & buckle', desc:'Gesp sluiting', img:'2._broek__2._broekband__strap_&_buckle.png'},
+        {id:'gurkha', naam:'Gurkha', desc:'Dubbele knoop sluiting', img:'2._broek__2._broekband__gurkha.png'},
+        {id:'internal', naam:'Verstelbare band', desc:'Internal adjustable', img:'2._broek__2._broekband__internal_adjustable_waistband.png'},
+        {id:'bretels', naam:'Bretels', desc:'Suspenders', img:'2._broek__2._broekband__bretels.png'},
+      ]
+    },
+    {
+      id: 'broek_sluiting', label: 'Sluiting', icon: 'ti-zipper', verplicht: true,
+      opties: [
+        {id:'knoop', naam:'Knoopsluiting', desc:'Buttoned fastening', img:'2._broek__4._sluiting__buttoned_fastening.png'},
+        {id:'rits', naam:'Rits', desc:'Zipped fastening', img:'2._broek__4._sluiting__zipped_fastening.png'},
+      ]
+    },
+    {
+      id: 'broek_zakken', label: 'Zijzakken', icon: 'ti-layout-sidebar', verplicht: true,
+      opties: [
+        {id:'straight', naam:'Rechte zakken', desc:'Straight side pockets', img:'2._broek__6._zakken__straight_side_pockets.png'},
+        {id:'slanted', naam:'Schuine zakken', desc:'Slanted slide pockets', img:'2._broek__6._zakken__slanted_slide_pockets.png'},
+        {id:'rounded', naam:'Ronde zakken', desc:'Rounded pockets', img:'2._broek__6._zakken__rounded_pockets.png'},
+        {id:'frogmouth', naam:'Frogmouth pockets', desc:'', img:'2._broek__6._zakken__frogmouth_pockets.png'},
+        {id:'frogmouth_money', naam:'Frogmouth + geldvak', desc:'', img:'2._broek__6._zakken__frogmouth_pockets_money_pocket.png'},
+        {id:'welted', naam:'Paspelzakken', desc:'Welted pockets', img:'2._broek__6._zakken__welted_pockets.png'},
+      ]
+    },
+    {
+      id: 'broek_achterzakken', label: 'Achterzakken', icon: 'ti-layout-bottombar-expand', verplicht: false,
+      opties: [
+        {id:'geen', naam:'Geen zakken', desc:'', img:'2._broek__7._achterzakken__no_pockets_trousers_back.png'},
+        {id:'enkel_links', naam:'Enkel links', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_left.png'},
+        {id:'enkel_rechts', naam:'Enkel rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_right.png'},
+        {id:'enkel_flap_links', naam:'Enkel flap links', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_flap_left.png'},
+        {id:'enkel_flap_rechts', naam:'Enkel flap rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_flap_right.png'},
+        {id:'enkel_knoop', naam:'Enkel + knoop rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_button_right.png'},
+        {id:'dubbel', naam:'Dubbel', desc:'', img:'2._broek__7._achterzakken__double_back_pockets.png'},
+        {id:'dubbel_knoppen', naam:'Dubbel + knopen', desc:'', img:'2._broek__7._achterzakken__double_back_pockets_-w_buttons.png'},
+        {id:'dubbel_flap', naam:'Dubbel + flap', desc:'', img:'2._broek__7._achterzakken__double_back_pockets_-w_flap.png'},
+        {id:'patch_vierkant', naam:'Patch vierkant', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_square.png'},
+        {id:'patch_rond', naam:'Patch rond', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_round.png'},
+        {id:'patch_punt', naam:'Patch punt', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_point.png'},
+      ]
+    },
+    {
+      id: 'broek_achterkant', label: 'Achterkant / fishtail', icon: 'ti-arrow-fork', verplicht: false,
+      opties: [
+        {id:'standaard', naam:'Standaard', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__standaard.png'},
+        {id:'fishtail', naam:'Fishtail', desc:'Puntige achterkant', img:'2._broek__3._achterkant_-_fishtail_etc__fishtail.png'},
+        {id:'fishtail_achter', naam:'Fishtail achter', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__fishtail_achter.png'},
+        {id:'after_dinner', naam:'After dinner split', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__after_dinner_split.png'},
+      ]
+    },
+    {
+      id: 'broek_onderkant', label: 'Onderkant pijp', icon: 'ti-arrow-down', verplicht: false,
+      opties: [
+        {id:'recht', naam:'Recht afgewerkt', desc:'', img:'2._broek__8._onderkant__trouser_bottom_straight.png'},
+        {id:'schuin', naam:'Schuin afgewerkt', desc:'', img:'2._broek__8._onderkant__trouser_bottom_slanted.png'},
+        {id:'omslag', naam:'Met omslag', desc:'Turn-up', img:'2._broek__8._onderkant__omslag.png'},
+        {id:'geen_omslag', naam:'Zonder omslag', desc:'', img:'2._broek__8._onderkant__geen_omslag.png'},
+      ]
+    },
+    {
+      id: 'broek_bies', label: 'Biezen', icon: 'ti-line', verplicht: false,
+      opties: [
+        {id:'enkel', naam:'Enkele bies', desc:'', img:'2._broek__9._biezen__enkele_bies.png'},
+        {id:'dubbel', naam:'Dubbele bies', desc:'', img:'2._broek__9._biezen__dubbele_bies.png'},
+      ]
+    },
+  ],
+  Gilet: [
+    {
+      id: 'gilet_sluiting', label: 'Single of double', icon: 'ti-shirt', verplicht: true,
+      opties: [
+        {id:'sb', naam:'Single breasted', desc:'', img:'3._gilets__1._single_of_double__single_breasted.png'},
+        {id:'db', naam:'Double breasted', desc:'', img:'3._gilets__1._single_of_double__double_breasted.png'},
+      ]
+    },
+    {
+      id: 'gilet_revers', label: 'Revers / kraag', icon: 'ti-chevrons-up', verplicht: true,
+      opties: [
+        {id:'notch', naam:'Notch revers', desc:'', img:'3._gilets__2._wel_of_geen_revers__notch.png'},
+        {id:'peak', naam:'Peak revers', desc:'', img:'3._gilets__2._wel_of_geen_revers__peak.png'},
+        {id:'shawl', naam:'Shawl kraag', desc:'', img:'3._gilets__2._wel_of_geen_revers__shawl.png'},
+        {id:'nehru', naam:'Nehru', desc:'', img:'3._gilets__2._wel_of_geen_revers__nehru.png'},
+        {id:'zonder', naam:'Zonder revers', desc:'V-hals', img:'3._gilets__2._wel_of_geen_revers__zonder.png'},
+        {id:'zonder_rond', naam:'Zonder revers (rond)', desc:'Ronde hals', img:'3._gilets__2._wel_of_geen_revers__zonder-rond.png'},
+      ]
+    },
+    {
+      id: 'gilet_zakken', label: 'Zakken', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'paspel', naam:'Paspelzakken', desc:'', img:'3._gilets__3._zakken__paspel.png'},
+        {id:'zakken', naam:'Standaard zakken', desc:'', img:'3._gilets__3._zakken__zakken.png'},
+        {id:'zakken_borstzak', naam:'Zakken + borstzak', desc:'', img:'3._gilets__3._zakken__zakken_met_borstzakken.png'},
+        {id:'patch', naam:'Patch pockets', desc:'', img:'3._gilets__3._zakken__patch.png'},
+        {id:'patch_flap', naam:'Patch + flap', desc:'', img:'3._gilets__3._zakken__patch_flap.png'},
+        {id:'patch_flap_button', naam:'Patch + flap + knoop', desc:'', img:'3._gilets__3._zakken__patch_flap_button.png'},
+        {id:'borstzak_links', naam:'Alleen borstzak links', desc:'', img:'3._gilets__3._zakken__zakken_borstzak_links.png'},
+        {id:'borstzak_rechts', naam:'Alleen borstzak rechts', desc:'', img:'3._gilets__3._zakken__zakken_borstzak_rechts.png'},
+      ]
+    },
+    {
+      id: 'gilet_rug', label: 'Rugpand', icon: 'ti-rotate-180', verplicht: false,
+      opties: [
+        {id:'voering', naam:'Voering op rug', desc:'Klassiek', img:'3._gilets__5._rug_voering_of_stof__voering_op_de_rug.png'},
+        {id:'stof', naam:'Stof op rug', desc:'Volledig in stof', img:'3._gilets__5._rug_voering_of_stof__stof_op_de_rug.png'},
+      ]
+    },
+    {
+      id: 'gilet_buckle', label: 'Buckle (achterkant)', icon: 'ti-adjustments', verplicht: false,
+      opties: [
+        {id:'met', naam:'Met buckle', desc:'Verstelbaar', img:'3._gilets__6._wel_of_geen_buckle__met_buckle.png'},
+        {id:'zonder', naam:'Zonder buckle', desc:'', img:'3._gilets__6._wel_of_geen_buckle__zonder_buckle.png'},
+      ]
+    },
+    {
+      id: 'gilet_onderkant', label: 'Onderkant', icon: 'ti-arrow-down', verplicht: false,
+      opties: [
+        {id:'recht', naam:'Rechte onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__normale_onderkant.png'},
+        {id:'rond', naam:'Ronde onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__ronde_onderkant.png'},
+      ]
+    },
+  ]
+};
 
-      <div class="do-row">
-        <div>
-          <label for="klantNaam">Naam</label>
-          <input id="klantNaam" type="text" autocomplete="name">
-        </div>
-        <div>
-          <label for="klantEmail">E-mail</label>
-          <input id="klantEmail" type="email" autocomplete="email">
-        </div>
-      </div>
-      <div class="do-row">
-        <div>
-          <label for="klantTelefoon">Telefoon</label>
-          <input id="klantTelefoon" type="tel" autocomplete="tel">
-        </div>
-        <div>
-          <label for="datumNodig">Wanneer heeft u het nodig?</label>
-          <input id="datumNodig" type="text" placeholder="Bijvoorbeeld september 2026">
-        </div>
-      </div>
-      <label for="algemeneOpmerking">Algemene opmerking</label>
-      <textarea id="algemeneOpmerking"></textarea>
+let gelegenheid = null;
+let bestelOptie = null;
+let extraItemType = 'Broek';
+let vorigeOrdernummer = '';
+let vorigeOrderCode = '';
+let vorigeOrderMatch = null;
+let vorigeOrderLookupBezig = false;
+let vorigeOrderLookupFout = '';
+let actieveKled = 'Jas';
+let actieveStap = 0;
+let keuzes = {};
 
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" onclick="toonSamenvatting()">Samenvatting controleren</button>
-      </div>
-    </section>
 
-    <section class="do-step" data-step="7">
-      <h2>Samenvatting</h2>
-      <p class="do-intro">Controleer uw keuzes voordat u de aanvraag verstuurt.</p>
-      <div id="samenvatting" class="do-summary"></div>
-
-      <div id="verzendResultaat"></div>
-
-      <div class="do-actions">
-        <button type="button" class="secondary" onclick="prevStep()">Terug</button>
-        <button type="button" class="gold" onclick="verzendBestelling()">Aanvraag versturen</button>
-      </div>
-    </section>
-  </main>
-
-  <script src="stoffen.js"></script>
-  <script src="voeringen.js"></script>
-  <script src="knopen.js"></script>
-  <script src="prijzen.js"></script>
-
-  <script>
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyP6SAUKyxBatZz3uYwCdyBwH27Er-g7gxVSVEb8SgOb9MJwYrIa8yWQ8I9uP2EweYWFg/exec";
-
-    const state = {
-      stap: 1,
-      gelegenheid: "",
-      besteltype: "",
-      stofRoute: "",
-      vorigeOrder: null,
-      matenKeuze: "nieuwe_maten"
+function renderGelegenheden() {
+  const grid = document.getElementById('gelegenheidGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  GELEGENHEDEN.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
+    card.innerHTML = `
+      <div>
+        <div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>
+        <div class="gelegenheid-name">${g.naam}</div>
+        <div class="gelegenheid-desc">${g.desc}</div>
+      </div>`;
+    card.onclick = () => {
+      gelegenheid = g.id;
+      if (!bestelOptie) bestelOptie = standaardBestelOptieVoorGelegenheid(g.id);
+      renderGelegenheden();
+      renderBestelOpties();
     };
+    grid.appendChild(card);
+  });
+  renderBestelOpties();
+}
 
-    const onderdelenPerBesteltype = {
-      pak_2delig: ["jas", "broek"],
-      pak_3delig: ["jas", "broek", "gilet"],
-      pak_extra_broek: ["jas", "broek"],
-      los_jasje: ["jas"],
-      losse_broek: ["broek"],
-      los_gilet: ["gilet"],
-      extra_bij_eerdere_order: ["jas", "broek", "gilet"]
+function standaardBestelOptieVoorGelegenheid(id){
+  if (id === 'black_tie') return 'tweedelig';
+  return 'tweedelig';
+}
+
+function getBeschikbareBestelOpties(){
+  if (!gelegenheid) return [];
+  return BESTEL_OPTIES.filter(o => (o.geschiktVoor || []).includes(gelegenheid));
+}
+
+function getBestelOptie(){
+  return BESTEL_OPTIES.find(o => o.id === bestelOptie) || null;
+}
+
+function getActieveKledingstukken(){
+  const optie = getBestelOptie();
+  if (!optie) return ['Jas','Broek'];
+  if (optie.id === 'extra_bestaande_order') return [extraItemType || 'Broek'];
+  return optie.kledingstukken || ['Jas','Broek'];
+}
+
+function renderBestelOpties(){
+  const section = document.getElementById('bestelSection');
+  const grid = document.getElementById('bestelGrid');
+  if (!section || !grid) return;
+  if (!gelegenheid) {
+    section.classList.remove('active');
+    grid.innerHTML = '';
+    return;
+  }
+  section.classList.add('active');
+  const opties = getBeschikbareBestelOpties();
+  grid.innerHTML = opties.map(o => `
+    <div class="bestel-card ${bestelOptie===o.id?'selected':''}" onclick="selectBestelOptie('${o.id}')">
+      <div class="bestel-icon"><i class="ti ${o.icon}"></i></div>
+      <div class="bestel-name">${o.naam}</div>
+      <div class="bestel-desc">${o.desc}</div>
+    </div>
+  `).join('');
+  const prevBox = document.getElementById('prevOrderBox');
+  if (prevBox) prevBox.className = 'prev-order-box' + (getBestelOptie()?.vereistVorigeOrder ? ' active' : '');
+  renderVorigeOrderResult();
+}
+
+function selectBestelOptie(id){
+  bestelOptie = id;
+  const optie = getBestelOptie();
+  if (optie && optie.id !== 'extra_bestaande_order') {
+    vorigeOrderMatch = null;
+    vorigeOrdernummer = '';
+  }
+  actieveKled = getActieveKledingstukken()[0] || 'Jas';
+  actieveStap = 0;
+  renderBestelOpties();
+}
+
+function setExtraItemType(type){
+  extraItemType = type;
+  actieveKled = type;
+  actieveStap = 0;
+  ['Broek','Jas','Gilet'].forEach(t => {
+    const el = document.getElementById('extra'+t+'Btn');
+    if (el) el.className = 'chip' + (t===type ? ' active' : '');
+  });
+  renderVorigeOrderResult();
+}
+
+function escapeHtml(value){
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function jsonpLookupVorigeOrder(ordernummer, code){
+  return new Promise((resolve, reject) => {
+    if (!ORDER_LOOKUP_WEBHOOK) {
+      reject(new Error('Geen lookup-webhook ingesteld.'));
+      return;
+    }
+    const callbackName = 'deoostLookup_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('Lookup duurde te lang. Probeer opnieuw of kies de stof handmatig.'));
+    }, 12000);
+    function cleanup(){
+      clearTimeout(timeout);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+    }
+    window[callbackName] = data => {
+      cleanup();
+      resolve(data || {});
     };
-
-    document.addEventListener("DOMContentLoaded", () => {
-      bindChoiceCards();
-      updateStep();
-      updateConditionalUI();
+    const params = new URLSearchParams({
+      action: 'lookupStof',
+      ordernummer: ordernummer || '',
+      code: code || '',
+      callback: callbackName
     });
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('Lookup kon niet geladen worden. Controleer de webhook-deployment.'));
+    };
+    script.src = ORDER_LOOKUP_WEBHOOK + '?' + params.toString();
+    document.head.appendChild(script);
+  });
+}
 
-    function bindChoiceCards() {
-      document.querySelectorAll("[data-choice-group]").forEach(group => {
-        group.querySelectorAll(".do-option").forEach(card => {
-          card.addEventListener("click", () => {
-            const key = group.dataset.choiceGroup;
-            const value = card.dataset.value;
-            state[key] = value;
-            group.querySelectorAll(".do-option").forEach(item => item.classList.remove("is-selected"));
-            card.classList.add("is-selected");
-            updateConditionalUI();
-          });
-        });
-      });
+async function zoekVorigeOrder(){
+  const input = document.getElementById('prevOrderInput');
+  const codeInput = document.getElementById('prevOrderCodeInput');
+  vorigeOrdernummer = (input ? input.value : vorigeOrdernummer).trim();
+  vorigeOrderCode = (codeInput ? codeInput.value : vorigeOrderCode).trim();
+  vorigeOrderMatch = null;
+  vorigeOrderLookupFout = '';
+  if (!vorigeOrdernummer && !vorigeOrderCode) {
+    vorigeOrderLookupFout = 'Vul een vorig ordernummer en/of stof-/controlecode in.';
+    renderVorigeOrderResult();
+    return;
+  }
+  vorigeOrderLookupBezig = true;
+  renderVorigeOrderResult();
+  try {
+    const data = await jsonpLookupVorigeOrder(vorigeOrdernummer, vorigeOrderCode);
+    if (!data.ok) throw new Error(data.error || 'Geen stof gevonden.');
+    // Alleen veilige stofgegevens worden opgeslagen. Geen klantnaam, e-mail, adres of maten.
+    vorigeOrderMatch = {
+      ordernummer: data.ordernummer || vorigeOrdernummer || '',
+      kledingstuk: data.kledingstuk || '',
+      stofnummer: data.stofnummer || '',
+      stofId: data.stofId || '',
+      leverancier: data.leverancier || '',
+      bunch: data.bunch || '',
+      bron: 'server_lookup'
+    };
+    const stof = getStofBijBestelling(vorigeOrderMatch);
+    if (stof) {
+      materiaalKeuzes.hoofdStof = stof.id;
+      materiaalKeuzes.jasStof = stof.id;
+      materiaalKeuzes.broekStof = stof.id;
+      materiaalKeuzes.giletStof = stof.id;
     }
+  } catch(err) {
+    vorigeOrderLookupFout = err.message || String(err);
+    vorigeOrderMatch = null;
+  } finally {
+    vorigeOrderLookupBezig = false;
+    renderVorigeOrderResult();
+  }
+}
 
-    function nextStep() {
-      if (!validateCurrentStep()) return;
-      state.stap = Math.min(7, state.stap + 1);
-      updateStep();
-    }
+function getStofBijBestelling(order){
+  if (!order) return null;
+  return STOFFEN.find(s =>
+    (order.stofId && s.id === order.stofId) ||
+    (order.stofnummer && String(s.stofnummer || '').toLowerCase() === String(order.stofnummer).toLowerCase())
+  ) || null;
+}
 
-    function prevStep() {
-      state.stap = Math.max(1, state.stap - 1);
-      updateStep();
-    }
+function renderVorigeOrderResult(){
+  const result = document.getElementById('prevOrderResult');
+  if (!result) return;
+  if (!getBestelOptie()?.vereistVorigeOrder) {
+    result.innerHTML = '';
+    return;
+  }
+  if (vorigeOrderLookupBezig) {
+    result.innerHTML = '<div class="inline-note">Stof wordt opgehaald...</div>';
+    return;
+  }
+  if (vorigeOrderLookupFout) {
+    result.innerHTML = `<div class="inline-note">${escapeHtml(vorigeOrderLookupFout)} U kunt ook handmatig een stof kiezen.</div>`;
+    return;
+  }
+  if (!vorigeOrdernummer && !vorigeOrderCode && !vorigeOrderMatch) {
+    result.innerHTML = '<div class="inline-note">Nog geen vorige order gekoppeld. U kunt ook doorgaan en de stof later handmatig kiezen.</div>';
+    return;
+  }
+  if (!vorigeOrderMatch) {
+    result.innerHTML = '<div class="inline-note">Nog geen stof gevonden. Gebruik “Zoek stof” of kies de stof handmatig.</div>';
+    return;
+  }
+  const stof = getStofBijBestelling(vorigeOrderMatch);
+  if (!stof) {
+    result.innerHTML = `<div class="inline-note">De lookup vond een stofreferentie, maar deze staat nog niet in <code>stoffen.js</code>. Gevonden stofId: <code>${escapeHtml(vorigeOrderMatch.stofId || '')}</code>, stofnummer: <code>${escapeHtml(vorigeOrderMatch.stofnummer || '')}</code>.</div>`;
+    return;
+  }
+  const img = stof.swatch || stof.closeup || '';
+  result.innerHTML = `
+    <div class="prev-order-card">
+      <div class="prev-order-img">${img ? `<img src="${img}" alt="${stof.naam}" onerror="this.style.display='none'">` : ''}</div>
+      <div class="prev-order-info">
+        <div class="prev-order-title">${stof.naam}</div>
+        <div class="prev-order-meta">
+          Vorige order: ${escapeHtml(vorigeOrderMatch.ordernummer || '—')}<br>
+          ${stof.merk || stof.leverancier || ''} · ${stof.bunch || vorigeOrderMatch.bunch || ''} · ${stof.stofnummer || vorigeOrderMatch.stofnummer || ''}<br>
+          ${stof.materiaal ? stof.materiaal.join('/') : ''} · ${stof.weving || ''} · ${stof.patroon || ''} · ${stof.kleur || ''}
+        </div>
+        <div class="prev-order-actions">
+          <button class="info-link" onclick="openStofInfo('${stof.id}',event)"><i class="ti ti-info-circle"></i> Stofinformatie</button>
+          <button class="info-link" onclick="selectStof('${stof.id}')"><i class="ti ti-check"></i> Gebruik deze stof</button>
+        </div>
+      </div>
+    </div>`;
+}
 
-    function updateStep() {
-      document.querySelectorAll(".do-step").forEach(step => {
-        step.classList.toggle("is-active", Number(step.dataset.step) === state.stap);
-      });
-      document.querySelectorAll("[data-progress]").forEach(item => {
-        item.classList.toggle("is-active", Number(item.dataset.progress) === state.stap);
-      });
-      updateConditionalUI();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
 
-    function validateCurrentStep() {
-      if (state.stap === 1 && !state.gelegenheid) {
-        alert("Kies eerst de gelegenheid.");
-        return false;
-      }
-      if (state.stap === 2 && !state.besteltype) {
-        alert("Kies eerst wat u wilt bestellen.");
-        return false;
-      }
-      if (state.stap === 2 && state.besteltype === "extra_bij_eerdere_order" && !state.vorigeOrder) {
-        alert("Zoek eerst de vorige bestelling op met ordernummer en e-mailadres.");
-        return false;
-      }
-      return true;
-    }
 
-    function updateConditionalUI() {
-      const vorigeOrderModule = document.getElementById("vorigeOrderModule");
-      vorigeOrderModule.classList.toggle("do-hidden", state.besteltype !== "extra_bij_eerdere_order");
+function getGelegenheid() {
+  return GELEGENHEDEN.find(g => g.id === gelegenheid) || null;
+}
 
-      const onderdelen = onderdelenPerBesteltype[state.besteltype] || [];
-      document.getElementById("jasKeuzes").classList.toggle("do-hidden", !onderdelen.includes("jas"));
-      document.getElementById("broekKeuzes").classList.toggle("do-hidden", !onderdelen.includes("broek"));
-      document.getElementById("giletKeuzes").classList.toggle("do-hidden", !onderdelen.includes("gilet"));
+function startConfiguratie() {
+  if (!gelegenheid) {
+    alert('Kies eerst een type kleding of gelegenheid.');
+    return;
+  }
+  if (!bestelOptie) {
+    alert('Kies eerst wat u wilt bestellen.');
+    return;
+  }
+  actieveKled = getActieveKledingstukken()[0] || 'Jas';
+  actieveStap = 0;
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'block';
+  render();
+}
 
-      const vorigeMatenKeuze = document.getElementById("vorigeMatenKeuze");
-      const maatvelden = document.getElementById("maatvelden");
-      const gebruiktVorigeMaten = state.matenKeuze === "gebruik_vorige_maten";
-      vorigeMatenKeuze.classList.toggle("do-hidden", !gebruiktVorigeMaten);
-      maatvelden.classList.toggle("do-hidden", gebruiktVorigeMaten);
-    }
+function terugNaarStart() {
+  document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('materialConfig').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+  renderGelegenheden();
+}
 
-    async function controleerVorigeOrder() {
-      const ordernummer = document.getElementById("vorigOrdernummer").value.trim();
-      const email = document.getElementById("vorigOrderEmail").value.trim().toLowerCase();
-      const resultaat = document.getElementById("vorigeOrderResultaat");
+function huidigeStappen() {
+  return STAPPEN[actieveKled] || [];
+}
 
-      if (!ordernummer || !email) {
-        resultaat.innerHTML = `<div class="do-message error">Vul zowel het ordernummer als het e-mailadres in.</div>`;
-        return;
-      }
+function huidigeStap() {
+  return huidigeStappen()[actieveStap];
+}
 
-      if (WEBHOOK_URL.includes("PLAATS_HIER")) {
-        resultaat.innerHTML = `<div class="do-message error">Plaats eerst de Apps Script webhook-URL in de variabele WEBHOOK_URL.</div>`;
-        return;
-      }
+function getOpties(stap) {
+  if (typeof stap.opties === 'function') return stap.opties(keuzes);
+  return stap.opties;
+}
 
-      resultaat.innerHTML = `<div class="do-message">Bestelling controleren...</div>`;
+function renderKledTabs() {
+  const tabs = document.getElementById('kledTabs');
+  tabs.innerHTML = '';
+  getActieveKledingstukken().forEach(k => {
+    const t = document.createElement('div');
+    t.className = 'kled-tab' + (k === actieveKled ? ' active' : '');
+    t.textContent = k;
+    t.onclick = () => { actieveKled = k; actieveStap = 0; render(); };
+    tabs.appendChild(t);
+  });
+}
 
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            actie: "zoekVorigeOrder",
-            ordernummer,
-            email
-          })
-        });
+function renderNav() {
+  const nav = document.getElementById('navList');
+  nav.innerHTML = '';
+  huidigeStappen().forEach((stap, i) => {
+    const heeftKeuze = keuzes[stap.id];
+    const li = document.createElement('li');
+    li.className = 'nav-item' + (i === actieveStap ? ' active' : '') + (heeftKeuze ? ' done' : '');
+    li.innerHTML = `
+      <i class="ti ${stap.icon} nav-icon"></i>
+      <span class="nav-label">${stap.label}${!stap.verplicht ? ' <span style="opacity:.6;font-size:10px">(opt.)</span>' : ''}</span>
+      <div class="nav-check"><i class="ti ti-check" style="font-size:9px;color:white"></i></div>`;
+    li.onclick = () => { actieveStap = i; renderStep(); renderNav(); updateProgress(); };
+    nav.appendChild(li);
+  });
+}
 
-        const data = await response.json();
+function renderSummaryPanel() {
+  const list = document.getElementById('summaryList');
+  const stappen = huidigeStappen();
+  const items = stappen.filter(s => keuzes[s.id]);
+  const g = getGelegenheid();
+  if (!items.length && !g) {
+    list.innerHTML = '<span class="summary-empty">Nog geen keuzes gemaakt</span>';
+    return;
+  }
+  let html = '';
+  if (g) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ${g.icon}" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Type kleding</div>
+        <div class="summary-val">${g.naam}</div>
+      </div>
+    </div>`;
+  }
+  const bo = getBestelOptie();
+  if (bo) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ${bo.icon}" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Bestelling</div>
+        <div class="summary-val">${bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam}</div>
+      </div>
+    </div>`;
+  }
+  if (vorigeOrderMatch) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ti-history" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Vorige order</div>
+        <div class="summary-val">${vorigeOrderMatch.ordernummer}</div>
+      </div>
+    </div>`;
+  }
+  html += items.map(s => {
+    const opties = getOpties(s);
+    const opt = opties.find(o => o.id === keuzes[s.id]);
+    if (!opt) return '';
+    return `<div class="summary-item">
+      <div class="summary-thumb"><img src="${IMG}${opt.img}" alt="${opt.naam}" onerror="this.style.display='none'"></div>
+      <div class="summary-text">
+        <div class="summary-cat">${s.label}</div>
+        <div class="summary-val">${opt.naam}</div>
+      </div>
+    </div>`;
+  }).join('');
+  list.innerHTML = html;
+}
 
-        if (!data.success) {
-          state.vorigeOrder = null;
-          resultaat.innerHTML = `
-            <div class="do-message error">
-              We konden geen bestelling vinden met deze combinatie van ordernummer en e-mailadres.
-            </div>
-          `;
-          return;
+function renderStep() {
+  const stap = huidigeStap();
+  if (!stap) return;
+  const opties = getOpties(stap);
+  const content = document.getElementById('stepContent');
+  const g = getGelegenheid();
+  content.innerHTML = `
+    ${g ? `<div class="gelegenheid-badge"><i class="ti ${g.icon}" style="font-size:13px"></i>${g.naam}</div>` : ''}
+    <div class="step-header">
+      <div class="step-title">${stap.label} ${!stap.verplicht ? '<span class="step-optional">Optioneel</span>' : ''}</div>
+    </div>
+    <div class="opt-grid" id="optGrid"></div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="prevStap()" ${actieveStap === 0 ? 'style="visibility:hidden"' : ''}>← Vorige</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        ${!stap.verplicht ? `<button class="btn-skip" onclick="slaOver()">Overslaan</button>` : ''}
+        ${actieveStap < huidigeStappen().length - 1 ?
+          `<button class="btn btn-primary" onclick="volgendeStap()">Volgende →</button>` :
+          `<button class="btn btn-accent" onclick="toonSamenvatting()">Samenvatting bekijken →</button>`
         }
+      </div>
+    </div>`;
 
-        state.vorigeOrder = data;
+  const grid = document.getElementById('optGrid');
+  opties.forEach(opt => {
+    const c = document.createElement('div');
+    c.className = 'opt-card' + (keuzes[stap.id] === opt.id ? ' selected' : '');
+    c.innerHTML = `
+      <div class="opt-img">
+        <img src="${IMG}${opt.img}" alt="${opt.naam}" onerror="this.style.display='none'">
+        <button class="opt-zoom" onclick="openLb('${IMG}${opt.img}','${opt.naam}',event)" title="Vergroot">
+          <i class="ti ti-zoom-in"></i>
+        </button>
+      </div>
+      <div class="opt-info">
+        <div class="opt-name">${opt.naam}</div>
+        ${opt.desc ? `<div class="opt-desc">${opt.desc}</div>` : ''}
+      </div>`;
+    c.onclick = () => {
+      keuzes[stap.id] = opt.id;
+      grid.querySelectorAll('.opt-card').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      renderNav();
+      renderSummaryPanel();
+    };
+    grid.appendChild(c);
+  });
+}
 
-        resultaat.innerHTML = `
-          <div class="do-message success">
-            <h3>Bestelling gevonden</h3>
-            <p><strong>Ordernummer:</strong> ${escapeHtml(data.ordernummer || ordernummer)}</p>
-            <p><strong>Datum:</strong> ${escapeHtml(data.datum || "")}</p>
-            <p><strong>Stof:</strong> ${escapeHtml(data.stofNaam || data.stofId || "")}</p>
-            <p><strong>Kledingstukken:</strong> ${escapeHtml((data.kledingstukken || []).join(", "))}</p>
+function updateProgress() {
+  const stappen = huidigeStappen();
+  const pct = stappen.length ? ((actieveStap + 1) / stappen.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
 
-            <h3>Zijn uw maten veranderd sinds deze bestelling?</h3>
-            <p>Kies alleen “Nee” als uw lichaamsmaten en gewenste pasvorm sinds uw vorige bestelling niet zijn veranderd.</p>
+function volgendeStap() {
+  const stap = huidigeStap();
+  if (stap && stap.verplicht && !keuzes[stap.id]) {
+    alert('Maak eerst een keuze voor "' + stap.label + '" voordat u verder gaat.');
+    return;
+  }
+  if (actieveStap < huidigeStappen().length - 1) {
+    actieveStap++;
+    render();
+  }
+}
 
-            <div class="do-actions">
-              <button type="button" onclick="gebruikVorigeMaten()">Nee, gebruik mijn vorige maten</button>
-              <button type="button" class="secondary" onclick="gebruikNieuweMaten()">Ja, mijn maten zijn veranderd</button>
-            </div>
-          </div>
-        `;
-      } catch (error) {
-        resultaat.innerHTML = `
-          <div class="do-message error">
-            Er ging iets mis bij het controleren van de bestelling. Controleer de webhook-URL en de Apps Script deployment.
-          </div>
-        `;
-      }
+function prevStap() {
+  if (actieveStap > 0) { actieveStap--; render(); }
+}
+
+function slaOver() {
+  delete keuzes[huidigeStap().id];
+  volgendeStap();
+}
+
+function toonSamenvatting() {
+  document.getElementById('mainConfig').style.display = 'none';
+  const fin = document.getElementById('finalSummary');
+  fin.style.display = 'block';
+  const content = document.getElementById('finalContent');
+
+  let html = '';
+  const g = getGelegenheid();
+  if (g) {
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">Type kleding / gelegenheid</div>
+      <div class="sum-card" style="max-width:320px">
+        <div class="sum-card-info" style="padding:12px">
+          <div class="sum-card-cat">Gekozen route</div>
+          <div class="sum-card-val">${g.naam}</div>
+          <div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">${g.desc}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+  const bo = getBestelOptie();
+  if (bo) {
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">Wat wilt u bestellen?</div>
+      <div class="sum-card" style="max-width:320px">
+        <div class="sum-card-info" style="padding:12px">
+          <div class="sum-card-cat">Bestelling</div>
+          <div class="sum-card-val">${bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam}</div>
+          <div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">${bo.desc}</div>
+          ${vorigeOrderMatch ? `<div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">Vorige order: ${vorigeOrderMatch.ordernummer}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+  getActieveKledingstukken().forEach(kled => {
+    const stappen = STAPPEN[kled];
+    const items = stappen.filter(s => keuzes[s.id]);
+    if (!items.length) return;
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">${kled}</div><div class="sum-grid">`;
+    items.forEach(s => {
+      const opties = typeof s.opties === 'function' ? s.opties(keuzes) : s.opties;
+      const opt = opties.find(o => o.id === keuzes[s.id]);
+      if (!opt) return;
+      html += `<div class="sum-card">
+        <div class="sum-card-img"><img src="${IMG}${opt.img}" alt="${opt.naam}" style="width:100%;height:100%;object-fit:contain;padding:4px" onerror="this.style.display='none'"></div>
+        <div class="sum-card-info">
+          <div class="sum-card-cat">${s.label}</div>
+          <div class="sum-card-val">${opt.naam}</div>
+        </div>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  content.innerHTML = html || '<p style="color:#6b6560;font-size:13px">Nog geen keuzes gemaakt.</p>';
+}
+
+function getSamenvatting() {
+  const result = {};
+  const g = getGelegenheid();
+  if (g) {
+    result.gelegenheid = {
+      id: g.id,
+      naam: g.naam,
+      desc: g.desc
+    };
+  }
+  const bo = getBestelOptie();
+  if (bo) {
+    result.bestelling = {
+      id: bo.id,
+      naam: bo.naam,
+      desc: bo.desc,
+      kledingstukken: getActieveKledingstukken(),
+      extraItems: bo.extraItems || [],
+      extraItemType: bo.id === 'extra_bestaande_order' ? extraItemType : null
+    };
+  }
+  if (vorigeOrderMatch) {
+    result.vorigeOrder = {
+      ordernummer: vorigeOrderMatch.ordernummer,
+      kledingstuk: vorigeOrderMatch.kledingstuk || '',
+      stofnummer: vorigeOrderMatch.stofnummer || '',
+      stofId: vorigeOrderMatch.stofId || ''
+    };
+  }
+  getActieveKledingstukken().forEach(kled => {
+    STAPPEN[kled].forEach(s => {
+      if (keuzes[s.id]) result[s.id] = keuzes[s.id];
+    });
+  });
+  return JSON.stringify(result);
+}
+
+function openLb(src, caption, e) {
+  e.stopPropagation();
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbCaption').textContent = caption;
+  document.getElementById('lb').style.display = 'flex';
+}
+
+
+/* =========================
+   STOF / MATERIAAL OPZET
+========================= */
+const STOFFEN_IMG = '';
+const STOFFEN = (window.DEOST_STOFFEN || []).filter(s => s.actief !== false);
+const VOERINGEN = (window.DEOST_VOERINGEN || []).filter(v => v.actief !== false);
+const KNOPEN = (window.DEOST_KNOPEN || []).filter(k => k.actief !== false);
+const PRIJZEN = window.DEOST_PRIJZEN || {};
+
+let materiaalMode = 'help';
+let materiaalFilters = {
+  gebruik:'geen_voorkeur', uitstraling:'geen_voorkeur', kleur:'geen_voorkeur',
+  materiaal:'geen_voorkeur', weving:'geen_voorkeur', patroon:'geen_voorkeur'
+};
+let materiaalKeuzes = { hoofdStof:null, jasStof:null, broekStof:null, giletStof:null };
+let actieveMateriaalDoel = 'hoofdStof';
+
+function toonMateriaalKeuze(){
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'none';
+  document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('materialConfig').style.display = 'block';
+  bepaalMateriaalDoel();
+  renderMateriaalKeuze();
+}
+
+function bepaalMateriaalDoel(){
+  const g = getGelegenheid();
+  const targets = getMateriaalDoelen();
+  if (!g || g.id !== 'tenue_de_ville') {
+    actieveMateriaalDoel = 'hoofdStof';
+    return;
+  }
+  actieveMateriaalDoel = targets.find(t => !materiaalKeuzes[t]) || targets[0] || 'hoofdStof';
+}
+
+function getMateriaalDoelen(){
+  const actieve = getActieveKledingstukken();
+  const map = {Jas:'jasStof', Broek:'broekStof', Gilet:'giletStof'};
+  return actieve.map(k => map[k]).filter(Boolean);
+}
+
+function doelLabel(doel){
+  return {hoofdStof:'Hoofdstof',jasStof:'Jasstof',broekStof:'Broekstof',giletStof:'Giletstof'}[doel] || 'Stof';
+}
+
+function getStof(id){ return STOFFEN.find(s => s.id === id); }
+
+function renderMateriaalKeuze(){
+  const g = getGelegenheid();
+  const content = document.getElementById('materialContent');
+  content.innerHTML = `
+    <div class="gelegenheid-badge"><i class="ti ${(g&&g.icon)||'ti-shirt'}"></i>${g ? g.naam : 'Geen gelegenheid gekozen'}</div>
+    <div class="material-selection-panel">
+      <div class="material-selection-title">Huidige materiaalkeuze</div>
+      ${renderMateriaalSelectieTekst()}
+    </div>
+    <div class="material-mode-grid">
+      <div class="material-mode ${materiaalMode==='help'?'active':''}" onclick="materiaalMode='help';renderMateriaalKeuze()">
+        <div class="material-mode-icon"><i class="ti ti-sparkles"></i></div>
+        <div class="material-mode-title">Help mij kiezen</div>
+        <div class="material-mode-desc">Beantwoord eenvoudige vragen over gebruik, uitstraling en kleur. Wij tonen passende stoffen.</div>
+      </div>
+      <div class="material-mode ${materiaalMode==='browse'?'active':''}" onclick="materiaalMode='browse';renderMateriaalKeuze()">
+        <div class="material-mode-icon"><i class="ti ti-adjustments"></i></div>
+        <div class="material-mode-title">Zelf bladeren</div>
+        <div class="material-mode-desc">Filter zelf op materiaalsoort, weving, patroon en kleur.</div>
+      </div>
+    </div>
+    ${materiaalMode==='help' ? renderHelpFilters() : renderBrowseFilters()}
+    ${renderStofResultaten()}
+  `;
+}
+
+function renderMateriaalSelectieTekst(){
+  const g = getGelegenheid();
+  const bo = getBestelOptie();
+  let html = '';
+  if (vorigeOrderMatch) {
+    const stof = getStofBijBestelling(vorigeOrderMatch);
+    html += `<div class="material-selection-row"><span>Vorige order:</span> ${vorigeOrderMatch.ordernummer}${stof ? ' — '+stof.naam+' ('+stof.stofnummer+')' : ''}</div>`;
+  }
+  if (g && g.id === 'tenue_de_ville') {
+    const targets = getMateriaalDoelen();
+    html += targets.map(k => {
+      const stof = getStof(materiaalKeuzes[k]);
+      return `<div class="material-selection-row"><span>${doelLabel(k)}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+    }).join('') + renderDoelKnoppen(targets);
+    return html;
+  }
+  const stof = getStof(materiaalKeuzes.hoofdStof);
+  let label = 'Hoofdstof';
+  if (bo && bo.id === 'extra_bestaande_order') label = 'Stof voor '+extraItemType.toLowerCase();
+  else if (bo && getActieveKledingstukken().length === 1) label = 'Stof voor '+getActieveKledingstukken()[0].toLowerCase();
+  else if (g && g.id === 'black_tie') label = 'Avondstof';
+  else label = 'Stof voor de geselecteerde kledingstukken';
+  html += `<div class="material-selection-row"><span>${label}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+  return html;
+}
+
+function renderDoelKnoppen(doelen){
+  return `<div class="chip-row" style="margin-top:8px">${doelen.map(d=>`<button class="chip ${actieveMateriaalDoel===d?'active':''}" onclick="actieveMateriaalDoel='${d}';renderMateriaalKeuze()">${doelLabel(d)}</button>`).join('')}</div>`;
+}
+
+function renderHelpFilters(){
+  return `<div class="filter-section">
+    <div class="filter-title">Help mij kiezen</div>
+    <div class="filter-sub">Laat technische termen gerust op “geen voorkeur”. De configurator gebruikt deze antwoorden alleen om de stoffenlijst te verkleinen.</div>
+    ${renderChipFilter('gebruik','Waarvoor wilt u het dragen?',[
+      ['geen_voorkeur','Geen voorkeur'],['zakelijk','Zakelijk'],['bruiloft','Bruiloft'],['zomer','Zomer'],['winter','Winter'],['avond','Avond / gala'],['casual','Casual']
+    ])}
+    ${renderChipFilter('uitstraling','Welke uitstraling zoekt u?',[
+      ['geen_voorkeur','Geen voorkeur'],['klassiek','Klassiek'],['rustig','Rustig'],['opvallend','Opvallend'],['formeel','Formeel'],['zacht','Zacht / informeel'],['veelzijdig','Veelzijdig']
+    ])}
+    ${renderChipFilter('kleur','Kleurfamilie',[
+      ['geen_voorkeur','Geen voorkeur'],['navy','Navy'],['blauw','Blauw'],['grijs','Grijs'],['zwart','Zwart'],['beige','Beige / naturel'],['bordeaux','Bordeaux']
+    ])}
+  </div>`;
+}
+
+function renderBrowseFilters(){
+  return `<div class="filter-section">
+    <div class="filter-title">Zelf bladeren</div>
+    <div class="filter-sub">Gebruik de technische filters om doelgericht door de stoffenbibliotheek te bladeren.</div>
+    ${renderChipFilter('materiaal','Materiaalsoort',[
+      ['geen_voorkeur','Geen voorkeur'],['wol','Wol'],['katoen','Katoen'],['linnen','Linnen']
+    ])}
+    ${renderChipFilter('weving','Weving / structuur',[
+      ['geen_voorkeur','Geen voorkeur'],['hopsack','Hopsack'],['flanel','Flanel'],['twill','Twill'],['plain','Plain weave'],['barathea','Barathea'],['velvet','Velvet']
+    ])}
+    ${renderChipFilter('patroon','Patroon',[
+      ['geen_voorkeur','Geen voorkeur'],['effen','Effen'],['prince_of_wales','Prince of Wales / Glencheck'],['windowpane','Windowpane'],['houndstooth','Houndstooth'],['stripe','Streep']
+    ])}
+    ${renderChipFilter('kleur','Kleur',[
+      ['geen_voorkeur','Geen voorkeur'],['navy','Navy'],['blauw','Blauw'],['grijs','Grijs'],['zwart','Zwart'],['beige','Beige'],['bordeaux','Bordeaux']
+    ])}
+  </div>`;
+}
+
+function renderChipFilter(key,label,opts){
+  return `<div class="filter-row"><div class="filter-label">${label}</div><div class="chip-row">${opts.map(([id,naam])=>`<button class="chip ${materiaalFilters[key]===id?'active':''}" onclick="setMateriaalFilter('${key}','${id}')">${naam}</button>`).join('')}</div></div>`;
+}
+
+function setMateriaalFilter(key,val){
+  materiaalFilters[key]=val;
+  renderMateriaalKeuze();
+}
+
+function getGefilterdeStoffen(){
+  const g = getGelegenheid();
+  return STOFFEN.filter(stof => {
+    if (g && !stof.geschiktVoor.includes(g.id)) return false;
+    if (materiaalMode === 'help') {
+      if (materiaalFilters.gebruik !== 'geen_voorkeur' && !stof.gebruik.includes(materiaalFilters.gebruik) && !stof.seizoen.includes(materiaalFilters.gebruik)) return false;
+      if (materiaalFilters.uitstraling !== 'geen_voorkeur' && !stof.uitstraling.includes(materiaalFilters.uitstraling)) return false;
+      if (materiaalFilters.kleur !== 'geen_voorkeur' && stof.kleur !== materiaalFilters.kleur) return false;
+    } else {
+      if (materiaalFilters.materiaal !== 'geen_voorkeur' && !stof.materiaal.includes(materiaalFilters.materiaal)) return false;
+      if (materiaalFilters.weving !== 'geen_voorkeur' && stof.weving !== materiaalFilters.weving) return false;
+      if (materiaalFilters.patroon !== 'geen_voorkeur' && stof.patroon !== materiaalFilters.patroon) return false;
+      if (materiaalFilters.kleur !== 'geen_voorkeur' && stof.kleur !== materiaalFilters.kleur) return false;
     }
+    return true;
+  });
+}
 
-    function gebruikVorigeMaten() {
-      state.matenKeuze = "gebruik_vorige_maten";
-      updateConditionalUI();
-      alert("De vorige maten worden gebruikt. De maten worden niet in de browser getoond.");
+function renderStofResultaten(){
+  const stoffen = getGefilterdeStoffen();
+  return `<div class="fabric-results-head"><div><div class="fabric-results-title">Aanbevolen stoffen</div><div class="fabric-results-count">${stoffen.length} resultaat${stoffen.length===1?'':'en'} — selectie voor ${doelLabel(actieveMateriaalDoel)}</div></div><button class="btn btn-ghost" onclick="resetMateriaalFilters()">Filters wissen</button></div>
+    <div class="fabric-grid">${stoffen.map(renderStofCard).join('') || '<p class="summary-empty">Geen stoffen gevonden. Wis een filter of kies “Geen voorkeur”.</p>'}</div>`;
+}
+
+function renderStofCard(stof){
+  const selected = materiaalKeuzes[actieveMateriaalDoel] === stof.id || (actieveMateriaalDoel==='hoofdStof' && materiaalKeuzes.hoofdStof===stof.id);
+  const img = STOFFEN_IMG + (stof.swatch || stof.closeup || 'placeholder.jpg');
+  return `<div class="fabric-card ${selected?'selected':''}" onclick="selectStof('${stof.id}')">
+    <div class="fabric-img">
+      <img src="${img}" alt="${stof.naam}" onerror="this.style.display='none'">
+      <div class="fabric-actions">
+        <button class="fabric-icon-btn" onclick="openLb('${STOFFEN_IMG + (stof.closeup || stof.swatch)}','${stof.naam}',event)" title="Close-up"><i class="ti ti-zoom-in"></i></button>
+        <button class="fabric-icon-btn" onclick="openStofInfo('${stof.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button>
+      </div>
+    </div>
+    <div class="fabric-info">
+      <div class="fabric-name">${stof.naam}</div>
+      <div class="fabric-meta">${stof.merk} · ${stof.stofnummer}<br>${stof.materiaal.join('/')} · ${stof.weving} · ${stof.patroon} · ${stof.kleur}</div>
+      <div class="fabric-tags">${stof.klantLabels.map(t=>`<span class="fabric-tag">${t}</span>`).join('')}<span class="fabric-tag">Prijs ${stof.prijsGroep}</span></div>
+    </div>
+  </div>`;
+}
+
+function selectStof(id){
+  const g = getGelegenheid();
+  if (!g || g.id !== 'tenue_de_ville') {
+    materiaalKeuzes.hoofdStof = id;
+    getMateriaalDoelen().forEach(k => { materiaalKeuzes[k] = id; });
+    if (!getMateriaalDoelen().length) {
+      materiaalKeuzes.jasStof = id;
+      materiaalKeuzes.broekStof = id;
+      materiaalKeuzes.giletStof = id;
     }
+  } else {
+    materiaalKeuzes[actieveMateriaalDoel] = id;
+  }
+  renderMateriaalKeuze();
+}
 
-    function gebruikNieuweMaten() {
-      state.matenKeuze = "nieuwe_maten";
-      updateConditionalUI();
-      alert("Vul straks de relevante maten opnieuw in.");
-    }
+function resetMateriaalFilters(){
+  materiaalFilters = {gebruik:'geen_voorkeur', uitstraling:'geen_voorkeur', kleur:'geen_voorkeur', materiaal:'geen_voorkeur', weving:'geen_voorkeur', patroon:'geen_voorkeur'};
+  renderMateriaalKeuze();
+}
 
-    function toonSamenvatting() {
-      state.stap = 7;
-      updateStep();
+function openStofInfo(id,e){
+  e.stopPropagation();
+  const stof = getStof(id);
+  if (!stof) return;
+  const media = document.getElementById('infoMedia');
+  media.innerHTML = `<img src="${STOFFEN_IMG + (stof.closeup || stof.swatch)}" alt="${stof.naam}" onerror="this.style.display='none'">`;
+  document.getElementById('infoContent').innerHTML = `
+    <div class="info-title">${stof.naam}</div>
+    <div class="info-meta">${stof.merk} · ${stof.stofnummer} · Prijsgroep ${stof.prijsGroep}</div>
+    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${stof.materiaal.join(', ')}<br>Weving: ${stof.weving}<br>Patroon: ${stof.patroon}<br>Kleur: ${stof.kleur}${stof.patroonkleur ? '<br>Patroonkleur: '+stof.patroonkleur : ''}</div></div>
+    <div class="info-section"><div class="info-section-title">Korte uitleg</div><div class="info-text">${stof.korteUitleg}</div></div>
+    <div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${stof.advies}</div></div>
+    ${stof.minderGeschiktVoor ? `<div class="info-section"><div class="info-section-title">Minder geschikt voor</div><div class="info-text">${stof.minderGeschiktVoor}</div></div>` : ''}
+    <div class="info-link-row">
+      ${stof.blogUrl ? `<a class="info-link" href="${stof.blogUrl}" target="_blank" rel="noopener"><i class="ti ti-article"></i> Gerelateerde blog</a>` : ''}
+      ${stof.videoUrl ? `<a class="info-link" href="${stof.videoUrl}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Video bekijken</a>` : ''}
+      <button class="info-link" onclick="selectStof('${stof.id}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
+    </div>`;
+  document.getElementById('infoModal').style.display='flex';
+}
 
-      const data = collectFormData();
-      const summary = document.getElementById("samenvatting");
-      summary.innerHTML = `
-        <dl>
-          <dt>Gelegenheid</dt><dd>${escapeHtml(data.gelegenheid)}</dd>
-          <dt>Besteltype</dt><dd>${escapeHtml(data.besteltype)}</dd>
-          <dt>Vorige order</dt><dd>${escapeHtml(data.vorigeOrder?.ordernummer || "Niet van toepassing")}</dd>
-          <dt>Maten</dt><dd>${escapeHtml(data.matenKeuze === "gebruik_vorige_maten" ? "Gebruik vorige maten" : "Nieuwe maten ingevuld")}</dd>
-          <dt>Stofroute</dt><dd>${escapeHtml(data.stofRoute || "Nog niet gekozen")}</dd>
-          <dt>Naam</dt><dd>${escapeHtml(data.klant.naam)}</dd>
-          <dt>E-mail</dt><dd>${escapeHtml(data.klant.email)}</dd>
-          <dt>Telefoon</dt><dd>${escapeHtml(data.klant.telefoon)}</dd>
-        </dl>
-      `;
-    }
+function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
 
-    function collectFormData() {
-      return {
-        actie: "nieuweBestelling",
-        gelegenheid: state.gelegenheid,
-        besteltype: state.besteltype,
-        stofRoute: state.stofRoute,
-        vorigeOrder: state.vorigeOrder ? {
-          ordernummer: state.vorigeOrder.ordernummer,
-          referentieToken: state.vorigeOrder.referentieToken,
-          stofId: state.vorigeOrder.stofId,
-          stofNaam: state.vorigeOrder.stofNaam
-        } : null,
-        matenKeuze: state.matenKeuze,
-        stijl: {
-          jasModel: valueOf("jasModel"),
-          jasRevers: valueOf("jasRevers"),
-          broekPlooien: valueOf("broekPlooien"),
-          broekBand: valueOf("broekBand"),
-          giletModel: valueOf("giletModel"),
-          giletRug: valueOf("giletRug")
-        },
-        stof: {
-          opmerking: valueOf("stofOpmerking")
-        },
-        maten: state.matenKeuze === "gebruik_vorige_maten" ? {
-          gebruikVorigeMaten: true,
-          referentieToken: state.vorigeOrder?.referentieToken || ""
-        } : {
-          gebruikVorigeMaten: false,
-          lengte: valueOf("maatLengte"),
-          gewicht: valueOf("maatGewicht"),
-          borst: valueOf("maatBorst"),
-          taille: valueOf("maatTaille"),
-          heup: valueOf("maatHeup"),
-          opmerking: valueOf("maatOpmerking")
-        },
-        klant: {
-          naam: valueOf("klantNaam"),
-          email: valueOf("klantEmail"),
-          telefoon: valueOf("klantTelefoon"),
-          datumNodig: valueOf("datumNodig"),
-          opmerking: valueOf("algemeneOpmerking")
-        },
-        aangemaaktOp: new Date().toISOString()
-      };
-    }
+function toonMateriaalSamenvatting(){
+  const g = getGelegenheid();
+  const bo = getBestelOptie();
+  let msg = 'Materiaalkeuze\n\n';
+  if (bo) msg += 'Bestelling: ' + (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) + '\n';
+  if (vorigeOrderMatch) msg += 'Vorige order: ' + vorigeOrderMatch.ordernummer + '\n';
+  if (g && g.id === 'tenue_de_ville') {
+    getMateriaalDoelen().forEach(k => {
+      const stof = getStof(materiaalKeuzes[k]);
+      msg += doelLabel(k)+': '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+    });
+  } else {
+    const stof = getStof(materiaalKeuzes.hoofdStof);
+    msg += 'Stof: '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+  }
+  alert(msg + '\nVolgende stap wordt later: voering, knopen, maten en klantgegevens.');
+}
 
-    async function verzendBestelling() {
-      const resultaat = document.getElementById("verzendResultaat");
-      const data = collectFormData();
 
-      if (!data.klant.naam || !data.klant.email) {
-        resultaat.innerHTML = `<div class="do-message error">Vul minimaal naam en e-mailadres in.</div>`;
-        return;
-      }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('lb').style.display = 'none';
+});
 
-      if (WEBHOOK_URL.includes("PLAATS_HIER")) {
-        resultaat.innerHTML = `<div class="do-message error">Plaats eerst de Apps Script webhook-URL in de variabele WEBHOOK_URL.</div>`;
-        return;
-      }
+function render() {
+  renderKledTabs();
+  renderNav();
+  renderStep();
+  renderSummaryPanel();
+  updateProgress();
+}
 
-      resultaat.innerHTML = `<div class="do-message">Aanvraag versturen...</div>`;
-
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          body: JSON.stringify(data)
-        });
-        const json = await response.json();
-
-        if (json.success) {
-          resultaat.innerHTML = `<div class="do-message success">Uw aanvraag is verstuurd. Ordernummer: ${escapeHtml(json.ordernummer || "")}</div>`;
-        } else {
-          resultaat.innerHTML = `<div class="do-message error">De aanvraag kon niet worden verstuurd. ${escapeHtml(json.message || "")}</div>`;
-        }
-      } catch (error) {
-        resultaat.innerHTML = `<div class="do-message error">Er ging iets mis bij het versturen. Controleer de webhook en deployment.</div>`;
-      }
-    }
-
-    function valueOf(id) {
-      const el = document.getElementById(id);
-      return el ? String(el.value || "").trim() : "";
-    }
-
-    function escapeHtml(value) {
-      return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-  </script>
+renderGelegenheden();
+</script>
 </body>
 </html>
