@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Oost — Stijlconfigurator</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf8f5;padding:1.5rem 1rem;}
+.wrap{max-width:860px;margin:0 auto;}
+.cfg-header{border-bottom:0.5px solid rgba(74,69,64,.2);padding:1.25rem 0 .875rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:flex-end;}
+.cfg-header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;letter-spacing:.05em;}
+.cfg-header p{font-size:12px;color:#6b6560;margin-top:3px;}
+
+/* LAYOUT: sidebar + main */
+.layout{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:640px){.layout{grid-template-columns:1fr;}}
+
+/* SIDEBAR NAV */
+.sidebar{position:sticky;top:1rem;}
+.kled-tabs{display:flex;gap:6px;margin-bottom:1rem;}
+.kled-tab{flex:1;padding:7px 4px;text-align:center;font-size:11px;letter-spacing:.05em;text-transform:uppercase;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;cursor:pointer;transition:all .2s;background:white;}
+.kled-tab.active{background:#1a1814;border-color:#1a1814;color:white;}
+.kled-tab:hover:not(.active){border-color:#4a4540;}
+.nav-list{list-style:none;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#6b6560;transition:all .2s;margin-bottom:2px;border:0.5px solid transparent;}
+.nav-item:hover{background:#f0ece4;color:#1a1814;}
+.nav-item.active{background:#1a1814;color:white;}
+.nav-item.done{color:#8B6F47;border-color:rgba(139,111,71,.2);}
+.nav-item.done .nav-check{opacity:1;}
+.nav-check{width:16px;height:16px;border-radius:50%;background:#8B6F47;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;transition:opacity .2s;}
+.nav-icon{font-size:14px;flex-shrink:0;}
+.nav-label{flex:1;line-height:1.3;}
+
+/* MAIN */
+.main{}
+.step-header{margin-bottom:1.25rem;}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;margin-bottom:4px;}
+.step-sub{font-size:12px;color:#6b6560;line-height:1.5;}
+.step-optional{display:inline-block;background:#f0ece4;border-radius:3px;padding:1px 6px;font-size:10px;color:#8B6F47;margin-left:6px;letter-spacing:.04em;}
+
+/* OPTIE GRID */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem;}
+.opt-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s;background:white;position:relative;}
+.opt-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.opt-card.selected{border-color:#1a1814;border-width:1.5px;}
+.opt-card.selected::after{content:'✓';position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;}
+.opt-img{width:100%;aspect-ratio:3/4;background:#f7f4ef;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.opt-img img{width:100%;height:100%;object-fit:contain;padding:8px;}
+.opt-zoom{position:absolute;bottom:5px;right:5px;width:22px;height:22px;border-radius:4px;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:12px;color:#1a1814;}
+.opt-img:hover .opt-zoom{opacity:1;}
+.opt-info{padding:8px 8px 10px;}
+.opt-name{font-size:12px;font-weight:500;color:#1a1814;margin-bottom:2px;line-height:1.3;}
+.opt-desc{font-size:11px;color:#6b6560;line-height:1.4;}
+
+/* SAMENVATTING SIDEBAR */
+.summary-panel{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1rem;background:white;margin-top:1rem;}
+.summary-title{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;margin-bottom:.75rem;color:#1a1814;}
+.summary-item{display:flex;gap:8px;margin-bottom:6px;align-items:flex-start;}
+.summary-thumb{width:36px;height:36px;border-radius:4px;background:#f7f4ef;overflow:hidden;flex-shrink:0;}
+.summary-thumb img{width:100%;height:100%;object-fit:contain;}
+.summary-text{flex:1;}
+.summary-cat{font-size:10px;color:#8B6F47;text-transform:uppercase;letter-spacing:.05em;}
+.summary-val{font-size:11px;color:#1a1814;line-height:1.3;}
+.summary-empty{font-size:11px;color:#6b6560;font-style:italic;}
+
+/* NAV BUTTONS */
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);}
+.btn{font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:.07em;text-transform:uppercase;padding:9px 20px;border-radius:4px;cursor:pointer;transition:all .2s;border:none;}
+.btn-ghost{background:transparent;border:0.5px solid rgba(74,69,64,.2);color:#6b6560;}
+.btn-ghost:hover{border-color:#4a4540;color:#1a1814;}
+.btn-primary{background:#1a1814;color:#faf8f5;}
+.btn-primary:hover{opacity:.85;}
+.btn-accent{background:#8B6F47;color:white;}
+.btn-accent:hover{background:#7a6040;}
+.btn-skip{background:transparent;border:none;font-size:11px;color:#8B6F47;cursor:pointer;letter-spacing:.04em;padding:4px 8px;}
+.btn-skip:hover{text-decoration:underline;}
+
+/* SAMENVATTING PAGINA */
+.final-summary{display:none;}
+.final-summary.active{display:block;}
+.sum-kled-block{margin-bottom:2rem;}
+.sum-kled-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:0.5px solid rgba(74,69,64,.2);}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:.5rem;}
+.sum-card{border:0.5px solid rgba(74,69,64,.2);border-radius:6px;overflow:hidden;background:white;}
+.sum-card-img{width:100%;aspect-ratio:1;background:#f7f4ef;}
+.sum-card-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.sum-card-info{padding:6px;}
+.sum-card-cat{font-size:9px;color:#8B6F47;text-transform:uppercase;letter-spacing:.05em;}
+.sum-card-val{font-size:11px;color:#1a1814;font-weight:500;}
+
+/* LIGHTBOX */
+.lb-overlay{position:fixed;inset:0;background:rgba(10,8,6,.88);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.lb-box{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;}
+.lb-img{max-width:min(560px,88vw);max-height:82vh;object-fit:contain;border-radius:8px;background:#f7f4ef;padding:20px;}
+.lb-caption{margin-top:12px;color:rgba(255,255,255,.8);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;text-align:center;}
+.lb-close{position:absolute;top:-16px;right:-16px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;color:white;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;}
+.lb-close:hover{background:rgba(255,255,255,.25);}
+
+/* PROGRESS */
+.progress-bar{height:2px;background:rgba(74,69,64,.1);border-radius:1px;margin-bottom:1.5rem;overflow:hidden;}
+.progress-fill{height:100%;background:#8B6F47;border-radius:1px;transition:width .3s ease;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="cfg-header">
+    <div>
+      <h1>Stijlconfigurator</h1>
+      <p>De Oost Bespoke Tailoring — configureer uw garderobe stap voor stap</p>
+    </div>
+  </div>
+
+  <div id="mainConfig">
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="kled-tabs" id="kledTabs"></div>
+        <ul class="nav-list" id="navList"></ul>
+        <div class="summary-panel">
+          <div class="summary-title">Uw keuzes</div>
+          <div id="summaryList"><span class="summary-empty">Nog geen keuzes gemaakt</span></div>
+        </div>
+      </div>
+      <!-- MAIN -->
+      <div class="main">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div id="stepContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="finalSummary" style="display:none">
+    <div id="finalContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="document.getElementById('finalSummary').style.display='none';document.getElementById('mainConfig').style.display='block'">← Terug aanpassen</button>
+      <button class="btn btn-accent" onclick="window.location.href='deoost_kleding.html?stijl='+encodeURIComponent(getSamenvatting())">Doorgaan naar bestelling →</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lb" style="display:none" class="lb-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="lb-box">
+    <button class="lb-close" onclick="document.getElementById('lb').style.display='none'">×</button>
+    <img id="lbImg" class="lb-img" src="" alt="">
+    <div id="lbCaption" class="lb-caption"></div>
+  </div>
+</div>
+
+<script>
+const IMG = 'tekeningen/';
+
+const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
+
+const STAPPEN = {
+  Jas: [
+    {
+      id: 'jas_sluiting', label: 'Single of double breasted', icon: 'ti-shirt', verplicht: true,
+      opties: [
+        {id:'sb', naam:'Single breasted', desc:'Enkele rij knopen', img:'1._jas__1._single_of_double_breasted__single_breasted.png'},
+        {id:'db', naam:'Double breasted', desc:'Dubbele rij knopen', img:'1._jas__1._single_of_double_breasted__double_breasted.png'},
+      ]
+    },
+    {
+      id: 'jas_knopen', label: 'Aantal knopen', icon: 'ti-circle-dot', verplicht: true,
+      conditioneel: (k) => true,
+      opties: (k) => k.jas_sluiting === 'db' ? [
+        {id:'4x2', naam:'4×2', desc:'4 knopen, 2 rijen', img:'1._jas__2._hoveel_knopen__double__4x2.png'},
+        {id:'6x2', naam:'6×2', desc:'6 knopen, 2 rijen', img:'1._jas__2._hoveel_knopen__double__6x2.png'},
+      ] : [
+        {id:'1', naam:'1 knoop', desc:'Minimalistisch', img:'1._jas__2._hoveel_knopen__single__1_knoop.png'},
+        {id:'2', naam:'2 knopen', desc:'Klassiek', img:'1._jas__2._hoveel_knopen__single__2_knopen.png'},
+        {id:'2.5', naam:'2,5 knopen', desc:'Halfknoop', img:'1._jas__2._hoveel_knopen__single__2_5_knopen.png'},
+        {id:'3', naam:'3 knopen', desc:'Traditioneel', img:'1._jas__2._hoveel_knopen__single__3_knopen.png'},
+        {id:'4', naam:'4 knopen', desc:'Langere jaslengte', img:'1._jas__2._hoveel_knopen__single__4_knopen.png'},
+      ]
+    },
+    {
+      id: 'jas_revers', label: 'Revers / kraag', icon: 'ti-chevrons-up', verplicht: true,
+      opties: (k) => k.jas_sluiting === 'db' ? [
+        {id:'notch_db', naam:'Notch revers', desc:'DB notch lapel', img:'1._jas__3._revers__double_breasted__notch.png'},
+        {id:'peak_db', naam:'Peak revers', desc:'DB peak lapel', img:'1._jas__3._revers__double_breasted__peak.png'},
+        {id:'shawl_db', naam:'Shawl kraag', desc:'DB shawl collar', img:'1._jas__3._revers__double_breasted__shawl.png'},
+      ] : [
+        {id:'notch_sb', naam:'Notch revers', desc:'Klassieke V-vorm', img:'1._jas__3._revers__single_breasted__notch.png'},
+        {id:'peak_sb', naam:'Peak revers', desc:'Puntige revers', img:'1._jas__3._revers__single_breasted__peak.png'},
+        {id:'shawl_sb', naam:'Shawl kraag', desc:'Ronde doorlopende kraag', img:'1._jas__3._revers__single_breasted__shawl.png'},
+        {id:'nehru', naam:'Nehru / Mao', desc:'Staande kraag', img:'1._jas__3._revers__single_breasted__nehru.png'},
+      ]
+    },
+    {
+      id: 'jas_belly', label: 'Belly (reversgrootte)', icon: 'ti-arrows-horizontal', verplicht: false,
+      opties: [
+        {id:'geen_belly', naam:'Geen belly', desc:'Rechte revisrand', img:'1._jas__3._revers__belly__geen_belly.png'},
+        {id:'belly', naam:'Belly', desc:'Lichte curve', img:'1._jas__3._revers__belly__belly.png'},
+        {id:'meer_belly', naam:'Meer belly', desc:'Uitgesproken curve', img:'1._jas__3._revers__belly__meer_belly.png'},
+      ]
+    },
+    {
+      id: 'jas_zakken', label: 'Zakken', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'slanted', naam:'Schuine zakken', desc:'Slanted pockets', img:'1._jas__4._zakken__slanted.png'},
+        {id:'slanted_flap', naam:'Schuine zakken + flap', desc:'Slanted flap pockets', img:'1._jas__4._zakken__slanted_flap.png'},
+        {id:'slanted_ticket', naam:'Schuine + ticketzak', desc:'Slanted + ticket pocket', img:'1._jas__4._zakken__slanted_ticket.png'},
+        {id:'slanted_flap_ticket', naam:'Schuine flap + ticket', desc:'Slanted flap + ticket', img:'1._jas__4._zakken__slanted_flap_ticket.png'},
+        {id:'welt', naam:'Paspelzakken', desc:'Welt pockets', img:'1._jas__4._zakken__welt_pocket.png'},
+        {id:'welt_flap', naam:'Paspel + flap', desc:'Welt flap pockets', img:'1._jas__4._zakken__welt_flap.png'},
+        {id:'welt_ticket', naam:'Paspel + ticket', desc:'Welt + ticket pocket', img:'1._jas__4._zakken__welt_ticket_pocket.png'},
+        {id:'welt_flap_ticket', naam:'Paspel flap + ticket', desc:'Welt flap + ticket', img:'1._jas__4._zakken__welt_flap_ticket.png'},
+        {id:'patch', naam:'Patch pockets', desc:'Opgenaaide zakken', img:'1._jas__4._zakken__patch_pockets.png'},
+        {id:'patch_flap', naam:'Patch pockets + flap', desc:'Opgenaaid met flap', img:'1._jas__4._zakken__patch_pockets_flap.png'},
+      ]
+    },
+    {
+      id: 'jas_borstzak', label: 'Borstzak', icon: 'ti-square', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Standaard borstzak', desc:'Rechte paspel', img:'1._jas__8.2_borstzakken__borstzak_normaal.png'},
+        {id:'barchetta', naam:'Barchetta', desc:'Gebogen borstzak', img:'1._jas__8.2_borstzakken__barchetta.png'},
+      ]
+    },
+    {
+      id: 'jas_split', label: 'Split (achterste)', icon: 'ti-layout-distribute-vertical', verplicht: true,
+      opties: [
+        {id:'geen_split', naam:'Geen split', desc:'Gesloten rug', img:'1._jas__6._split__geen_split.png'},
+        {id:'enkele_split', naam:'Enkele split', desc:'Centrale split', img:'1._jas__6._split__enkele_split.png'},
+        {id:'dubbele_split', naam:'Dubbele split', desc:'Twee zijsplits', img:'1._jas__6._split__dubbele_split.png'},
+      ]
+    },
+    {
+      id: 'jas_schouder', label: 'Schoudertype', icon: 'ti-arrows-horizontal', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Normaal', desc:'Klassieke schouder', img:'1._jas__9._schoudertype__normaal.png'},
+        {id:'rollino', naam:'Rollino', desc:'Zachte Napolitaanse stijl', img:'1._jas__9._schoudertype__rollino.png'},
+        {id:'spalla_camicia', naam:'Spalla Camicia', desc:'Hemdsmouw inzet', img:'1._jas__9._schoudertype__spalla_camicia.png'},
+      ]
+    },
+    {
+      id: 'jas_mouw_aantal', label: 'Mouwknopen — aantal', icon: 'ti-circles', verplicht: false,
+      opties: [
+        {id:'geen', naam:'Geen knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__geen_knopen.png'},
+        {id:'3', naam:'3 knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__3_knopen.png'},
+        {id:'4', naam:'4 knopen', desc:'Meest gangbaar', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__4_knopen.png'},
+        {id:'5', naam:'5 knopen', desc:'', img:'1._jas__7._knopen_op_de_mouw__aantal_knopen__5_knopen.png'},
+      ]
+    },
+    {
+      id: 'jas_mouw_plaatsing', label: 'Mouwknopen — plaatsing', icon: 'ti-circles', verplicht: false,
+      opties: [
+        {id:'normaal', naam:'Normaal', desc:'Gelijke afstand', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen.png'},
+        {id:'kissing', naam:'Kissing buttons', desc:'Rakend aan elkaar', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen_kissing.png'},
+        {id:'meer_ruimte', naam:'Meer ruimte', desc:'Grotere tussenafstand', img:'1._jas__7._knopen_op_de_mouw__hoe_geplaatst__4_knopen_meer_ruimte.png'},
+      ]
+    },
+    {
+      id: 'jas_revers_detail', label: 'Revers detail', icon: 'ti-flower', verplicht: false,
+      opties: [
+        {id:'knoopsgat', naam:'Knoopsgat', desc:'Standaard buttonhole', img:'1._jas__8._flowerloop_op_revers_-_stitching__knoopsgat.png'},
+        {id:'flowerloop', naam:'Flowerloop', desc:'Lusje voor bloem', img:'1._jas__8._flowerloop_op_revers_-_stitching__flowerloop.png'},
+        {id:'milanees', naam:'Milanees', desc:'Milanese buttonhole', img:'1._jas__8._flowerloop_op_revers_-_stitching__milanees.png'},
+      ]
+    },
+    {
+      id: 'jas_stitching', label: 'Pick stitching', icon: 'ti-needle-thread', verplicht: false,
+      opties: [
+        {id:'panden', naam:'Panden', desc:'Alleen panden', img:'1._jas__8._pick_stitching__panden.png'},
+        {id:'panden_revers', naam:'Panden + revers', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers.png'},
+        {id:'panden_revers_naden', naam:'Panden + revers + naden', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers_plus_naden.png'},
+        {id:'panden_revers_naden_dik', naam:'Dikker stitching', desc:'', img:'1._jas__8._pick_stitching__panden_plus_revers_plus_naden_dikker.png'},
+        {id:'revers', naam:'Alleen revers', desc:'', img:'1._jas__8._pick_stitching__revers.png'},
+      ]
+    },
+    {
+      id: 'jas_swelled_edge', label: 'Swelled edge', icon: 'ti-line', verplicht: false,
+      opties: [
+        {id:'swelled', naam:'Swelled edge', desc:'Brede stiksels op revers', img:'1._jas__10._revers_swelled_edge__swelled_edge.png'},
+        {id:'swelled_panden', naam:'Swelled edge + panden', desc:'Revers én panden', img:'1._jas__10._revers_swelled_edge__swelled_edge_revers_plus_panden.png'},
+      ]
+    },
+    {
+      id: 'jas_binnenzakken', label: 'Binnenzakken', icon: 'ti-box', verplicht: false,
+      opties: [
+        {id:'standaard', naam:'Standaard', desc:'Links binnenzak', img:'1._jas__5._binnenzakken__binnenzakken.png'},
+        {id:'links', naam:'Alleen links', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_links.png'},
+        {id:'rechts', naam:'Alleen rechts', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_rechts.png'},
+        {id:'x2_boven', naam:'2× boven', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_x_2_boven.png'},
+        {id:'onder_x2', naam:'2× onder', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_onder_x_2.png'},
+        {id:'x4plus', naam:'4+ zakken', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_x_4plus.png'},
+        {id:'knoop', naam:'Met knoop', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_met_knoop.png'},
+        {id:'driehoek', naam:'Driehoek flap', desc:'', img:'1._jas__5._binnenzakken__binnenzakken_met_driehoek_flap.png'},
+      ]
+    },
+    {
+      id: 'jas_constructie', label: 'Constructie / canvas', icon: 'ti-layers', verplicht: false,
+      opties: [
+        {id:'canvas', naam:'Full canvas', desc:'Volledige paardenhaar tussenvoering', img:'1._jas__5.1_lining_constructie__canvas.png'},
+        {id:'canvas2', naam:'Half canvas', desc:'Borst canvas', img:'1._jas__5.1_lining_constructie__canvas_2.png'},
+      ]
+    },
+  ],
+  Broek: [
+    {
+      id: 'broek_stijl', label: 'Pijpvorm', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'recht', naam:'Rechte pijp', desc:'Klassiek', img:'2._broek__1._stijl__rechte_pijp.png'},
+        {id:'slim', naam:'Slim fit', desc:'Nauwer model', img:'2._broek__1._stijl__slim.png'},
+        {id:'flared', naam:'Flared', desc:'Uitlopende pijp', img:'2._broek__1._stijl__flared.png'},
+      ]
+    },
+    {
+      id: 'broek_plooi', label: 'Plooien', icon: 'ti-fold', verplicht: true,
+      opties: [
+        {id:'geen', naam:'Geen plooi', desc:'Flat front', img:'2._broek__5._pleats__geen_plooi.png'},
+        {id:'enkele', naam:'Enkele plooi', desc:'Forward pleat', img:'2._broek__5._pleats__enkele_plooi.png'},
+        {id:'enkele2', naam:'Enkele plooi variant', desc:'Reverse pleat', img:'2._broek__5._pleats__enkele_plooi_2.png'},
+        {id:'dubbele', naam:'Dubbele plooi', desc:'Twee plooien', img:'2._broek__5._pleats__dubbele_plooi.png'},
+        {id:'dubbele2', naam:'Dubbele plooi variant', desc:'', img:'2._broek__5._pleats__dubbele_plooi_2.png'},
+      ]
+    },
+    {
+      id: 'broek_band', label: 'Broekband', icon: 'ti-belt', verplicht: true,
+      opties: [
+        {id:'6_wide', naam:'6 brede lussen', desc:'Standard waistband', img:'2._broek__2._broekband__6_wide_loops.png'},
+        {id:'6_double', naam:'6 dubbele lussen', desc:'Double loops', img:'2._broek__2._broekband__6_double_loops.png'},
+        {id:'8_loops', naam:'8 lussen', desc:'Extra lussen', img:'2._broek__2._broekband__8_loops.png'},
+        {id:'no_loops', naam:'Zonder lussen', desc:'No loops', img:'2._broek__2._broekband__no_loops.png'},
+        {id:'side_tabs_2', naam:'Side tabs 2 knopen', desc:'', img:'2._broek__2._broekband__side_tabs_2_buttons.png'},
+        {id:'side_tabs_3', naam:'Side tabs 3 knopen', desc:'', img:'2._broek__2._broekband__side_tabs_3_buttons.png'},
+        {id:'strap_buckle', naam:'Strap & buckle', desc:'Gesp sluiting', img:'2._broek__2._broekband__strap_&_buckle.png'},
+        {id:'gurkha', naam:'Gurkha', desc:'Dubbele knoop sluiting', img:'2._broek__2._broekband__gurkha.png'},
+        {id:'internal', naam:'Verstelbare band', desc:'Internal adjustable', img:'2._broek__2._broekband__internal_adjustable_waistband.png'},
+        {id:'bretels', naam:'Bretels', desc:'Suspenders', img:'2._broek__2._broekband__bretels.png'},
+      ]
+    },
+    {
+      id: 'broek_sluiting', label: 'Sluiting', icon: 'ti-zipper', verplicht: true,
+      opties: [
+        {id:'knoop', naam:'Knoopsluiting', desc:'Buttoned fastening', img:'2._broek__4._sluiting__buttoned_fastening.png'},
+        {id:'rits', naam:'Rits', desc:'Zipped fastening', img:'2._broek__4._sluiting__zipped_fastening.png'},
+      ]
+    },
+    {
+      id: 'broek_zakken', label: 'Zijzakken', icon: 'ti-layout-sidebar', verplicht: true,
+      opties: [
+        {id:'straight', naam:'Rechte zakken', desc:'Straight side pockets', img:'2._broek__6._zakken__straight_side_pockets.png'},
+        {id:'slanted', naam:'Schuine zakken', desc:'Slanted slide pockets', img:'2._broek__6._zakken__slanted_slide_pockets.png'},
+        {id:'rounded', naam:'Ronde zakken', desc:'Rounded pockets', img:'2._broek__6._zakken__rounded_pockets.png'},
+        {id:'frogmouth', naam:'Frogmouth pockets', desc:'', img:'2._broek__6._zakken__frogmouth_pockets.png'},
+        {id:'frogmouth_money', naam:'Frogmouth + geldvak', desc:'', img:'2._broek__6._zakken__frogmouth_pockets_money_pocket.png'},
+        {id:'welted', naam:'Paspelzakken', desc:'Welted pockets', img:'2._broek__6._zakken__welted_pockets.png'},
+      ]
+    },
+    {
+      id: 'broek_achterzakken', label: 'Achterzakken', icon: 'ti-layout-bottombar-expand', verplicht: false,
+      opties: [
+        {id:'geen', naam:'Geen zakken', desc:'', img:'2._broek__7._achterzakken__no_pockets_trousers_back.png'},
+        {id:'enkel_links', naam:'Enkel links', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_left.png'},
+        {id:'enkel_rechts', naam:'Enkel rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_right.png'},
+        {id:'enkel_flap_links', naam:'Enkel flap links', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_flap_left.png'},
+        {id:'enkel_flap_rechts', naam:'Enkel flap rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_flap_right.png'},
+        {id:'enkel_knoop', naam:'Enkel + knoop rechts', desc:'', img:'2._broek__7._achterzakken__single_back_pocket_-w_button_right.png'},
+        {id:'dubbel', naam:'Dubbel', desc:'', img:'2._broek__7._achterzakken__double_back_pockets.png'},
+        {id:'dubbel_knoppen', naam:'Dubbel + knopen', desc:'', img:'2._broek__7._achterzakken__double_back_pockets_-w_buttons.png'},
+        {id:'dubbel_flap', naam:'Dubbel + flap', desc:'', img:'2._broek__7._achterzakken__double_back_pockets_-w_flap.png'},
+        {id:'patch_vierkant', naam:'Patch vierkant', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_square.png'},
+        {id:'patch_rond', naam:'Patch rond', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_round.png'},
+        {id:'patch_punt', naam:'Patch punt', desc:'', img:'2._broek__7._achterzakken__double_patch_pockets_point.png'},
+      ]
+    },
+    {
+      id: 'broek_achterkant', label: 'Achterkant / fishtail', icon: 'ti-arrow-fork', verplicht: false,
+      opties: [
+        {id:'standaard', naam:'Standaard', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__standaard.png'},
+        {id:'fishtail', naam:'Fishtail', desc:'Puntige achterkant', img:'2._broek__3._achterkant_-_fishtail_etc__fishtail.png'},
+        {id:'fishtail_achter', naam:'Fishtail achter', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__fishtail_achter.png'},
+        {id:'after_dinner', naam:'After dinner split', desc:'', img:'2._broek__3._achterkant_-_fishtail_etc__after_dinner_split.png'},
+      ]
+    },
+    {
+      id: 'broek_onderkant', label: 'Onderkant pijp', icon: 'ti-arrow-down', verplicht: false,
+      opties: [
+        {id:'recht', naam:'Recht afgewerkt', desc:'', img:'2._broek__8._onderkant__trouser_bottom_straight.png'},
+        {id:'schuin', naam:'Schuin afgewerkt', desc:'', img:'2._broek__8._onderkant__trouser_bottom_slanted.png'},
+        {id:'omslag', naam:'Met omslag', desc:'Turn-up', img:'2._broek__8._onderkant__omslag.png'},
+        {id:'geen_omslag', naam:'Zonder omslag', desc:'', img:'2._broek__8._onderkant__geen_omslag.png'},
+      ]
+    },
+    {
+      id: 'broek_bies', label: 'Biezen', icon: 'ti-line', verplicht: false,
+      opties: [
+        {id:'enkel', naam:'Enkele bies', desc:'', img:'2._broek__9._biezen__enkele_bies.png'},
+        {id:'dubbel', naam:'Dubbele bies', desc:'', img:'2._broek__9._biezen__dubbele_bies.png'},
+      ]
+    },
+  ],
+  Gilet: [
+    {
+      id: 'gilet_sluiting', label: 'Single of double', icon: 'ti-shirt', verplicht: true,
+      opties: [
+        {id:'sb', naam:'Single breasted', desc:'', img:'3._gilets__1._single_of_double__single_breasted.png'},
+        {id:'db', naam:'Double breasted', desc:'', img:'3._gilets__1._single_of_double__double_breasted.png'},
+      ]
+    },
+    {
+      id: 'gilet_revers', label: 'Revers / kraag', icon: 'ti-chevrons-up', verplicht: true,
+      opties: [
+        {id:'notch', naam:'Notch revers', desc:'', img:'3._gilets__2._wel_of_geen_revers__notch.png'},
+        {id:'peak', naam:'Peak revers', desc:'', img:'3._gilets__2._wel_of_geen_revers__peak.png'},
+        {id:'shawl', naam:'Shawl kraag', desc:'', img:'3._gilets__2._wel_of_geen_revers__shawl.png'},
+        {id:'nehru', naam:'Nehru', desc:'', img:'3._gilets__2._wel_of_geen_revers__nehru.png'},
+        {id:'zonder', naam:'Zonder revers', desc:'V-hals', img:'3._gilets__2._wel_of_geen_revers__zonder.png'},
+        {id:'zonder_rond', naam:'Zonder revers (rond)', desc:'Ronde hals', img:'3._gilets__2._wel_of_geen_revers__zonder-rond.png'},
+      ]
+    },
+    {
+      id: 'gilet_zakken', label: 'Zakken', icon: 'ti-layout-bottombar', verplicht: true,
+      opties: [
+        {id:'paspel', naam:'Paspelzakken', desc:'', img:'3._gilets__3._zakken__paspel.png'},
+        {id:'zakken', naam:'Standaard zakken', desc:'', img:'3._gilets__3._zakken__zakken.png'},
+        {id:'zakken_borstzak', naam:'Zakken + borstzak', desc:'', img:'3._gilets__3._zakken__zakken_met_borstzakken.png'},
+        {id:'patch', naam:'Patch pockets', desc:'', img:'3._gilets__3._zakken__patch.png'},
+        {id:'patch_flap', naam:'Patch + flap', desc:'', img:'3._gilets__3._zakken__patch_flap.png'},
+        {id:'patch_flap_button', naam:'Patch + flap + knoop', desc:'', img:'3._gilets__3._zakken__patch_flap_button.png'},
+        {id:'borstzak_links', naam:'Alleen borstzak links', desc:'', img:'3._gilets__3._zakken__zakken_borstzak_links.png'},
+        {id:'borstzak_rechts', naam:'Alleen borstzak rechts', desc:'', img:'3._gilets__3._zakken__zakken_borstzak_rechts.png'},
+      ]
+    },
+    {
+      id: 'gilet_rug', label: 'Rugpand', icon: 'ti-rotate-180', verplicht: false,
+      opties: [
+        {id:'voering', naam:'Voering op rug', desc:'Klassiek', img:'3._gilets__5._rug_voering_of_stof__voering_op_de_rug.png'},
+        {id:'stof', naam:'Stof op rug', desc:'Volledig in stof', img:'3._gilets__5._rug_voering_of_stof__stof_op_de_rug.png'},
+      ]
+    },
+    {
+      id: 'gilet_buckle', label: 'Buckle (achterkant)', icon: 'ti-adjustments', verplicht: false,
+      opties: [
+        {id:'met', naam:'Met buckle', desc:'Verstelbaar', img:'3._gilets__6._wel_of_geen_buckle__met_buckle.png'},
+        {id:'zonder', naam:'Zonder buckle', desc:'', img:'3._gilets__6._wel_of_geen_buckle__zonder_buckle.png'},
+      ]
+    },
+    {
+      id: 'gilet_onderkant', label: 'Onderkant', icon: 'ti-arrow-down', verplicht: false,
+      opties: [
+        {id:'recht', naam:'Rechte onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__normale_onderkant.png'},
+        {id:'rond', naam:'Ronde onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__ronde_onderkant.png'},
+      ]
+    },
+  ]
+};
+
+let actieveKled = 'Jas';
+let actieveStap = 0;
+let keuzes = {};
+
+function huidigeStappen() {
+  return STAPPEN[actieveKled] || [];
+}
+
+function huidigeStap() {
+  return huidigeStappen()[actieveStap];
+}
+
+function getOpties(stap) {
+  if (typeof stap.opties === 'function') return stap.opties(keuzes);
+  return stap.opties;
+}
+
+function renderKledTabs() {
+  const tabs = document.getElementById('kledTabs');
+  tabs.innerHTML = '';
+  KLEDINGSTUKKEN.forEach(k => {
+    const t = document.createElement('div');
+    t.className = 'kled-tab' + (k === actieveKled ? ' active' : '');
+    t.textContent = k;
+    t.onclick = () => { actieveKled = k; actieveStap = 0; render(); };
+    tabs.appendChild(t);
+  });
+}
+
+function renderNav() {
+  const nav = document.getElementById('navList');
+  nav.innerHTML = '';
+  huidigeStappen().forEach((stap, i) => {
+    const heeftKeuze = keuzes[stap.id];
+    const li = document.createElement('li');
+    li.className = 'nav-item' + (i === actieveStap ? ' active' : '') + (heeftKeuze ? ' done' : '');
+    li.innerHTML = `
+      <i class="ti ${stap.icon} nav-icon"></i>
+      <span class="nav-label">${stap.label}${!stap.verplicht ? ' <span style="opacity:.6;font-size:10px">(opt.)</span>' : ''}</span>
+      <div class="nav-check"><i class="ti ti-check" style="font-size:9px;color:white"></i></div>`;
+    li.onclick = () => { actieveStap = i; renderStep(); renderNav(); updateProgress(); };
+    nav.appendChild(li);
+  });
+}
+
+function renderSummaryPanel() {
+  const list = document.getElementById('summaryList');
+  const stappen = huidigeStappen();
+  const items = stappen.filter(s => keuzes[s.id]);
+  if (!items.length) {
+    list.innerHTML = '<span class="summary-empty">Nog geen keuzes gemaakt</span>';
+    return;
+  }
+  list.innerHTML = items.map(s => {
+    const opties = getOpties(s);
+    const opt = opties.find(o => o.id === keuzes[s.id]);
+    if (!opt) return '';
+    return `<div class="summary-item">
+      <div class="summary-thumb"><img src="${IMG}${opt.img}" alt="${opt.naam}" onerror="this.style.display='none'"></div>
+      <div class="summary-text">
+        <div class="summary-cat">${s.label}</div>
+        <div class="summary-val">${opt.naam}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStep() {
+  const stap = huidigeStap();
+  if (!stap) return;
+  const opties = getOpties(stap);
+  const content = document.getElementById('stepContent');
+  content.innerHTML = `
+    <div class="step-header">
+      <div class="step-title">${stap.label} ${!stap.verplicht ? '<span class="step-optional">Optioneel</span>' : ''}</div>
+    </div>
+    <div class="opt-grid" id="optGrid"></div>
+    <div class="step-nav">
+      <button class="btn btn-ghost" onclick="prevStap()" ${actieveStap === 0 ? 'style="visibility:hidden"' : ''}>← Vorige</button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        ${!stap.verplicht ? `<button class="btn-skip" onclick="slaOver()">Overslaan</button>` : ''}
+        ${actieveStap < huidigeStappen().length - 1 ?
+          `<button class="btn btn-primary" onclick="volgendeStap()">Volgende →</button>` :
+          `<button class="btn btn-accent" onclick="toonSamenvatting()">Samenvatting bekijken →</button>`
+        }
+      </div>
+    </div>`;
+
+  const grid = document.getElementById('optGrid');
+  opties.forEach(opt => {
+    const c = document.createElement('div');
+    c.className = 'opt-card' + (keuzes[stap.id] === opt.id ? ' selected' : '');
+    c.innerHTML = `
+      <div class="opt-img">
+        <img src="${IMG}${opt.img}" alt="${opt.naam}" onerror="this.style.display='none'">
+        <button class="opt-zoom" onclick="openLb('${IMG}${opt.img}','${opt.naam}',event)" title="Vergroot">
+          <i class="ti ti-zoom-in"></i>
+        </button>
+      </div>
+      <div class="opt-info">
+        <div class="opt-name">${opt.naam}</div>
+        ${opt.desc ? `<div class="opt-desc">${opt.desc}</div>` : ''}
+      </div>`;
+    c.onclick = () => {
+      keuzes[stap.id] = opt.id;
+      grid.querySelectorAll('.opt-card').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+      renderNav();
+      renderSummaryPanel();
+    };
+    grid.appendChild(c);
+  });
+}
+
+function updateProgress() {
+  const stappen = huidigeStappen();
+  const pct = stappen.length ? ((actieveStap + 1) / stappen.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function volgendeStap() {
+  const stap = huidigeStap();
+  if (stap && stap.verplicht && !keuzes[stap.id]) {
+    alert('Maak eerst een keuze voor "' + stap.label + '" voordat u verder gaat.');
+    return;
+  }
+  if (actieveStap < huidigeStappen().length - 1) {
+    actieveStap++;
+    render();
+  }
+}
+
+function prevStap() {
+  if (actieveStap > 0) { actieveStap--; render(); }
+}
+
+function slaOver() {
+  delete keuzes[huidigeStap().id];
+  volgendeStap();
+}
+
+function toonSamenvatting() {
+  document.getElementById('mainConfig').style.display = 'none';
+  const fin = document.getElementById('finalSummary');
+  fin.style.display = 'block';
+  const content = document.getElementById('finalContent');
+
+  let html = '';
+  KLEDINGSTUKKEN.forEach(kled => {
+    const stappen = STAPPEN[kled];
+    const items = stappen.filter(s => keuzes[s.id]);
+    if (!items.length) return;
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">${kled}</div><div class="sum-grid">`;
+    items.forEach(s => {
+      const opties = typeof s.opties === 'function' ? s.opties(keuzes) : s.opties;
+      const opt = opties.find(o => o.id === keuzes[s.id]);
+      if (!opt) return;
+      html += `<div class="sum-card">
+        <div class="sum-card-img"><img src="${IMG}${opt.img}" alt="${opt.naam}" style="width:100%;height:100%;object-fit:contain;padding:4px" onerror="this.style.display='none'"></div>
+        <div class="sum-card-info">
+          <div class="sum-card-cat">${s.label}</div>
+          <div class="sum-card-val">${opt.naam}</div>
+        </div>
+      </div>`;
+    });
+    html += '</div></div>';
+  });
+  content.innerHTML = html || '<p style="color:#6b6560;font-size:13px">Nog geen keuzes gemaakt.</p>';
+}
+
+function getSamenvatting() {
+  const result = {};
+  KLEDINGSTUKKEN.forEach(kled => {
+    STAPPEN[kled].forEach(s => {
+      if (keuzes[s.id]) result[s.id] = keuzes[s.id];
+    });
+  });
+  return JSON.stringify(result);
+}
+
+function openLb(src, caption, e) {
+  e.stopPropagation();
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbCaption').textContent = caption;
+  document.getElementById('lb').style.display = 'flex';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('lb').style.display = 'none';
+});
+
+function render() {
+  renderKledTabs();
+  renderNav();
+  renderStep();
+  renderSummaryPanel();
+  updateProgress();
+}
+
+render();
+</script>
+</body>
+</html>
