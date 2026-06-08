@@ -102,6 +102,25 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 /* PROGRESS */
 .progress-bar{height:2px;background:rgba(74,69,64,.1);border-radius:1px;margin-bottom:1.5rem;overflow:hidden;}
 .progress-fill{height:100%;background:#8B6F47;border-radius:1px;transition:width .3s ease;}
+
+
+/* START: gelegenheid/type kleding */
+.start-screen{display:block;}
+.start-intro{max-width:680px;margin:0 auto 1.25rem;text-align:center;}
+.start-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:6px;}
+.start-sub{font-size:13px;color:#6b6560;line-height:1.6;}
+.gelegenheid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+@media(max-width:720px){.gelegenheid-grid{grid-template-columns:1fr;}}
+.gelegenheid-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:pointer;transition:all .2s;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
+.gelegenheid-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.gelegenheid-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.gelegenheid-card.selected::after{content:'✓';position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;}
+.gelegenheid-icon{font-size:24px;color:#8B6F47;margin-bottom:.75rem;}
+.gelegenheid-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#1a1814;margin-bottom:6px;line-height:1.2;}
+.gelegenheid-desc{font-size:12px;color:#6b6560;line-height:1.55;}
+.start-actions{display:flex;justify-content:center;margin-top:1rem;}
+.gelegenheid-badge{display:inline-flex;align-items:center;gap:6px;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:5px 12px;font-size:11px;color:#6b6560;margin-bottom:1rem;}
+
 </style>
 </head>
 <body>
@@ -113,7 +132,18 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
     </div>
   </div>
 
-  <div id="mainConfig">
+  <div id="startScreen" class="start-screen">
+    <div class="start-intro">
+      <div class="start-title">Waarvoor stelt u kleding samen?</div>
+      <div class="start-sub">Kies eerst het type kleding of gelegenheid. Daarna begeleiden we u door de stijlkeuzes voor jas, broek en gilet.</div>
+    </div>
+    <div class="gelegenheid-grid" id="gelegenheidGrid"></div>
+    <div class="start-actions">
+      <button class="btn btn-primary" id="startBtn" onclick="startConfiguratie()">Doorgaan naar stijlkeuzes →</button>
+    </div>
+  </div>
+
+  <div id="mainConfig" style="display:none">
     <div class="layout">
       <!-- SIDEBAR -->
       <div class="sidebar">
@@ -152,6 +182,27 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 
 <script>
 const IMG = 'tekeningen/';
+
+const GELEGENHEDEN = [
+  {
+    id: 'pak_kostuum',
+    naam: 'Pak / kostuum',
+    desc: 'Jas, vest en broek van één stof. Geschikt voor een klassiek twee- of driedelig pak.',
+    icon: 'ti-shirt'
+  },
+  {
+    id: 'tenue_de_ville',
+    naam: 'Tenue de ville',
+    desc: 'Jas, vest en broek van meerdere stoffen. Geschikt voor een formelere daggelegenheid of bruiloft.',
+    icon: 'ti-tie'
+  },
+  {
+    id: 'black_tie',
+    naam: 'Black-Tie / Avond- / Galakleding',
+    desc: 'Smoking, dinner jacket of avondkleding. Later kunnen hier specifieke black-tie regels en prijslogica aan gekoppeld worden.',
+    icon: 'ti-moon-stars'
+  }
+];
 
 const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
 
@@ -451,9 +502,53 @@ const STAPPEN = {
   ]
 };
 
+let gelegenheid = null;
 let actieveKled = 'Jas';
 let actieveStap = 0;
 let keuzes = {};
+
+
+function renderGelegenheden() {
+  const grid = document.getElementById('gelegenheidGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  GELEGENHEDEN.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
+    card.innerHTML = `
+      <div>
+        <div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>
+        <div class="gelegenheid-name">${g.naam}</div>
+        <div class="gelegenheid-desc">${g.desc}</div>
+      </div>`;
+    card.onclick = () => {
+      gelegenheid = g.id;
+      renderGelegenheden();
+    };
+    grid.appendChild(card);
+  });
+}
+
+function getGelegenheid() {
+  return GELEGENHEDEN.find(g => g.id === gelegenheid) || null;
+}
+
+function startConfiguratie() {
+  if (!gelegenheid) {
+    alert('Kies eerst een type kleding of gelegenheid.');
+    return;
+  }
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'block';
+  render();
+}
+
+function terugNaarStart() {
+  document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+  renderGelegenheden();
+}
 
 function huidigeStappen() {
   return STAPPEN[actieveKled] || [];
@@ -500,11 +595,22 @@ function renderSummaryPanel() {
   const list = document.getElementById('summaryList');
   const stappen = huidigeStappen();
   const items = stappen.filter(s => keuzes[s.id]);
-  if (!items.length) {
+  const g = getGelegenheid();
+  if (!items.length && !g) {
     list.innerHTML = '<span class="summary-empty">Nog geen keuzes gemaakt</span>';
     return;
   }
-  list.innerHTML = items.map(s => {
+  let html = '';
+  if (g) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ${g.icon}" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Type kleding</div>
+        <div class="summary-val">${g.naam}</div>
+      </div>
+    </div>`;
+  }
+  html += items.map(s => {
     const opties = getOpties(s);
     const opt = opties.find(o => o.id === keuzes[s.id]);
     if (!opt) return '';
@@ -516,6 +622,7 @@ function renderSummaryPanel() {
       </div>
     </div>`;
   }).join('');
+  list.innerHTML = html;
 }
 
 function renderStep() {
@@ -523,7 +630,9 @@ function renderStep() {
   if (!stap) return;
   const opties = getOpties(stap);
   const content = document.getElementById('stepContent');
+  const g = getGelegenheid();
   content.innerHTML = `
+    ${g ? `<div class="gelegenheid-badge"><i class="ti ${g.icon}" style="font-size:13px"></i>${g.naam}</div>` : ''}
     <div class="step-header">
       <div class="step-title">${stap.label} ${!stap.verplicht ? '<span class="step-optional">Optioneel</span>' : ''}</div>
     </div>
@@ -599,6 +708,18 @@ function toonSamenvatting() {
   const content = document.getElementById('finalContent');
 
   let html = '';
+  const g = getGelegenheid();
+  if (g) {
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">Type kleding / gelegenheid</div>
+      <div class="sum-card" style="max-width:320px">
+        <div class="sum-card-info" style="padding:12px">
+          <div class="sum-card-cat">Gekozen route</div>
+          <div class="sum-card-val">${g.naam}</div>
+          <div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">${g.desc}</div>
+        </div>
+      </div>
+    </div>`;
+  }
   KLEDINGSTUKKEN.forEach(kled => {
     const stappen = STAPPEN[kled];
     const items = stappen.filter(s => keuzes[s.id]);
@@ -623,6 +744,14 @@ function toonSamenvatting() {
 
 function getSamenvatting() {
   const result = {};
+  const g = getGelegenheid();
+  if (g) {
+    result.gelegenheid = {
+      id: g.id,
+      naam: g.naam,
+      desc: g.desc
+    };
+  }
   KLEDINGSTUKKEN.forEach(kled => {
     STAPPEN[kled].forEach(s => {
       if (keuzes[s.id]) result[s.id] = keuzes[s.id];
@@ -650,7 +779,7 @@ function render() {
   updateProgress();
 }
 
-render();
+renderGelegenheden();
 </script>
 </body>
 </html>
