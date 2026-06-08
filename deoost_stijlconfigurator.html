@@ -99,6 +99,41 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .lb-close{position:absolute;top:-16px;right:-16px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;color:white;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;}
 .lb-close:hover{background:rgba(255,255,255,.25);}
 
+/* BESTELLING STAP */
+.bestelling-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:1.5rem;}
+.referentie-blok{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1.25rem;background:white;margin-bottom:1.5rem;}
+.referentie-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:#1a1814;margin-bottom:4px;}
+.referentie-sub{font-size:12px;color:#6b6560;margin-bottom:1rem;line-height:1.5;}
+.referentie-input-row{display:flex;gap:8px;margin-bottom:.875rem;}
+.referentie-input{flex:1;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 12px;font-size:13px;font-family:'Jost',sans-serif;background:white;color:#1a1814;}
+.referentie-input:focus{outline:none;border-color:#8B6F47;}
+.referentie-niet-gevonden{font-size:12px;color:#c0392b;display:flex;align-items:center;gap:6px;padding:.5rem 0;}
+.referentie-gevonden{border-top:0.5px solid rgba(74,69,64,.15);padding-top:.875rem;}
+.ref-check{font-size:12px;color:#27ae60;display:flex;align-items:center;gap:6px;margin-bottom:.75rem;font-weight:500;}
+.ref-stofkaart{display:flex;gap:12px;align-items:flex-start;}
+.ref-swatch{width:60px;height:60px;border-radius:6px;border:0.5px solid rgba(74,69,64,.2);overflow:hidden;flex-shrink:0;background:#e0dbd5;}
+.ref-swatch img{width:100%;height:100%;object-fit:cover;}
+.ref-stofnaam{font-size:14px;font-weight:500;color:#1a1814;margin-bottom:3px;}
+.ref-details{font-size:12px;color:#6b6560;margin-bottom:2px;}
+.ref-bevestiging{font-size:11px;color:#8B6F47;margin-top:6px;font-style:italic;}
+.bestelling-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:default;transition:all .2s;display:flex;flex-direction:column;justify-content:space-between;gap:1rem;}
+.bestelling-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.bestelling-card-naam{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#1a1814;margin-bottom:4px;}
+.bestelling-card-desc{font-size:12px;color:#6b6560;line-height:1.4;}
+.bestelling-qty-row{display:flex;align-items:center;justify-content:center;gap:16px;padding-top:.75rem;border-top:0.5px solid rgba(74,69,64,.15);}
+.qty-btn{width:32px;height:32px;border-radius:50%;border:0.5px solid rgba(74,69,64,.3);background:white;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#1a1814;transition:all .2s;line-height:1;}
+.qty-btn:hover{background:#f0ece4;border-color:#4a4540;}
+.qty-val{font-size:18px;font-weight:500;color:#1a1814;min-width:24px;text-align:center;}
+.bestelling-overzicht{border:0.5px solid rgba(139,111,71,.3);border-radius:8px;padding:1rem 1.25rem;background:#faf6f0;margin-bottom:1rem;}
+.bestelling-overzicht-title{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#8B6F47;margin-bottom:.625rem;}
+.bestelling-overzicht-items{display:flex;gap:12px;flex-wrap:wrap;}
+.bestelling-overzicht-item{display:flex;align-items:center;gap:6px;background:white;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:4px 10px;}
+.bo-type{font-size:13px;color:#1a1814;font-weight:400;}
+.bo-aantal{font-size:13px;color:#8B6F47;font-weight:500;}
+
+/* GELEGENHEID CARDS MET AFBEELDING */
+.gelegenheid-img{width:100%;aspect-ratio:3/4;object-fit:contain;border-radius:4px;margin-bottom:.75rem;background:#f7f4ef;padding:8px;}
+
 /* PROGRESS */
 .progress-bar{height:2px;background:rgba(74,69,64,.1);border-radius:1px;margin-bottom:1.5rem;overflow:hidden;}
 .progress-fill{height:100%;background:#8B6F47;border-radius:1px;transition:width .3s ease;}
@@ -109,8 +144,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .start-intro{max-width:680px;margin:0 auto 1.25rem;text-align:center;}
 .start-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:6px;}
 .start-sub{font-size:13px;color:#6b6560;line-height:1.6;}
-.gelegenheid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
-@media(max-width:720px){.gelegenheid-grid{grid-template-columns:1fr;}}
+.gelegenheid-grid{display:flex;flex-direction:column;gap:1.5rem;margin:1.5rem 0;}
+.gelegenheid-groep-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8B6F47;padding-bottom:.375rem;border-bottom:0.5px solid rgba(139,111,71,.25);margin-bottom:.5rem;}
+.gelegenheid-groep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+@media(max-width:720px){.gelegenheid-groep-grid{grid-template-columns:1fr;}}
 .gelegenheid-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:pointer;transition:all .2s;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
 .gelegenheid-card:hover{border-color:#4a4540;transform:translateY(-1px);}
 .gelegenheid-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
@@ -203,6 +240,9 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
     </div>
   </div>
 
+  <div id="bestellingScreen" style="display:none;max-width:860px;margin:0 auto;padding:0">
+  </div>
+
   <div id="mainConfig" style="display:none">
     <div class="layout">
       <!-- SIDEBAR -->
@@ -267,30 +307,81 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 <script src="voeringen.js"></script>
 <script src="knopen.js"></script>
 <script src="prijzen.js"></script>
+<script src="bestellingen.js"></script>
 <script>
 const IMG = 'tekeningen/';
 
-const GELEGENHEDEN = [
+const GELEGENHEID_GROEPEN = [
   {
-    id: 'pak_kostuum',
-    naam: 'Pak / kostuum',
-    desc: 'Jas, vest en broek van één stof. Geschikt voor een klassiek twee- of driedelig pak.',
-    icon: 'ti-shirt'
+    id: 'dagkleding',
+    label: 'Dagkleding',
+    items: [
+      {
+        id: 'pak_kostuum',
+        naam: 'Pak / kostuum',
+        desc: 'Jas en broek van één stof. Klassiek twee- of driedelig pak.',
+        icon: 'ti-shirt',
+        img: null
+      },
+      {
+        id: 'tenue_de_ville',
+        naam: 'Tenue de ville',
+        desc: 'Jas, vest en broek in meerdere stoffen. Formelere daggelegenheid of bruiloft.',
+        icon: 'ti-tie',
+        img: null
+      },
+    ]
   },
   {
-    id: 'tenue_de_ville',
-    naam: 'Tenue de ville',
-    desc: 'Jas, vest en broek van meerdere stoffen. Geschikt voor een formelere daggelegenheid of bruiloft.',
-    icon: 'ti-tie'
+    id: 'formalwear',
+    label: 'Formalwear',
+    items: [
+      {
+        id: 'black_tie',
+        naam: 'Black tie / Smoking',
+        desc: 'Smoking of dinner jacket met bekleede revers. Avond- en galagebruik.',
+        icon: 'ti-moon-stars',
+        img: 'dinner_jacket_peak_lapels_welted_pockets_ticket_pocket-01.png',
+        formalwear: true
+      },
+      {
+        id: 'white_tie',
+        naam: 'White tie / Rokkostuum',
+        desc: 'Rok jas of jas de soirée. De meest formele avondgelegenheid.',
+        icon: 'ti-crown',
+        img: 'frock_coat_2-01.png',
+        formalwear: true
+      },
+      {
+        id: 'morning_coat',
+        naam: 'Jacquet / Rokkostuum dag',
+        desc: 'Morning coat voor racedays, huwelijksceremonies en officiële daggelegenheden.',
+        icon: 'ti-building-bank',
+        img: 'morning_coat-01.png',
+        formalwear: true
+      },
+    ]
   },
   {
-    id: 'black_tie',
-    naam: 'Black-Tie / Avond- / Galakleding',
-    desc: 'Smoking, dinner jacket of avondkleding. Later kunnen hier specifieke black-tie regels en prijslogica aan gekoppeld worden.',
-    icon: 'ti-moon-stars'
+    id: 'extra',
+    label: 'Extra / aanvulling',
+    items: [
+      {
+        id: 'losse_stukken',
+        naam: 'Los kledingstuk of aanvulling',
+        desc: 'Extra broek, gilet of jas bij een bestaand pak. U kunt een vorig ordernummer opgeven.',
+        icon: 'ti-layout-grid-add',
+        img: null,
+        referentie: true
+      },
+    ]
   }
 ];
 
+// Flat lijst voor lookups
+const GELEGENHEDEN = GELEGENHEID_GROEPEN.flatMap(g => g.items);
+
+const KLEDINGSTUKKEN_ALLE = ['Jas','Broek','Gilet','Accessoires'];
 const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
 
 const STAPPEN = {
@@ -327,6 +418,17 @@ const STAPPEN = {
         {id:'peak_sb', naam:'Peak revers', desc:'Puntige revers', img:'1._jas__3._revers__single_breasted__peak.png'},
         {id:'shawl_sb', naam:'Shawl kraag', desc:'Ronde doorlopende kraag', img:'1._jas__3._revers__single_breasted__shawl.png'},
         {id:'nehru', naam:'Nehru / Mao', desc:'Staande kraag', img:'1._jas__3._revers__single_breasted__nehru.png'},
+      ]
+    },
+    {
+      id: 'jas_revers_bekleding', label: 'Revers bekleding', icon: 'ti-sparkles', verplicht: false,
+      conditioneel: (k, gel) => ['black_tie','white_tie','morning_coat'].includes(gel),
+      opties: [
+        {id:'geen', naam:'Geen bekleding', desc:'Volledig in stof', img:'1._jas__3._revers__single_breasted__notch.png'},
+        {id:'satijn', naam:'Satijn', desc:'Klassieke smoking afwerking', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
+        {id:'mohair', naam:'Mohair', desc:'Subtiele glans', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
+        {id:'velvet', naam:'Velvet', desc:'Rijke diepte', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
+        {id:'grosgrain', naam:'Grosgrain', desc:'Geribbelde zijde', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
       ]
     },
     {
@@ -586,10 +688,42 @@ const STAPPEN = {
         {id:'rond', naam:'Ronde onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__ronde_onderkant.png'},
       ]
     },
+  ],
+  Accessoires: [
+    {
+      id: 'acc_vlinderdas', label: 'Vlinderdas', icon: 'ti-tie', verplicht: false,
+      conditioneel: (k, gel) => ['black_tie','white_tie'].includes(gel),
+      opties: [
+        {id:'self_tie', naam:'Self-tie', desc:'Zelf te strikken', img:'bowtie.png'},
+        {id:'pre_tied', naam:'Pre-tied', desc:'Voorgestrikt', img:'bowtie.png'},
+        {id:'geen', naam:'Geen vlinderdas', desc:'Eigen keuze', img:null},
+      ]
+    },
+    {
+      id: 'acc_kamerband', label: 'Kamerband', icon: 'ti-belt', verplicht: false,
+      conditioneel: (k, gel) => ['black_tie'].includes(gel),
+      opties: [
+        {id:'satijn_zwart', naam:'Satijn — zwart', desc:'Klassiek', img:null},
+        {id:'satijn_navy', naam:'Satijn — navy', desc:'Modern alternatief', img:null},
+        {id:'satijn_bordeaux', naam:'Satijn — bordeaux', desc:'Kleuraccent', img:null},
+        {id:'velvet_zwart', naam:'Velvet — zwart', desc:'Rijke textuur', img:null},
+        {id:'geen', naam:'Geen kamerband', desc:'', img:null},
+      ]
+    },
+    {
+      id: 'acc_pochet', label: 'Pochet stijl', icon: 'ti-square', verplicht: false,
+      opties: [
+        {id:'tv_fold', naam:'TV fold', desc:'Strak en rechthoekig', img:null},
+        {id:'presidential', naam:'Presidential', desc:'Strak driehoekig', img:null},
+        {id:'puff', naam:'Puff', desc:'Gepokt', img:null},
+        {id:'geen', naam:'Geen pochet', desc:'', img:null},
+      ]
+    },
   ]
 };
 
 let gelegenheid = null;
+let bestellingItems = []; // geselecteerde kledingstukken + aantallen
 let actieveKled = 'Jas';
 let actieveStap = 0;
 let keuzes = {};
@@ -599,20 +733,34 @@ function renderGelegenheden() {
   const grid = document.getElementById('gelegenheidGrid');
   if (!grid) return;
   grid.innerHTML = '';
-  GELEGENHEDEN.forEach(g => {
-    const card = document.createElement('div');
-    card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
-    card.innerHTML = `
-      <div>
-        <div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>
-        <div class="gelegenheid-name">${g.naam}</div>
-        <div class="gelegenheid-desc">${g.desc}</div>
-      </div>`;
-    card.onclick = () => {
-      gelegenheid = g.id;
-      renderGelegenheden();
-    };
-    grid.appendChild(card);
+  GELEGENHEID_GROEPEN.forEach(groep => {
+    // Groep label
+    const lbl = document.createElement('div');
+    lbl.className = 'gelegenheid-groep-label';
+    lbl.textContent = groep.label;
+    grid.appendChild(lbl);
+    // Groep grid
+    const groepGrid = document.createElement('div');
+    groepGrid.className = 'gelegenheid-groep-grid';
+    groep.items.forEach(g => {
+      const card = document.createElement('div');
+      card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
+      const imgHtml = g.img
+        ? `<img class="gelegenheid-img" src="${g.img}" alt="${g.naam}" onerror="this.style.display='none'">`
+        : `<div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>`;
+      card.innerHTML = `
+        <div>
+          ${imgHtml}
+          <div class="gelegenheid-name">${g.naam}</div>
+          <div class="gelegenheid-desc">${g.desc}</div>
+        </div>`;
+      card.onclick = () => {
+        gelegenheid = g.id;
+        renderGelegenheden();
+      };
+      groepGrid.appendChild(card);
+    });
+    grid.appendChild(groepGrid);
   });
 }
 
@@ -626,19 +774,140 @@ function startConfiguratie() {
     return;
   }
   document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('bestellingScreen').style.display = 'block';
+  renderBestellingStap();
+}
+
+function startStijlkeuzes() {
+  if (bestellingItems.length === 0) {
+    alert('Kies minimaal één kledingstuk om te configureren.');
+    return;
+  }
+  document.getElementById('bestellingScreen').style.display = 'none';
   document.getElementById('mainConfig').style.display = 'block';
+  // Stel actieve kledingstukken in op basis van selectie
+  const gekozenKled = [...new Set(bestellingItems.map(i => i.type))];
+  actieveKled = gekozenKled[0] || 'Jas';
+  actieveStap = 0;
   render();
+}
+
+function getGekozenKledingstukken() {
+  return [...new Set(bestellingItems.map(i => i.type))];
+}
+
+const BESTELLING_OPTIES = [
+  { id: 'Jas', label: 'Jas', icon: 'ti-shirt', desc: 'Colbert, jasje of jacket' },
+  { id: 'Broek', label: 'Broek', icon: 'ti-layout-bottombar', desc: 'Pantalon of broek' },
+  { id: 'Gilet', label: 'Gilet', icon: 'ti-layers-intersect', desc: 'Vest of waistcoat' },
+];
+
+function renderBestellingStap() {
+  const g = getGelegenheid();
+  const screen = document.getElementById('bestellingScreen');
+  
+  // Bepaal welke opties beschikbaar zijn op basis van gelegenheid
+  let opties = BESTELLING_OPTIES;
+  
+  let html = `
+    <div class="cfg-header">
+      <div>
+        <h1>Wat wilt u bestellen?</h1>
+        <p>Selecteer de kledingstukken en het aantal — u kunt meerdere stuks van hetzelfde bestellen</p>
+      </div>
+      <button class="btn btn-ghost" onclick="terugNaarStart()" style="font-size:11px">← Terug</button>
+    </div>
+    <div class="gelegenheid-badge" style="margin-bottom:1.5rem">
+      <i class="ti ${g ? g.icon : 'ti-shirt'}"></i>
+      ${g ? g.naam : ''}
+    </div>
+    <div class="bestelling-grid" id="bestellingGrid">`;
+
+  opties.forEach(opt => {
+    const items = bestellingItems.filter(i => i.type === opt.id);
+    const aantal = items.length;
+    html += `
+      <div class="bestelling-card ${aantal > 0 ? 'selected' : ''}" id="bcard-${opt.id}">
+        <div class="bestelling-card-top">
+          <i class="ti ${opt.icon}" style="font-size:22px;color:#8B6F47;margin-bottom:8px;display:block"></i>
+          <div class="bestelling-card-naam">${opt.label}</div>
+          <div class="bestelling-card-desc">${opt.desc}</div>
+        </div>
+        <div class="bestelling-qty-row">
+          <button class="qty-btn" onclick="wijzigAantal('${opt.id}',-1)">−</button>
+          <span class="qty-val" id="qty-${opt.id}">${aantal}</span>
+          <button class="qty-btn" onclick="wijzigAantal('${opt.id}',1)">+</button>
+        </div>
+      </div>`;
+  });
+
+  html += `</div>`;
+
+  // Referentie ordernummer bij losse stukken
+  const g = getGelegenheid();
+  if (g && g.referentie) {
+    html += `<div class="referentie-blok">
+      <div class="referentie-title">Referentie aan vorige bestelling <span style="font-weight:300;color:#6b6560">(optioneel)</span></div>
+      <div class="referentie-sub">Voer uw ordernummer in. De stof van uw vorige bestelling wordt automatisch geselecteerd en ter bevestiging getoond.</div>
+      <div class="referentie-input-row">
+        <input type="text" id="refOrdernr" placeholder="bijv. DO-KL-20240315-123" class="referentie-input" oninput="zoekReferentie(this.value)">
+        <button class="btn btn-ghost" onclick="zoekReferentie(document.getElementById('refOrdernr').value)" style="font-size:12px">Zoeken</button>
+      </div>
+      <div id="referentieResultaat"></div>
+    </div>`;
+  }
+
+  // Toon geselecteerde items overzicht
+  if (bestellingItems.length > 0) {
+    html += `<div class="bestelling-overzicht">
+      <div class="bestelling-overzicht-title">Uw selectie</div>
+      <div class="bestelling-overzicht-items">`;
+    
+    const grouped = {};
+    bestellingItems.forEach(i => { grouped[i.type] = (grouped[i.type] || 0) + 1; });
+    Object.entries(grouped).forEach(([type, aantal]) => {
+      html += `<div class="bestelling-overzicht-item">
+        <span class="bo-type">${type}</span>
+        <span class="bo-aantal">${aantal}×</span>
+      </div>`;
+    });
+    
+    html += `</div></div>`;
+  }
+
+  html += `
+    <div class="step-nav" style="margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <div></div>
+      <button class="btn btn-primary" onclick="startStijlkeuzes()">Stijlkeuzes maken →</button>
+    </div>`;
+
+  screen.innerHTML = html;
+}
+
+function wijzigAantal(type, delta) {
+  if (delta > 0) {
+    bestellingItems.push({ type, id: type + '_' + Date.now() });
+  } else {
+    const idx = bestellingItems.findLastIndex(i => i.type === type);
+    if (idx > -1) bestellingItems.splice(idx, 1);
+  }
+  renderBestellingStap();
 }
 
 function terugNaarStart() {
   document.getElementById('finalSummary').style.display = 'none';
   document.getElementById('mainConfig').style.display = 'none';
+  document.getElementById('bestellingScreen').style.display = 'none';
   document.getElementById('startScreen').style.display = 'block';
   renderGelegenheden();
 }
 
 function huidigeStappen() {
-  return STAPPEN[actieveKled] || [];
+  const alle = STAPPEN[actieveKled] || [];
+  return alle.filter(s => {
+    if (!s.conditioneel) return true;
+    return s.conditioneel(keuzes, gelegenheid);
+  });
 }
 
 function huidigeStap() {
@@ -653,7 +922,9 @@ function getOpties(stap) {
 function renderKledTabs() {
   const tabs = document.getElementById('kledTabs');
   tabs.innerHTML = '';
-  KLEDINGSTUKKEN.forEach(k => {
+  const basis = getGekozenKledingstukken().length > 0 ? getGekozenKledingstukken() : KLEDINGSTUKKEN;
+  const gekozen = [...new Set([...basis, ...(window._extraTabs || [])])];
+  gekozen.forEach(k => {
     const t = document.createElement('div');
     t.className = 'kled-tab' + (k === actieveKled ? ' active' : '');
     t.textContent = k;
@@ -1086,7 +1357,53 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('lb').style.display = 'none';
 });
 
+let referentieStof = null;
+
+function zoekReferentie(nr) {
+  const res = document.getElementById('referentieResultaat');
+  if (!res) return;
+  if (!nr || nr.trim().length < 4) { res.innerHTML = ''; referentieStof = null; return; }
+  
+  const bestellingen = window.DEOST_BESTELLINGEN || [];
+  const match = bestellingen.find(b => b.ordernummer.toLowerCase() === nr.trim().toLowerCase());
+  
+  if (!match) {
+    res.innerHTML = `<div class="referentie-niet-gevonden"><i class="ti ti-search-off"></i> Ordernummer niet gevonden. Controleer het nummer of laat het veld leeg.</div>`;
+    referentieStof = null;
+    return;
+  }
+  
+  // Zoek de stof op in DEOST_STOFFEN
+  const stoffen = window.DEOST_STOFFEN || [];
+  const stof = stoffen.find(s => s.stofnummer === match.stofnummer || s.id === match.stofId);
+  referentieStof = stof || null;
+  
+  res.innerHTML = `<div class="referentie-gevonden">
+    <div class="ref-check"><i class="ti ti-circle-check"></i> Bestelling gevonden</div>
+    <div class="ref-stofkaart">
+      <div class="ref-swatch" style="background:${stof ? '' : '#e0dbd5'}">
+        ${stof && stof.swatch ? `<img src="${stof.swatch}" alt="${stof ? stof.naam : ''}" onerror="this.style.background='#e0dbd5'">` : ''}
+      </div>
+      <div class="ref-info">
+        <div class="ref-stofnaam">${stof ? stof.naam : match.stofnummer}</div>
+        <div class="ref-details">${stof ? stof.leverancier + ' · ' + stof.stofnummer : ''}</div>
+        <div class="ref-details">${match.kledingstuk} · ${match.datum}</div>
+        <div class="ref-bevestiging">Deze stof wordt automatisch geselecteerd voor uw nieuwe bestelling.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
 function render() {
+  // Voeg Accessoires toe bij formalwear gelegenheden
+  const formalwear = ['black_tie','white_tie','morning_coat'].includes(gelegenheid);
+  const gekozen = getGekozenKledingstukken();
+  if (formalwear && !gekozen.includes('Accessoires')) {
+    // Accessoires altijd beschikbaar bij formalwear als extra tab
+    window._extraTabs = ['Accessoires'];
+  } else {
+    window._extraTabs = [];
+  }
   renderKledTabs();
   renderNav();
   renderStep();
