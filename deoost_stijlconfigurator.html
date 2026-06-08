@@ -99,41 +99,6 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .lb-close{position:absolute;top:-16px;right:-16px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;color:white;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;}
 .lb-close:hover{background:rgba(255,255,255,.25);}
 
-/* BESTELLING STAP */
-.bestelling-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:1.5rem;}
-.referentie-blok{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;padding:1.25rem;background:white;margin-bottom:1.5rem;}
-.referentie-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:#1a1814;margin-bottom:4px;}
-.referentie-sub{font-size:12px;color:#6b6560;margin-bottom:1rem;line-height:1.5;}
-.referentie-input-row{display:flex;gap:8px;margin-bottom:.875rem;}
-.referentie-input{flex:1;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 12px;font-size:13px;font-family:'Jost',sans-serif;background:white;color:#1a1814;}
-.referentie-input:focus{outline:none;border-color:#8B6F47;}
-.referentie-niet-gevonden{font-size:12px;color:#c0392b;display:flex;align-items:center;gap:6px;padding:.5rem 0;}
-.referentie-gevonden{border-top:0.5px solid rgba(74,69,64,.15);padding-top:.875rem;}
-.ref-check{font-size:12px;color:#27ae60;display:flex;align-items:center;gap:6px;margin-bottom:.75rem;font-weight:500;}
-.ref-stofkaart{display:flex;gap:12px;align-items:flex-start;}
-.ref-swatch{width:60px;height:60px;border-radius:6px;border:0.5px solid rgba(74,69,64,.2);overflow:hidden;flex-shrink:0;background:#e0dbd5;}
-.ref-swatch img{width:100%;height:100%;object-fit:cover;}
-.ref-stofnaam{font-size:14px;font-weight:500;color:#1a1814;margin-bottom:3px;}
-.ref-details{font-size:12px;color:#6b6560;margin-bottom:2px;}
-.ref-bevestiging{font-size:11px;color:#8B6F47;margin-top:6px;font-style:italic;}
-.bestelling-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:default;transition:all .2s;display:flex;flex-direction:column;justify-content:space-between;gap:1rem;}
-.bestelling-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
-.bestelling-card-naam{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#1a1814;margin-bottom:4px;}
-.bestelling-card-desc{font-size:12px;color:#6b6560;line-height:1.4;}
-.bestelling-qty-row{display:flex;align-items:center;justify-content:center;gap:16px;padding-top:.75rem;border-top:0.5px solid rgba(74,69,64,.15);}
-.qty-btn{width:32px;height:32px;border-radius:50%;border:0.5px solid rgba(74,69,64,.3);background:white;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#1a1814;transition:all .2s;line-height:1;}
-.qty-btn:hover{background:#f0ece4;border-color:#4a4540;}
-.qty-val{font-size:18px;font-weight:500;color:#1a1814;min-width:24px;text-align:center;}
-.bestelling-overzicht{border:0.5px solid rgba(139,111,71,.3);border-radius:8px;padding:1rem 1.25rem;background:#faf6f0;margin-bottom:1rem;}
-.bestelling-overzicht-title{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#8B6F47;margin-bottom:.625rem;}
-.bestelling-overzicht-items{display:flex;gap:12px;flex-wrap:wrap;}
-.bestelling-overzicht-item{display:flex;align-items:center;gap:6px;background:white;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:4px 10px;}
-.bo-type{font-size:13px;color:#1a1814;font-weight:400;}
-.bo-aantal{font-size:13px;color:#8B6F47;font-weight:500;}
-
-/* GELEGENHEID CARDS MET AFBEELDING */
-.gelegenheid-img{width:100%;aspect-ratio:3/4;object-fit:contain;border-radius:4px;margin-bottom:.75rem;background:#f7f4ef;padding:8px;}
-
 /* PROGRESS */
 .progress-bar{height:2px;background:rgba(74,69,64,.1);border-radius:1px;margin-bottom:1.5rem;overflow:hidden;}
 .progress-fill{height:100%;background:#8B6F47;border-radius:1px;transition:width .3s ease;}
@@ -144,10 +109,8 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .start-intro{max-width:680px;margin:0 auto 1.25rem;text-align:center;}
 .start-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:6px;}
 .start-sub{font-size:13px;color:#6b6560;line-height:1.6;}
-.gelegenheid-grid{display:flex;flex-direction:column;gap:1.5rem;margin:1.5rem 0;}
-.gelegenheid-groep-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8B6F47;padding-bottom:.375rem;border-bottom:0.5px solid rgba(139,111,71,.25);margin-bottom:.5rem;}
-.gelegenheid-groep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
-@media(max-width:720px){.gelegenheid-groep-grid{grid-template-columns:1fr;}}
+.gelegenheid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:1.5rem 0;}
+@media(max-width:720px){.gelegenheid-grid{grid-template-columns:1fr;}}
 .gelegenheid-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1.25rem;background:white;cursor:pointer;transition:all .2s;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;position:relative;}
 .gelegenheid-card:hover{border-color:#4a4540;transform:translateY(-1px);}
 .gelegenheid-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
@@ -218,6 +181,31 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .info-link{display:inline-flex;align-items:center;gap:6px;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 12px;font-size:12px;color:#1a1814;text-decoration:none;background:white;}
 .info-link:hover{border-color:#1a1814;}
 
+/* BESTELKEUZE / LOSSE ONDERDELEN */
+.bestel-section{margin-top:1.5rem;padding-top:1.25rem;border-top:0.5px solid rgba(74,69,64,.2);display:none;}
+.bestel-section.active{display:block;animation:fi .25s ease;}
+.bestel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:1rem 0 1.25rem;}
+.bestel-card{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1rem;background:white;cursor:pointer;transition:all .2s;position:relative;min-height:120px;}
+.bestel-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.bestel-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.bestel-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.bestel-icon{font-size:20px;color:#8B6F47;margin-bottom:.5rem;}
+.bestel-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:4px;color:#1a1814;line-height:1.25;}
+.bestel-desc{font-size:11px;color:#6b6560;line-height:1.45;}
+.prev-order-box{border:0.5px solid rgba(74,69,64,.2);border-radius:10px;padding:1rem;background:#fff;margin:1rem 0;display:none;}
+.prev-order-box.active{display:block;}
+.prev-order-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:.75rem;}
+.prev-order-row input{border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 10px;font-size:13px;font-family:'Jost',sans-serif;background:white;width:100%;}
+.prev-order-result{margin-top:1rem;}
+.prev-order-card{display:grid;grid-template-columns:90px 1fr;gap:12px;border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;background:#f7f4ef;}
+.prev-order-img{background:white;min-height:90px;display:flex;align-items:center;justify-content:center;}
+.prev-order-img img{width:100%;height:100%;object-fit:cover;}
+.prev-order-info{padding:10px;}
+.prev-order-title{font-size:13px;font-weight:500;color:#1a1814;margin-bottom:3px;}
+.prev-order-meta{font-size:11px;color:#6b6560;line-height:1.45;}
+.prev-order-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.inline-note{font-size:11px;color:#6b6560;line-height:1.5;margin-top:6px;}
+
 </style>
 </head>
 <body>
@@ -235,12 +223,35 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
       <div class="start-sub">Kies eerst het type kleding of gelegenheid. Daarna begeleiden we u door de stijlkeuzes voor jas, broek en gilet.</div>
     </div>
     <div class="gelegenheid-grid" id="gelegenheidGrid"></div>
+
+    <div class="bestel-section" id="bestelSection">
+      <div class="start-intro" style="margin-top:1rem">
+        <div class="start-title">Wat wilt u bestellen?</div>
+        <div class="start-sub">Kies of het om een compleet set, een los kledingstuk of een extra onderdeel bij een eerdere bestelling gaat.</div>
+      </div>
+      <div class="bestel-grid" id="bestelGrid"></div>
+      <div class="prev-order-box" id="prevOrderBox">
+        <div class="filter-title">Eerdere bestelling refereren</div>
+        <div class="filter-sub">Vul het vorige ordernummer in. Als de stof in de bibliotheek bekend is, tonen we de stofkaart en gebruiken we die als uitgangspunt voor het extra kledingstuk.</div>
+        <div class="chip-row" style="margin-top:.75rem">
+          <button class="chip active" id="extraBroekBtn" onclick="setExtraItemType('Broek')">Extra broek</button>
+          <button class="chip" id="extraJasBtn" onclick="setExtraItemType('Jas')">Extra jasje</button>
+          <button class="chip" id="extraGiletBtn" onclick="setExtraItemType('Gilet')">Extra gilet</button>
+        </div>
+        <div class="prev-order-row">
+          <div>
+            <div class="filter-label">Vorig ordernummer</div>
+            <input type="text" id="prevOrderInput" placeholder="bijv. DO-KL-20240315-123" oninput="vorigeOrdernummer=this.value.trim()">
+          </div>
+          <button class="btn btn-primary" onclick="zoekVorigeOrder()">Zoek order</button>
+        </div>
+        <div class="prev-order-result" id="prevOrderResult"></div>
+      </div>
+    </div>
+
     <div class="start-actions">
       <button class="btn btn-primary" id="startBtn" onclick="startConfiguratie()">Doorgaan naar stijlkeuzes →</button>
     </div>
-  </div>
-
-  <div id="bestellingScreen" style="display:none;max-width:860px;margin:0 auto;padding:0">
   </div>
 
   <div id="mainConfig" style="display:none">
@@ -311,78 +322,89 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 <script>
 const IMG = 'tekeningen/';
 
-const GELEGENHEID_GROEPEN = [
+const GELEGENHEDEN = [
   {
-    id: 'dagkleding',
-    label: 'Dagkleding',
-    items: [
-      {
-        id: 'pak_kostuum',
-        naam: 'Pak / kostuum',
-        desc: 'Jas en broek van één stof. Klassiek twee- of driedelig pak.',
-        icon: 'ti-shirt',
-        img: null
-      },
-      {
-        id: 'tenue_de_ville',
-        naam: 'Tenue de ville',
-        desc: 'Jas, vest en broek in meerdere stoffen. Formelere daggelegenheid of bruiloft.',
-        icon: 'ti-tie',
-        img: null
-      },
-    ]
+    id: 'pak_kostuum',
+    naam: 'Pak / kostuum',
+    desc: 'Jas, vest en broek van één stof. Geschikt voor een klassiek twee- of driedelig pak.',
+    icon: 'ti-shirt'
   },
   {
-    id: 'formalwear',
-    label: 'Formalwear',
-    items: [
-      {
-        id: 'black_tie',
-        naam: 'Black tie / Smoking',
-        desc: 'Smoking of dinner jacket met bekleede revers. Avond- en galagebruik.',
-        icon: 'ti-moon-stars',
-        img: 'dinner_jacket_peak_lapels_welted_pockets_ticket_pocket-01.png',
-        formalwear: true
-      },
-      {
-        id: 'white_tie',
-        naam: 'White tie / Rokkostuum',
-        desc: 'Rok jas of jas de soirée. De meest formele avondgelegenheid.',
-        icon: 'ti-crown',
-        img: 'frock_coat_2-01.png',
-        formalwear: true
-      },
-      {
-        id: 'morning_coat',
-        naam: 'Jacquet / Rokkostuum dag',
-        desc: 'Morning coat voor racedays, huwelijksceremonies en officiële daggelegenheden.',
-        icon: 'ti-building-bank',
-        img: 'morning_coat-01.png',
-        formalwear: true
-      },
-    ]
+    id: 'tenue_de_ville',
+    naam: 'Tenue de ville',
+    desc: 'Jas, vest en broek van meerdere stoffen. Geschikt voor een formelere daggelegenheid of bruiloft.',
+    icon: 'ti-tie'
   },
   {
-    id: 'extra',
-    label: 'Extra / aanvulling',
-    items: [
-      {
-        id: 'losse_stukken',
-        naam: 'Los kledingstuk of aanvulling',
-        desc: 'Extra broek, gilet of jas bij een bestaand pak. U kunt een vorig ordernummer opgeven.',
-        icon: 'ti-layout-grid-add',
-        img: null,
-        referentie: true
-      },
-    ]
+    id: 'black_tie',
+    naam: 'Black-Tie / Avond- / Galakleding',
+    desc: 'Smoking, dinner jacket of avondkleding. Later kunnen hier specifieke black-tie regels en prijslogica aan gekoppeld worden.',
+    icon: 'ti-moon-stars'
   }
 ];
 
-// Flat lijst voor lookups
-const GELEGENHEDEN = GELEGENHEID_GROEPEN.flatMap(grp => grp.items);
-
-const KLEDINGSTUKKEN_ALLE = ['Jas','Broek','Gilet','Accessoires'];
 const KLEDINGSTUKKEN = ['Jas','Broek','Gilet'];
+
+const BESTEL_OPTIES = [
+  {
+    id:'tweedelig',
+    naam:'2-delig pak',
+    desc:'Jas en broek. Bij Pak / kostuum standaard uit één stof.',
+    icon:'ti-shirt',
+    kledingstukken:['Jas','Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'driedelig',
+    naam:'3-delig pak',
+    desc:'Jas, broek en gilet. Bij Pak / kostuum standaard uit één stof.',
+    icon:'ti-layers-intersect',
+    kledingstukken:['Jas','Broek','Gilet'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'pak_extra_broek',
+    naam:'Pak met extra broek',
+    desc:'Jas, broek en een tweede broek. De extra broek gebruikt standaard dezelfde stof.',
+    icon:'ti-copy-plus',
+    kledingstukken:['Jas','Broek'],
+    extraItems:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'los_jasje',
+    naam:'Los jasje',
+    desc:'Alleen een jasje of dinner jacket samenstellen.',
+    icon:'ti-shirt',
+    kledingstukken:['Jas'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'losse_broek',
+    naam:'Losse broek',
+    desc:'Alleen een pantalon of smokingbroek samenstellen.',
+    icon:'ti-layout-bottombar',
+    kledingstukken:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'los_gilet',
+    naam:'Los gilet',
+    desc:'Alleen een gilet samenstellen.',
+    icon:'ti-layers-intersect',
+    kledingstukken:['Gilet'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie']
+  },
+  {
+    id:'extra_bestaande_order',
+    naam:'Extra kledingstuk bij eerdere order',
+    desc:'Bestel een extra broek, jasje of gilet met verwijzing naar een vorige order en dezelfde stof.',
+    icon:'ti-history',
+    kledingstukken:['Broek'],
+    geschiktVoor:['pak_kostuum','tenue_de_ville','black_tie'],
+    vereistVorigeOrder:true
+  }
+];
 
 const STAPPEN = {
   Jas: [
@@ -418,17 +440,6 @@ const STAPPEN = {
         {id:'peak_sb', naam:'Peak revers', desc:'Puntige revers', img:'1._jas__3._revers__single_breasted__peak.png'},
         {id:'shawl_sb', naam:'Shawl kraag', desc:'Ronde doorlopende kraag', img:'1._jas__3._revers__single_breasted__shawl.png'},
         {id:'nehru', naam:'Nehru / Mao', desc:'Staande kraag', img:'1._jas__3._revers__single_breasted__nehru.png'},
-      ]
-    },
-    {
-      id: 'jas_revers_bekleding', label: 'Revers bekleding', icon: 'ti-sparkles', verplicht: false,
-      conditioneel: (k, gel) => ['black_tie','white_tie','morning_coat'].includes(gel),
-      opties: [
-        {id:'geen', naam:'Geen bekleding', desc:'Volledig in stof', img:'1._jas__3._revers__single_breasted__notch.png'},
-        {id:'satijn', naam:'Satijn', desc:'Klassieke smoking afwerking', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
-        {id:'mohair', naam:'Mohair', desc:'Subtiele glans', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
-        {id:'velvet', naam:'Velvet', desc:'Rijke diepte', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
-        {id:'grosgrain', naam:'Grosgrain', desc:'Geribbelde zijde', img:'1_button_peak_lapel_welted_pockets_ticket_pocket-01.png'},
       ]
     },
     {
@@ -688,42 +699,14 @@ const STAPPEN = {
         {id:'rond', naam:'Ronde onderkant', desc:'', img:'3._gilets__7._onderkant_recht_of_rond__ronde_onderkant.png'},
       ]
     },
-  ],
-  Accessoires: [
-    {
-      id: 'acc_vlinderdas', label: 'Vlinderdas', icon: 'ti-tie', verplicht: false,
-      conditioneel: (k, gel) => ['black_tie','white_tie'].includes(gel),
-      opties: [
-        {id:'self_tie', naam:'Self-tie', desc:'Zelf te strikken', img:'bowtie.png'},
-        {id:'pre_tied', naam:'Pre-tied', desc:'Voorgestrikt', img:'bowtie.png'},
-        {id:'geen', naam:'Geen vlinderdas', desc:'Eigen keuze', img:null},
-      ]
-    },
-    {
-      id: 'acc_kamerband', label: 'Kamerband', icon: 'ti-belt', verplicht: false,
-      conditioneel: (k, gel) => ['black_tie'].includes(gel),
-      opties: [
-        {id:'satijn_zwart', naam:'Satijn — zwart', desc:'Klassiek', img:null},
-        {id:'satijn_navy', naam:'Satijn — navy', desc:'Modern alternatief', img:null},
-        {id:'satijn_bordeaux', naam:'Satijn — bordeaux', desc:'Kleuraccent', img:null},
-        {id:'velvet_zwart', naam:'Velvet — zwart', desc:'Rijke textuur', img:null},
-        {id:'geen', naam:'Geen kamerband', desc:'', img:null},
-      ]
-    },
-    {
-      id: 'acc_pochet', label: 'Pochet stijl', icon: 'ti-square', verplicht: false,
-      opties: [
-        {id:'tv_fold', naam:'TV fold', desc:'Strak en rechthoekig', img:null},
-        {id:'presidential', naam:'Presidential', desc:'Strak driehoekig', img:null},
-        {id:'puff', naam:'Puff', desc:'Gepokt', img:null},
-        {id:'geen', naam:'Geen pochet', desc:'', img:null},
-      ]
-    },
   ]
 };
 
 let gelegenheid = null;
-let bestellingItems = []; // geselecteerde kledingstukken + aantallen
+let bestelOptie = null;
+let extraItemType = 'Broek';
+let vorigeOrdernummer = '';
+let vorigeOrderMatch = null;
 let actieveKled = 'Jas';
 let actieveStap = 0;
 let keuzes = {};
@@ -733,39 +716,160 @@ function renderGelegenheden() {
   const grid = document.getElementById('gelegenheidGrid');
   if (!grid) return;
   grid.innerHTML = '';
-  GELEGENHEID_GROEPEN.forEach(groep => {
-    // Groep label
-    const lbl = document.createElement('div');
-    lbl.className = 'gelegenheid-groep-label';
-    lbl.textContent = groep.label;
-    grid.appendChild(lbl);
-    // Groep grid
-    const groepGrid = document.createElement('div');
-    groepGrid.className = 'gelegenheid-groep-grid';
-    groep.items.forEach(gel => {
-      const card = document.createElement('div');
-      card.className = 'gelegenheid-card' + (gelegenheid === gel.id ? ' selected' : '');
-      const imgHtml = g.img
-        ? `<img class="gelegenheid-img" src="${gel.img}" alt="${gel.naam}" onerror="this.style.display='none'">`
-        : `<div class="gelegenheid-icon"><i class="ti ${gel.icon}"></i></div>`;
-      card.innerHTML = `
-        <div>
-          ${imgHtml}
-          <div class="gelegenheid-name">${gel.naam}</div>
-          <div class="gelegenheid-desc">${gel.desc}</div>
-        </div>`;
-      card.onclick = () => {
-        gelegenheid = gel.id;
-        renderGelegenheden();
-      };
-      groepGrid.appendChild(card);
-    });
-    grid.appendChild(groepGrid);
+  GELEGENHEDEN.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'gelegenheid-card' + (gelegenheid === g.id ? ' selected' : '');
+    card.innerHTML = `
+      <div>
+        <div class="gelegenheid-icon"><i class="ti ${g.icon}"></i></div>
+        <div class="gelegenheid-name">${g.naam}</div>
+        <div class="gelegenheid-desc">${g.desc}</div>
+      </div>`;
+    card.onclick = () => {
+      gelegenheid = g.id;
+      if (!bestelOptie) bestelOptie = standaardBestelOptieVoorGelegenheid(g.id);
+      renderGelegenheden();
+      renderBestelOpties();
+    };
+    grid.appendChild(card);
   });
+  renderBestelOpties();
+}
+
+function standaardBestelOptieVoorGelegenheid(id){
+  if (id === 'black_tie') return 'tweedelig';
+  return 'tweedelig';
+}
+
+function getBeschikbareBestelOpties(){
+  if (!gelegenheid) return [];
+  return BESTEL_OPTIES.filter(o => (o.geschiktVoor || []).includes(gelegenheid));
+}
+
+function getBestelOptie(){
+  return BESTEL_OPTIES.find(o => o.id === bestelOptie) || null;
+}
+
+function getActieveKledingstukken(){
+  const optie = getBestelOptie();
+  if (!optie) return ['Jas','Broek'];
+  if (optie.id === 'extra_bestaande_order') return [extraItemType || 'Broek'];
+  return optie.kledingstukken || ['Jas','Broek'];
+}
+
+function renderBestelOpties(){
+  const section = document.getElementById('bestelSection');
+  const grid = document.getElementById('bestelGrid');
+  if (!section || !grid) return;
+  if (!gelegenheid) {
+    section.classList.remove('active');
+    grid.innerHTML = '';
+    return;
+  }
+  section.classList.add('active');
+  const opties = getBeschikbareBestelOpties();
+  grid.innerHTML = opties.map(o => `
+    <div class="bestel-card ${bestelOptie===o.id?'selected':''}" onclick="selectBestelOptie('${o.id}')">
+      <div class="bestel-icon"><i class="ti ${o.icon}"></i></div>
+      <div class="bestel-name">${o.naam}</div>
+      <div class="bestel-desc">${o.desc}</div>
+    </div>
+  `).join('');
+  const prevBox = document.getElementById('prevOrderBox');
+  if (prevBox) prevBox.className = 'prev-order-box' + (getBestelOptie()?.vereistVorigeOrder ? ' active' : '');
+  renderVorigeOrderResult();
+}
+
+function selectBestelOptie(id){
+  bestelOptie = id;
+  const optie = getBestelOptie();
+  if (optie && optie.id !== 'extra_bestaande_order') {
+    vorigeOrderMatch = null;
+    vorigeOrdernummer = '';
+  }
+  actieveKled = getActieveKledingstukken()[0] || 'Jas';
+  actieveStap = 0;
+  renderBestelOpties();
+}
+
+function setExtraItemType(type){
+  extraItemType = type;
+  actieveKled = type;
+  actieveStap = 0;
+  ['Broek','Jas','Gilet'].forEach(t => {
+    const el = document.getElementById('extra'+t+'Btn');
+    if (el) el.className = 'chip' + (t===type ? ' active' : '');
+  });
+  renderVorigeOrderResult();
+}
+
+function zoekVorigeOrder(){
+  const input = document.getElementById('prevOrderInput');
+  vorigeOrdernummer = (input ? input.value : vorigeOrdernummer).trim();
+  const lijst = window.DEOST_BESTELLINGEN || [];
+  vorigeOrderMatch = lijst.find(o => String(o.ordernummer || '').toLowerCase() === vorigeOrdernummer.toLowerCase()) || null;
+  if (vorigeOrderMatch) {
+    const stof = getStofBijBestelling(vorigeOrderMatch);
+    if (stof) {
+      materiaalKeuzes.hoofdStof = stof.id;
+      materiaalKeuzes.jasStof = stof.id;
+      materiaalKeuzes.broekStof = stof.id;
+      materiaalKeuzes.giletStof = stof.id;
+    }
+  }
+  renderVorigeOrderResult();
+}
+
+function getStofBijBestelling(order){
+  if (!order) return null;
+  return STOFFEN.find(s =>
+    (order.stofId && s.id === order.stofId) ||
+    (order.stofnummer && String(s.stofnummer || '').toLowerCase() === String(order.stofnummer).toLowerCase())
+  ) || null;
+}
+
+function renderVorigeOrderResult(){
+  const result = document.getElementById('prevOrderResult');
+  if (!result) return;
+  if (!getBestelOptie()?.vereistVorigeOrder) {
+    result.innerHTML = '';
+    return;
+  }
+  if (!vorigeOrdernummer && !vorigeOrderMatch) {
+    result.innerHTML = '<div class="inline-note">Nog geen vorige order gekoppeld. U kunt ook doorgaan en de stof later handmatig kiezen.</div>';
+    return;
+  }
+  if (!vorigeOrderMatch) {
+    result.innerHTML = '<div class="inline-note">Geen bestelling gevonden met dit ordernummer. Controleer het nummer of voeg deze order toe aan <code>bestellingen.js</code>.</div>';
+    return;
+  }
+  const stof = getStofBijBestelling(vorigeOrderMatch);
+  if (!stof) {
+    result.innerHTML = `<div class="inline-note">Order gevonden, maar de stof is niet gekoppeld aan de huidige stoffenbibliotheek. Controleer <code>stofnummer</code> of <code>stofId</code> in <code>bestellingen.js</code>.</div>`;
+    return;
+  }
+  const img = stof.swatch || stof.closeup || '';
+  result.innerHTML = `
+    <div class="prev-order-card">
+      <div class="prev-order-img">${img ? `<img src="${img}" alt="${stof.naam}" onerror="this.style.display='none'">` : ''}</div>
+      <div class="prev-order-info">
+        <div class="prev-order-title">${stof.naam}</div>
+        <div class="prev-order-meta">
+          Vorige order: ${vorigeOrderMatch.ordernummer}<br>
+          ${vorigeOrderMatch.klantnaam ? 'Klant: '+vorigeOrderMatch.klantnaam+'<br>' : ''}
+          ${stof.merk || ''} · ${stof.stofnummer || ''}<br>
+          ${stof.materiaal ? stof.materiaal.join('/') : ''} · ${stof.weving || ''} · ${stof.patroon || ''} · ${stof.kleur || ''}
+        </div>
+        <div class="prev-order-actions">
+          <button class="info-link" onclick="openStofInfo('${stof.id}',event)"><i class="ti ti-info-circle"></i> Stofinformatie</button>
+          <button class="info-link" onclick="selectStof('${stof.id}')"><i class="ti ti-check"></i> Gebruik deze stof</button>
+        </div>
+      </div>
+    </div>`;
 }
 
 function getGelegenheid() {
-  return GELEGENHEDEN.find(grp => grp.id === gelegenheid) || null;
+  return GELEGENHEDEN.find(g => g.id === gelegenheid) || null;
 }
 
 function startConfiguratie() {
@@ -773,140 +877,30 @@ function startConfiguratie() {
     alert('Kies eerst een type kleding of gelegenheid.');
     return;
   }
-  document.getElementById('startScreen').style.display = 'none';
-  document.getElementById('bestellingScreen').style.display = 'block';
-  renderBestellingStap();
-}
-
-function startStijlkeuzes() {
-  if (bestellingItems.length === 0) {
-    alert('Kies minimaal één kledingstuk om te configureren.');
+  if (!bestelOptie) {
+    alert('Kies eerst wat u wilt bestellen.');
     return;
   }
-  document.getElementById('bestellingScreen').style.display = 'none';
-  document.getElementById('mainConfig').style.display = 'block';
-  // Stel actieve kledingstukken in op basis van selectie
-  const gekozenKled = [...new Set(bestellingItems.map(i => i.type))];
-  actieveKled = gekozenKled[0] || 'Jas';
+  if (getBestelOptie()?.vereistVorigeOrder && vorigeOrdernummer && !vorigeOrderMatch) {
+    zoekVorigeOrder();
+  }
+  actieveKled = getActieveKledingstukken()[0] || 'Jas';
   actieveStap = 0;
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'block';
   render();
-}
-
-function getGekozenKledingstukken() {
-  return [...new Set(bestellingItems.map(i => i.type))];
-}
-
-const BESTELLING_OPTIES = [
-  { id: 'Jas', label: 'Jas', icon: 'ti-shirt', desc: 'Colbert, jasje of jacket' },
-  { id: 'Broek', label: 'Broek', icon: 'ti-layout-bottombar', desc: 'Pantalon of broek' },
-  { id: 'Gilet', label: 'Gilet', icon: 'ti-layers-intersect', desc: 'Vest of waistcoat' },
-];
-
-function renderBestellingStap() {
-  var g = getGelegenheid();
-  const screen = document.getElementById('bestellingScreen');
-  
-  // Bepaal welke opties beschikbaar zijn op basis van gelegenheid
-  let opties = BESTELLING_OPTIES;
-  
-  let html = `
-    <div class="cfg-header">
-      <div>
-        <h1>Wat wilt u bestellen?</h1>
-        <p>Selecteer de kledingstukken en het aantal — u kunt meerdere stuks van hetzelfde bestellen</p>
-      </div>
-      <button class="btn btn-ghost" onclick="terugNaarStart()" style="font-size:11px">← Terug</button>
-    </div>
-    <div class="gelegenheid-badge" style="margin-bottom:1.5rem">
-      <i class="ti ${g ? g.icon : 'ti-shirt'}"></i>
-      ${g ? g.naam : ''}
-    </div>
-    <div class="bestelling-grid" id="bestellingGrid">`;
-
-  opties.forEach(opt => {
-    const items = bestellingItems.filter(i => i.type === opt.id);
-    const aantal = items.length;
-    html += `
-      <div class="bestelling-card ${aantal > 0 ? 'selected' : ''}" id="bcard-${opt.id}">
-        <div class="bestelling-card-top">
-          <i class="ti ${opt.icon}" style="font-size:22px;color:#8B6F47;margin-bottom:8px;display:block"></i>
-          <div class="bestelling-card-naam">${opt.label}</div>
-          <div class="bestelling-card-desc">${opt.desc}</div>
-        </div>
-        <div class="bestelling-qty-row">
-          <button class="qty-btn" onclick="wijzigAantal('${opt.id}',-1)">−</button>
-          <span class="qty-val" id="qty-${opt.id}">${aantal}</span>
-          <button class="qty-btn" onclick="wijzigAantal('${opt.id}',1)">+</button>
-        </div>
-      </div>`;
-  });
-
-  html += `</div>`;
-
-  // Referentie ordernummer bij losse stukken
-  if (g && g.referentie) {
-    html += `<div class="referentie-blok">
-      <div class="referentie-title">Referentie aan vorige bestelling <span style="font-weight:300;color:#6b6560">(optioneel)</span></div>
-      <div class="referentie-sub">Voer uw ordernummer in. De stof van uw vorige bestelling wordt automatisch geselecteerd en ter bevestiging getoond.</div>
-      <div class="referentie-input-row">
-        <input type="text" id="refOrdernr" placeholder="bijv. DO-KL-20240315-123" class="referentie-input" oninput="zoekReferentie(this.value)">
-        <button class="btn btn-ghost" onclick="zoekReferentie(document.getElementById('refOrdernr').value)" style="font-size:12px">Zoeken</button>
-      </div>
-      <div id="referentieResultaat"></div>
-    </div>`;
-  }
-
-  // Toon geselecteerde items overzicht
-  if (bestellingItems.length > 0) {
-    html += `<div class="bestelling-overzicht">
-      <div class="bestelling-overzicht-title">Uw selectie</div>
-      <div class="bestelling-overzicht-items">`;
-    
-    const grouped = {};
-    bestellingItems.forEach(i => { grouped[i.type] = (grouped[i.type] || 0) + 1; });
-    Object.entries(grouped).forEach(([type, aantal]) => {
-      html += `<div class="bestelling-overzicht-item">
-        <span class="bo-type">${type}</span>
-        <span class="bo-aantal">${aantal}×</span>
-      </div>`;
-    });
-    
-    html += `</div></div>`;
-  }
-
-  html += `
-    <div class="step-nav" style="margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
-      <div></div>
-      <button class="btn btn-primary" onclick="startStijlkeuzes()">Stijlkeuzes maken →</button>
-    </div>`;
-
-  screen.innerHTML = html;
-}
-
-function wijzigAantal(type, delta) {
-  if (delta > 0) {
-    bestellingItems.push({ type, id: type + '_' + Date.now() });
-  } else {
-    const idx = bestellingItems.findLastIndex(i => i.type === type);
-    if (idx > -1) bestellingItems.splice(idx, 1);
-  }
-  renderBestellingStap();
 }
 
 function terugNaarStart() {
   document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('materialConfig').style.display = 'none';
   document.getElementById('mainConfig').style.display = 'none';
-  document.getElementById('bestellingScreen').style.display = 'none';
   document.getElementById('startScreen').style.display = 'block';
   renderGelegenheden();
 }
 
 function huidigeStappen() {
-  const alle = STAPPEN[actieveKled] || [];
-  return alle.filter(s => {
-    if (!s.conditioneel) return true;
-    return s.conditioneel(keuzes, gelegenheid);
-  });
+  return STAPPEN[actieveKled] || [];
 }
 
 function huidigeStap() {
@@ -921,9 +915,7 @@ function getOpties(stap) {
 function renderKledTabs() {
   const tabs = document.getElementById('kledTabs');
   tabs.innerHTML = '';
-  const basis = getGekozenKledingstukken().length > 0 ? getGekozenKledingstukken() : KLEDINGSTUKKEN;
-  const gekozen = [...new Set([...basis, ...(window._extraTabs || [])])];
-  gekozen.forEach(k => {
+  getActieveKledingstukken().forEach(k => {
     const t = document.createElement('div');
     t.className = 'kled-tab' + (k === actieveKled ? ' active' : '');
     t.textContent = k;
@@ -952,7 +944,7 @@ function renderSummaryPanel() {
   const list = document.getElementById('summaryList');
   const stappen = huidigeStappen();
   const items = stappen.filter(s => keuzes[s.id]);
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   if (!items.length && !g) {
     list.innerHTML = '<span class="summary-empty">Nog geen keuzes gemaakt</span>';
     return;
@@ -964,6 +956,25 @@ function renderSummaryPanel() {
       <div class="summary-text">
         <div class="summary-cat">Type kleding</div>
         <div class="summary-val">${g.naam}</div>
+      </div>
+    </div>`;
+  }
+  const bo = getBestelOptie();
+  if (bo) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ${bo.icon}" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Bestelling</div>
+        <div class="summary-val">${bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam}</div>
+      </div>
+    </div>`;
+  }
+  if (vorigeOrderMatch) {
+    html += `<div class="summary-item">
+      <div class="summary-thumb" style="display:flex;align-items:center;justify-content:center"><i class="ti ti-history" style="font-size:18px;color:#8B6F47"></i></div>
+      <div class="summary-text">
+        <div class="summary-cat">Vorige order</div>
+        <div class="summary-val">${vorigeOrderMatch.ordernummer}</div>
       </div>
     </div>`;
   }
@@ -987,7 +998,7 @@ function renderStep() {
   if (!stap) return;
   const opties = getOpties(stap);
   const content = document.getElementById('stepContent');
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   content.innerHTML = `
     ${g ? `<div class="gelegenheid-badge"><i class="ti ${g.icon}" style="font-size:13px"></i>${g.naam}</div>` : ''}
     <div class="step-header">
@@ -1065,7 +1076,7 @@ function toonSamenvatting() {
   const content = document.getElementById('finalContent');
 
   let html = '';
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   if (g) {
     html += `<div class="sum-kled-block"><div class="sum-kled-title">Type kleding / gelegenheid</div>
       <div class="sum-card" style="max-width:320px">
@@ -1077,7 +1088,20 @@ function toonSamenvatting() {
       </div>
     </div>`;
   }
-  KLEDINGSTUKKEN.forEach(kled => {
+  const bo = getBestelOptie();
+  if (bo) {
+    html += `<div class="sum-kled-block"><div class="sum-kled-title">Wat wilt u bestellen?</div>
+      <div class="sum-card" style="max-width:320px">
+        <div class="sum-card-info" style="padding:12px">
+          <div class="sum-card-cat">Bestelling</div>
+          <div class="sum-card-val">${bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam}</div>
+          <div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">${bo.desc}</div>
+          ${vorigeOrderMatch ? `<div style="font-size:11px;color:#6b6560;line-height:1.5;margin-top:4px">Vorige order: ${vorigeOrderMatch.ordernummer}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+  getActieveKledingstukken().forEach(kled => {
     const stappen = STAPPEN[kled];
     const items = stappen.filter(s => keuzes[s.id]);
     if (!items.length) return;
@@ -1101,7 +1125,7 @@ function toonSamenvatting() {
 
 function getSamenvatting() {
   const result = {};
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   if (g) {
     result.gelegenheid = {
       id: g.id,
@@ -1109,7 +1133,27 @@ function getSamenvatting() {
       desc: g.desc
     };
   }
-  KLEDINGSTUKKEN.forEach(kled => {
+  const bo = getBestelOptie();
+  if (bo) {
+    result.bestelling = {
+      id: bo.id,
+      naam: bo.naam,
+      desc: bo.desc,
+      kledingstukken: getActieveKledingstukken(),
+      extraItems: bo.extraItems || [],
+      extraItemType: bo.id === 'extra_bestaande_order' ? extraItemType : null
+    };
+  }
+  if (vorigeOrderMatch) {
+    result.vorigeOrder = {
+      ordernummer: vorigeOrderMatch.ordernummer,
+      klantnaam: vorigeOrderMatch.klantnaam || '',
+      kledingstuk: vorigeOrderMatch.kledingstuk || '',
+      stofnummer: vorigeOrderMatch.stofnummer || '',
+      stofId: vorigeOrderMatch.stofId || ''
+    };
+  }
+  getActieveKledingstukken().forEach(kled => {
     STAPPEN[kled].forEach(s => {
       if (keuzes[s.id]) result[s.id] = keuzes[s.id];
     });
@@ -1152,10 +1196,19 @@ function toonMateriaalKeuze(){
 }
 
 function bepaalMateriaalDoel(){
-  var g = getGelegenheid();
-  if (!g || g.id === 'pak_kostuum') actieveMateriaalDoel = 'hoofdStof';
-  else if (g.id === 'tenue_de_ville') actieveMateriaalDoel = materiaalKeuzes.jasStof ? (materiaalKeuzes.broekStof ? 'giletStof' : 'broekStof') : 'jasStof';
-  else actieveMateriaalDoel = 'hoofdStof';
+  const g = getGelegenheid();
+  const targets = getMateriaalDoelen();
+  if (!g || g.id !== 'tenue_de_ville') {
+    actieveMateriaalDoel = 'hoofdStof';
+    return;
+  }
+  actieveMateriaalDoel = targets.find(t => !materiaalKeuzes[t]) || targets[0] || 'hoofdStof';
+}
+
+function getMateriaalDoelen(){
+  const actieve = getActieveKledingstukken();
+  const map = {Jas:'jasStof', Broek:'broekStof', Gilet:'giletStof'};
+  return actieve.map(k => map[k]).filter(Boolean);
 }
 
 function doelLabel(doel){
@@ -1165,7 +1218,7 @@ function doelLabel(doel){
 function getStof(id){ return STOFFEN.find(s => s.id === id); }
 
 function renderMateriaalKeuze(){
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   const content = document.getElementById('materialContent');
   content.innerHTML = `
     <div class="gelegenheid-badge"><i class="ti ${(g&&g.icon)||'ti-shirt'}"></i>${g ? g.naam : 'Geen gelegenheid gekozen'}</div>
@@ -1191,15 +1244,29 @@ function renderMateriaalKeuze(){
 }
 
 function renderMateriaalSelectieTekst(){
-  const gel = getGelegenheid();
+  const g = getGelegenheid();
+  const bo = getBestelOptie();
+  let html = '';
+  if (vorigeOrderMatch) {
+    const stof = getStofBijBestelling(vorigeOrderMatch);
+    html += `<div class="material-selection-row"><span>Vorige order:</span> ${vorigeOrderMatch.ordernummer}${stof ? ' — '+stof.naam+' ('+stof.stofnummer+')' : ''}</div>`;
+  }
   if (g && g.id === 'tenue_de_ville') {
-    return ['jasStof','broekStof','giletStof'].map(k => {
+    const targets = getMateriaalDoelen();
+    html += targets.map(k => {
       const stof = getStof(materiaalKeuzes[k]);
       return `<div class="material-selection-row"><span>${doelLabel(k)}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
-    }).join('') + renderDoelKnoppen(['jasStof','broekStof','giletStof']);
+    }).join('') + renderDoelKnoppen(targets);
+    return html;
   }
   const stof = getStof(materiaalKeuzes.hoofdStof);
-  return `<div class="material-selection-row"><span>${g && g.id === 'black_tie' ? 'Avondstof' : 'Stof voor jas, vest en broek'}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+  let label = 'Hoofdstof';
+  if (bo && bo.id === 'extra_bestaande_order') label = 'Stof voor '+extraItemType.toLowerCase();
+  else if (bo && getActieveKledingstukken().length === 1) label = 'Stof voor '+getActieveKledingstukken()[0].toLowerCase();
+  else if (g && g.id === 'black_tie') label = 'Avondstof';
+  else label = 'Stof voor de geselecteerde kledingstukken';
+  html += `<div class="material-selection-row"><span>${label}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+  return html;
 }
 
 function renderDoelKnoppen(doelen){
@@ -1251,7 +1318,7 @@ function setMateriaalFilter(key,val){
 }
 
 function getGefilterdeStoffen(){
-  var g = getGelegenheid();
+  const g = getGelegenheid();
   return STOFFEN.filter(stof => {
     if (g && !stof.geschiktVoor.includes(g.id)) return false;
     if (materiaalMode === 'help') {
@@ -1294,14 +1361,15 @@ function renderStofCard(stof){
 }
 
 function selectStof(id){
-  var g = getGelegenheid();
-  if (!g || g.id === 'pak_kostuum') {
+  const g = getGelegenheid();
+  if (!g || g.id !== 'tenue_de_ville') {
     materiaalKeuzes.hoofdStof = id;
-    materiaalKeuzes.jasStof = id;
-    materiaalKeuzes.broekStof = id;
-    materiaalKeuzes.giletStof = id;
-  } else if (g.id === 'black_tie') {
-    materiaalKeuzes.hoofdStof = id;
+    getMateriaalDoelen().forEach(k => { materiaalKeuzes[k] = id; });
+    if (!getMateriaalDoelen().length) {
+      materiaalKeuzes.jasStof = id;
+      materiaalKeuzes.broekStof = id;
+      materiaalKeuzes.giletStof = id;
+    }
   } else {
     materiaalKeuzes[actieveMateriaalDoel] = id;
   }
@@ -1337,10 +1405,13 @@ function openStofInfo(id,e){
 function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
 
 function toonMateriaalSamenvatting(){
-  var g = getGelegenheid();
+  const g = getGelegenheid();
+  const bo = getBestelOptie();
   let msg = 'Materiaalkeuze\n\n';
+  if (bo) msg += 'Bestelling: ' + (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) + '\n';
+  if (vorigeOrderMatch) msg += 'Vorige order: ' + vorigeOrderMatch.ordernummer + '\n';
   if (g && g.id === 'tenue_de_ville') {
-    ['jasStof','broekStof','giletStof'].forEach(k => {
+    getMateriaalDoelen().forEach(k => {
       const stof = getStof(materiaalKeuzes[k]);
       msg += doelLabel(k)+': '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
     });
@@ -1356,53 +1427,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('lb').style.display = 'none';
 });
 
-let referentieStof = null;
-
-function zoekReferentie(nr) {
-  const res = document.getElementById('referentieResultaat');
-  if (!res) return;
-  if (!nr || nr.trim().length < 4) { res.innerHTML = ''; referentieStof = null; return; }
-  
-  const bestellingen = window.DEOST_BESTELLINGEN || [];
-  const match = bestellingen.find(b => b.ordernummer.toLowerCase() === nr.trim().toLowerCase());
-  
-  if (!match) {
-    res.innerHTML = `<div class="referentie-niet-gevonden"><i class="ti ti-search-off"></i> Ordernummer niet gevonden. Controleer het nummer of laat het veld leeg.</div>`;
-    referentieStof = null;
-    return;
-  }
-  
-  // Zoek de stof op in DEOST_STOFFEN
-  const stoffen = window.DEOST_STOFFEN || [];
-  const stof = stoffen.find(s => s.stofnummer === match.stofnummer || s.id === match.stofId);
-  referentieStof = stof || null;
-  
-  res.innerHTML = `<div class="referentie-gevonden">
-    <div class="ref-check"><i class="ti ti-circle-check"></i> Bestelling gevonden</div>
-    <div class="ref-stofkaart">
-      <div class="ref-swatch" style="background:${stof ? '' : '#e0dbd5'}">
-        ${stof && stof.swatch ? `<img src="${stof.swatch}" alt="${stof ? stof.naam : ''}" onerror="this.style.background='#e0dbd5'">` : ''}
-      </div>
-      <div class="ref-info">
-        <div class="ref-stofnaam">${stof ? stof.naam : match.stofnummer}</div>
-        <div class="ref-details">${stof ? stof.leverancier + ' · ' + stof.stofnummer : ''}</div>
-        <div class="ref-details">${match.kledingstuk} · ${match.datum}</div>
-        <div class="ref-bevestiging">Deze stof wordt automatisch geselecteerd voor uw nieuwe bestelling.</div>
-      </div>
-    </div>
-  </div>`;
-}
-
 function render() {
-  // Voeg Accessoires toe bij formalwear gelegenheden
-  const formalwear = ['black_tie','white_tie','morning_coat'].includes(gelegenheid);
-  const gekozen = getGekozenKledingstukken();
-  if (formalwear && !gekozen.includes('Accessoires')) {
-    // Accessoires altijd beschikbaar bij formalwear als extra tab
-    window._extraTabs = ['Accessoires'];
-  } else {
-    window._extraTabs = [];
-  }
   renderKledTabs();
   renderNav();
   renderStep();
