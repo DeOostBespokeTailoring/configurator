@@ -121,6 +121,66 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .start-actions{display:flex;justify-content:center;margin-top:1rem;}
 .gelegenheid-badge{display:inline-flex;align-items:center;gap:6px;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:5px 12px;font-size:11px;color:#6b6560;margin-bottom:1rem;}
 
+
+/* MATERIAAL / STOFKEUZE OPZET */
+.material-screen{display:none;}
+.material-head{margin-bottom:1.25rem;}
+.material-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:4px;}
+.material-sub{font-size:13px;color:#6b6560;line-height:1.55;max-width:680px;}
+.material-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0 1.25rem;}
+@media(max-width:640px){.material-mode-grid{grid-template-columns:1fr;}}
+.material-mode{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;background:white;padding:1rem;cursor:pointer;transition:all .2s;}
+.material-mode:hover{border-color:#4a4540;transform:translateY(-1px);}
+.material-mode.active{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.material-mode-icon{font-size:22px;color:#8B6F47;margin-bottom:6px;}
+.material-mode-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:3px;}
+.material-mode-desc{font-size:12px;color:#6b6560;line-height:1.45;}
+.filter-section{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;background:white;padding:1rem;margin-bottom:1rem;}
+.filter-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:8px;}
+.filter-sub{font-size:12px;color:#6b6560;line-height:1.5;margin-bottom:.75rem;}
+.filter-row{margin-bottom:.875rem;}
+.filter-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b6560;margin-bottom:6px;}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;}
+.chip{border:0.5px solid rgba(74,69,64,.2);border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;background:white;color:#6b6560;transition:all .2s;}
+.chip:hover{border-color:#4a4540;color:#1a1814;}
+.chip.active{background:#1a1814;border-color:#1a1814;color:white;}
+.fabric-results-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;margin:1.25rem 0 .75rem;}
+.fabric-results-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;}
+.fabric-results-count{font-size:12px;color:#6b6560;}
+.fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:1.25rem;}
+.fabric-card{border:0.5px solid rgba(74,69,64,.2);border-radius:8px;overflow:hidden;background:white;cursor:pointer;transition:all .2s;position:relative;}
+.fabric-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.fabric-card.selected{border-color:#1a1814;border-width:1.5px;}
+.fabric-card.selected::after{content:'✓';position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;z-index:2;}
+.fabric-img{width:100%;aspect-ratio:1;background:#f7f4ef;position:relative;overflow:hidden;}
+.fabric-img img{width:100%;height:100%;object-fit:cover;}
+.fabric-actions{position:absolute;left:6px;right:6px;bottom:6px;display:flex;justify-content:space-between;gap:6px;}
+.fabric-icon-btn{width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,.92);border:0.5px solid rgba(74,69,64,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1814;font-size:13px;}
+.fabric-icon-btn:hover{background:white;border-color:#1a1814;}
+.fabric-info{padding:8px;}
+.fabric-name{font-size:12px;font-weight:500;line-height:1.3;margin-bottom:2px;}
+.fabric-meta{font-size:10px;color:#6b6560;line-height:1.35;}
+.fabric-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;}
+.fabric-tag{font-size:9px;background:#f7f4ef;border:0.5px solid rgba(74,69,64,.15);border-radius:3px;padding:1px 5px;color:#6b6560;}
+.material-selection-panel{border:0.5px solid rgba(139,111,71,.35);background:#f7f4ef;border-radius:8px;padding:1rem;margin:1rem 0;}
+.material-selection-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:8px;}
+.material-selection-row{font-size:12px;color:#1a1814;margin-bottom:4px;}
+.material-selection-row span{color:#6b6560;}
+.info-overlay{position:fixed;inset:0;background:rgba(10,8,6,.78);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.info-box{background:#faf8f5;border-radius:10px;max-width:620px;width:100%;max-height:90vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.info-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:#1a1814;color:white;cursor:pointer;font-size:18px;line-height:1;}
+.info-media{width:100%;aspect-ratio:16/9;background:#f0ece4;overflow:hidden;border-radius:10px 10px 0 0;}
+.info-media img{width:100%;height:100%;object-fit:cover;}
+.info-content{padding:1.25rem;}
+.info-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;margin-bottom:3px;}
+.info-meta{font-size:12px;color:#6b6560;margin-bottom:1rem;}
+.info-section{margin-bottom:1rem;}
+.info-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#8B6F47;margin-bottom:4px;}
+.info-text{font-size:13px;color:#1a1814;line-height:1.6;}
+.info-link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;}
+.info-link{display:inline-flex;align-items:center;gap:6px;border:0.5px solid rgba(74,69,64,.2);border-radius:4px;padding:8px 12px;font-size:12px;color:#1a1814;text-decoration:none;background:white;}
+.info-link:hover{border-color:#1a1814;}
+
 </style>
 </head>
 <body>
@@ -162,11 +222,24 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
     </div>
   </div>
 
+
+  <div id="materialConfig" class="material-screen">
+    <div class="material-head">
+      <div class="material-title">Stof & materiaal kiezen</div>
+      <div class="material-sub">Kies de stof op basis van adviesvragen of blader zelf door de stoffenbibliotheek. Deze opzet is voorbereid op close-ups, informatiepanelen, bloglinks en video’s.</div>
+    </div>
+    <div id="materialContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonSamenvatting()">← Terug naar samenvatting</button>
+      <button class="btn btn-accent" onclick="toonMateriaalSamenvatting()">Materiaalkeuze controleren →</button>
+    </div>
+  </div>
+
   <div id="finalSummary" style="display:none">
     <div id="finalContent"></div>
     <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
       <button class="btn btn-ghost" onclick="document.getElementById('finalSummary').style.display='none';document.getElementById('mainConfig').style.display='block'">← Terug aanpassen</button>
-      <button class="btn btn-accent" onclick="window.location.href='deoost_kleding.html?stijl='+encodeURIComponent(getSamenvatting())">Doorgaan naar bestelling →</button>
+      <button class="btn btn-accent" onclick="toonMateriaalKeuze()">Doorgaan naar stofkeuze →</button>
     </div>
   </div>
 </div>
@@ -180,6 +253,20 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
   </div>
 </div>
 
+
+<!-- MATERIAAL INFO MODAL -->
+<div id="infoModal" style="display:none" class="info-overlay" onclick="if(event.target===this)closeInfoModal()">
+  <div class="info-box">
+    <button class="info-close" onclick="closeInfoModal()">×</button>
+    <div class="info-media" id="infoMedia"></div>
+    <div class="info-content" id="infoContent"></div>
+  </div>
+</div>
+
+<script src="stoffen.js"></script>
+<script src="voeringen.js"></script>
+<script src="knopen.js"></script>
+<script src="prijzen.js"></script>
 <script>
 const IMG = 'tekeningen/';
 
@@ -766,6 +853,234 @@ function openLb(src, caption, e) {
   document.getElementById('lbCaption').textContent = caption;
   document.getElementById('lb').style.display = 'flex';
 }
+
+
+/* =========================
+   STOF / MATERIAAL OPZET
+========================= */
+const STOFFEN_IMG = '';
+const STOFFEN = (window.DEOST_STOFFEN || []).filter(s => s.actief !== false);
+const VOERINGEN = (window.DEOST_VOERINGEN || []).filter(v => v.actief !== false);
+const KNOPEN = (window.DEOST_KNOPEN || []).filter(k => k.actief !== false);
+const PRIJZEN = window.DEOST_PRIJZEN || {};
+
+let materiaalMode = 'help';
+let materiaalFilters = {
+  gebruik:'geen_voorkeur', uitstraling:'geen_voorkeur', kleur:'geen_voorkeur',
+  materiaal:'geen_voorkeur', weving:'geen_voorkeur', patroon:'geen_voorkeur'
+};
+let materiaalKeuzes = { hoofdStof:null, jasStof:null, broekStof:null, giletStof:null };
+let actieveMateriaalDoel = 'hoofdStof';
+
+function toonMateriaalKeuze(){
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainConfig').style.display = 'none';
+  document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('materialConfig').style.display = 'block';
+  bepaalMateriaalDoel();
+  renderMateriaalKeuze();
+}
+
+function bepaalMateriaalDoel(){
+  const g = getGelegenheid();
+  if (!g || g.id === 'pak_kostuum') actieveMateriaalDoel = 'hoofdStof';
+  else if (g.id === 'tenue_de_ville') actieveMateriaalDoel = materiaalKeuzes.jasStof ? (materiaalKeuzes.broekStof ? 'giletStof' : 'broekStof') : 'jasStof';
+  else actieveMateriaalDoel = 'hoofdStof';
+}
+
+function doelLabel(doel){
+  return {hoofdStof:'Hoofdstof',jasStof:'Jasstof',broekStof:'Broekstof',giletStof:'Giletstof'}[doel] || 'Stof';
+}
+
+function getStof(id){ return STOFFEN.find(s => s.id === id); }
+
+function renderMateriaalKeuze(){
+  const g = getGelegenheid();
+  const content = document.getElementById('materialContent');
+  content.innerHTML = `
+    <div class="gelegenheid-badge"><i class="ti ${(g&&g.icon)||'ti-shirt'}"></i>${g ? g.naam : 'Geen gelegenheid gekozen'}</div>
+    <div class="material-selection-panel">
+      <div class="material-selection-title">Huidige materiaalkeuze</div>
+      ${renderMateriaalSelectieTekst()}
+    </div>
+    <div class="material-mode-grid">
+      <div class="material-mode ${materiaalMode==='help'?'active':''}" onclick="materiaalMode='help';renderMateriaalKeuze()">
+        <div class="material-mode-icon"><i class="ti ti-sparkles"></i></div>
+        <div class="material-mode-title">Help mij kiezen</div>
+        <div class="material-mode-desc">Beantwoord eenvoudige vragen over gebruik, uitstraling en kleur. Wij tonen passende stoffen.</div>
+      </div>
+      <div class="material-mode ${materiaalMode==='browse'?'active':''}" onclick="materiaalMode='browse';renderMateriaalKeuze()">
+        <div class="material-mode-icon"><i class="ti ti-adjustments"></i></div>
+        <div class="material-mode-title">Zelf bladeren</div>
+        <div class="material-mode-desc">Filter zelf op materiaalsoort, weving, patroon en kleur.</div>
+      </div>
+    </div>
+    ${materiaalMode==='help' ? renderHelpFilters() : renderBrowseFilters()}
+    ${renderStofResultaten()}
+  `;
+}
+
+function renderMateriaalSelectieTekst(){
+  const g = getGelegenheid();
+  if (g && g.id === 'tenue_de_ville') {
+    return ['jasStof','broekStof','giletStof'].map(k => {
+      const stof = getStof(materiaalKeuzes[k]);
+      return `<div class="material-selection-row"><span>${doelLabel(k)}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+    }).join('') + renderDoelKnoppen(['jasStof','broekStof','giletStof']);
+  }
+  const stof = getStof(materiaalKeuzes.hoofdStof);
+  return `<div class="material-selection-row"><span>${g && g.id === 'black_tie' ? 'Avondstof' : 'Stof voor jas, vest en broek'}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
+}
+
+function renderDoelKnoppen(doelen){
+  return `<div class="chip-row" style="margin-top:8px">${doelen.map(d=>`<button class="chip ${actieveMateriaalDoel===d?'active':''}" onclick="actieveMateriaalDoel='${d}';renderMateriaalKeuze()">${doelLabel(d)}</button>`).join('')}</div>`;
+}
+
+function renderHelpFilters(){
+  return `<div class="filter-section">
+    <div class="filter-title">Help mij kiezen</div>
+    <div class="filter-sub">Laat technische termen gerust op “geen voorkeur”. De configurator gebruikt deze antwoorden alleen om de stoffenlijst te verkleinen.</div>
+    ${renderChipFilter('gebruik','Waarvoor wilt u het dragen?',[
+      ['geen_voorkeur','Geen voorkeur'],['zakelijk','Zakelijk'],['bruiloft','Bruiloft'],['zomer','Zomer'],['winter','Winter'],['avond','Avond / gala'],['casual','Casual']
+    ])}
+    ${renderChipFilter('uitstraling','Welke uitstraling zoekt u?',[
+      ['geen_voorkeur','Geen voorkeur'],['klassiek','Klassiek'],['rustig','Rustig'],['opvallend','Opvallend'],['formeel','Formeel'],['zacht','Zacht / informeel'],['veelzijdig','Veelzijdig']
+    ])}
+    ${renderChipFilter('kleur','Kleurfamilie',[
+      ['geen_voorkeur','Geen voorkeur'],['navy','Navy'],['blauw','Blauw'],['grijs','Grijs'],['zwart','Zwart'],['beige','Beige / naturel'],['bordeaux','Bordeaux']
+    ])}
+  </div>`;
+}
+
+function renderBrowseFilters(){
+  return `<div class="filter-section">
+    <div class="filter-title">Zelf bladeren</div>
+    <div class="filter-sub">Gebruik de technische filters om doelgericht door de stoffenbibliotheek te bladeren.</div>
+    ${renderChipFilter('materiaal','Materiaalsoort',[
+      ['geen_voorkeur','Geen voorkeur'],['wol','Wol'],['katoen','Katoen'],['linnen','Linnen']
+    ])}
+    ${renderChipFilter('weving','Weving / structuur',[
+      ['geen_voorkeur','Geen voorkeur'],['hopsack','Hopsack'],['flanel','Flanel'],['twill','Twill'],['plain','Plain weave'],['barathea','Barathea'],['velvet','Velvet']
+    ])}
+    ${renderChipFilter('patroon','Patroon',[
+      ['geen_voorkeur','Geen voorkeur'],['effen','Effen'],['prince_of_wales','Prince of Wales / Glencheck'],['windowpane','Windowpane'],['houndstooth','Houndstooth'],['stripe','Streep']
+    ])}
+    ${renderChipFilter('kleur','Kleur',[
+      ['geen_voorkeur','Geen voorkeur'],['navy','Navy'],['blauw','Blauw'],['grijs','Grijs'],['zwart','Zwart'],['beige','Beige'],['bordeaux','Bordeaux']
+    ])}
+  </div>`;
+}
+
+function renderChipFilter(key,label,opts){
+  return `<div class="filter-row"><div class="filter-label">${label}</div><div class="chip-row">${opts.map(([id,naam])=>`<button class="chip ${materiaalFilters[key]===id?'active':''}" onclick="setMateriaalFilter('${key}','${id}')">${naam}</button>`).join('')}</div></div>`;
+}
+
+function setMateriaalFilter(key,val){
+  materiaalFilters[key]=val;
+  renderMateriaalKeuze();
+}
+
+function getGefilterdeStoffen(){
+  const g = getGelegenheid();
+  return STOFFEN.filter(stof => {
+    if (g && !stof.geschiktVoor.includes(g.id)) return false;
+    if (materiaalMode === 'help') {
+      if (materiaalFilters.gebruik !== 'geen_voorkeur' && !stof.gebruik.includes(materiaalFilters.gebruik) && !stof.seizoen.includes(materiaalFilters.gebruik)) return false;
+      if (materiaalFilters.uitstraling !== 'geen_voorkeur' && !stof.uitstraling.includes(materiaalFilters.uitstraling)) return false;
+      if (materiaalFilters.kleur !== 'geen_voorkeur' && stof.kleur !== materiaalFilters.kleur) return false;
+    } else {
+      if (materiaalFilters.materiaal !== 'geen_voorkeur' && !stof.materiaal.includes(materiaalFilters.materiaal)) return false;
+      if (materiaalFilters.weving !== 'geen_voorkeur' && stof.weving !== materiaalFilters.weving) return false;
+      if (materiaalFilters.patroon !== 'geen_voorkeur' && stof.patroon !== materiaalFilters.patroon) return false;
+      if (materiaalFilters.kleur !== 'geen_voorkeur' && stof.kleur !== materiaalFilters.kleur) return false;
+    }
+    return true;
+  });
+}
+
+function renderStofResultaten(){
+  const stoffen = getGefilterdeStoffen();
+  return `<div class="fabric-results-head"><div><div class="fabric-results-title">Aanbevolen stoffen</div><div class="fabric-results-count">${stoffen.length} resultaat${stoffen.length===1?'':'en'} — selectie voor ${doelLabel(actieveMateriaalDoel)}</div></div><button class="btn btn-ghost" onclick="resetMateriaalFilters()">Filters wissen</button></div>
+    <div class="fabric-grid">${stoffen.map(renderStofCard).join('') || '<p class="summary-empty">Geen stoffen gevonden. Wis een filter of kies “Geen voorkeur”.</p>'}</div>`;
+}
+
+function renderStofCard(stof){
+  const selected = materiaalKeuzes[actieveMateriaalDoel] === stof.id || (actieveMateriaalDoel==='hoofdStof' && materiaalKeuzes.hoofdStof===stof.id);
+  const img = STOFFEN_IMG + (stof.swatch || stof.closeup || 'placeholder.jpg');
+  return `<div class="fabric-card ${selected?'selected':''}" onclick="selectStof('${stof.id}')">
+    <div class="fabric-img">
+      <img src="${img}" alt="${stof.naam}" onerror="this.style.display='none'">
+      <div class="fabric-actions">
+        <button class="fabric-icon-btn" onclick="openLb('${STOFFEN_IMG + (stof.closeup || stof.swatch)}','${stof.naam}',event)" title="Close-up"><i class="ti ti-zoom-in"></i></button>
+        <button class="fabric-icon-btn" onclick="openStofInfo('${stof.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button>
+      </div>
+    </div>
+    <div class="fabric-info">
+      <div class="fabric-name">${stof.naam}</div>
+      <div class="fabric-meta">${stof.merk} · ${stof.stofnummer}<br>${stof.materiaal.join('/')} · ${stof.weving} · ${stof.patroon} · ${stof.kleur}</div>
+      <div class="fabric-tags">${stof.klantLabels.map(t=>`<span class="fabric-tag">${t}</span>`).join('')}<span class="fabric-tag">Prijs ${stof.prijsGroep}</span></div>
+    </div>
+  </div>`;
+}
+
+function selectStof(id){
+  const g = getGelegenheid();
+  if (!g || g.id === 'pak_kostuum') {
+    materiaalKeuzes.hoofdStof = id;
+    materiaalKeuzes.jasStof = id;
+    materiaalKeuzes.broekStof = id;
+    materiaalKeuzes.giletStof = id;
+  } else if (g.id === 'black_tie') {
+    materiaalKeuzes.hoofdStof = id;
+  } else {
+    materiaalKeuzes[actieveMateriaalDoel] = id;
+  }
+  renderMateriaalKeuze();
+}
+
+function resetMateriaalFilters(){
+  materiaalFilters = {gebruik:'geen_voorkeur', uitstraling:'geen_voorkeur', kleur:'geen_voorkeur', materiaal:'geen_voorkeur', weving:'geen_voorkeur', patroon:'geen_voorkeur'};
+  renderMateriaalKeuze();
+}
+
+function openStofInfo(id,e){
+  e.stopPropagation();
+  const stof = getStof(id);
+  if (!stof) return;
+  const media = document.getElementById('infoMedia');
+  media.innerHTML = `<img src="${STOFFEN_IMG + (stof.closeup || stof.swatch)}" alt="${stof.naam}" onerror="this.style.display='none'">`;
+  document.getElementById('infoContent').innerHTML = `
+    <div class="info-title">${stof.naam}</div>
+    <div class="info-meta">${stof.merk} · ${stof.stofnummer} · Prijsgroep ${stof.prijsGroep}</div>
+    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${stof.materiaal.join(', ')}<br>Weving: ${stof.weving}<br>Patroon: ${stof.patroon}<br>Kleur: ${stof.kleur}${stof.patroonkleur ? '<br>Patroonkleur: '+stof.patroonkleur : ''}</div></div>
+    <div class="info-section"><div class="info-section-title">Korte uitleg</div><div class="info-text">${stof.korteUitleg}</div></div>
+    <div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${stof.advies}</div></div>
+    ${stof.minderGeschiktVoor ? `<div class="info-section"><div class="info-section-title">Minder geschikt voor</div><div class="info-text">${stof.minderGeschiktVoor}</div></div>` : ''}
+    <div class="info-link-row">
+      ${stof.blogUrl ? `<a class="info-link" href="${stof.blogUrl}" target="_blank" rel="noopener"><i class="ti ti-article"></i> Gerelateerde blog</a>` : ''}
+      ${stof.videoUrl ? `<a class="info-link" href="${stof.videoUrl}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Video bekijken</a>` : ''}
+      <button class="info-link" onclick="selectStof('${stof.id}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
+    </div>`;
+  document.getElementById('infoModal').style.display='flex';
+}
+
+function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
+
+function toonMateriaalSamenvatting(){
+  const g = getGelegenheid();
+  let msg = 'Materiaalkeuze\n\n';
+  if (g && g.id === 'tenue_de_ville') {
+    ['jasStof','broekStof','giletStof'].forEach(k => {
+      const stof = getStof(materiaalKeuzes[k]);
+      msg += doelLabel(k)+': '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+    });
+  } else {
+    const stof = getStof(materiaalKeuzes.hoofdStof);
+    msg += 'Stof: '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+  }
+  alert(msg + '\nVolgende stap wordt later: voering, knopen, maten en klantgegevens.');
+}
+
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('lb').style.display = 'none';
