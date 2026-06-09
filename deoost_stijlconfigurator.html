@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>De Oost — Stijlconfigurator</title>
+<!-- versie: startflow-blacktie-counter-sidebar-20260609 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -2260,12 +2261,46 @@ function renderResourceCards(items,type){
     const selected = type==='voering' ? afwerkingKeuzes.voeringId===item.id : afwerkingKeuzes.knoopId===item.id;
     const img = item.swatch || item.closeup || '';
     const onclick = type==='voering' ? `selectVoering('${item.id}')` : `selectKnoop('${item.id}')`;
-    const meta = type==='voering' ? `${item.materiaal || ''} · ${item.kleur || ''}` : `${item.materiaal || ''} · ${item.kleur || ''}`;
+    const meta = `${item.materiaal || ''}${item.kleur ? ' · '+item.kleur : ''}`;
     return `<div class="resource-card ${selected?'selected':''}" onclick="${onclick}">
-      <div class="resource-img">${img ? `<img src="${img}" alt="${item.naam}" onerror="this.style.display='none'">` : `<div class="resource-fallback">${item.naam ? item.naam.slice(0,1) : '•'}</div>`}</div>
+      <div class="resource-img">
+        ${img ? `<img src="${img}" alt="${item.naam}" onerror="this.style.display='none'">` : `<div class="resource-fallback">${item.naam ? item.naam.slice(0,1) : '•'}</div>`}
+        <div class="fabric-actions">
+          <button class="fabric-icon-btn" onclick="openResourceZoom('${type}','${item.id}',event)" title="Close-up"><i class="ti ti-zoom-in"></i></button>
+          <button class="fabric-icon-btn" onclick="openResourceInfo('${type}','${item.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button>
+        </div>
+      </div>
       <div class="resource-info"><div class="resource-name">${item.naam}</div><div class="resource-meta">${meta}<br>${(item.klantLabels || item.labels || []).join(' · ')}</div></div>
     </div>`;
   }).join('')}</div>`;
+}
+
+function getResourceItem(type,id){
+  return type === 'voering' ? VOERINGEN.find(v => v.id === id) : KNOPEN.find(k => k.id === id);
+}
+
+function openResourceZoom(type,id,e){
+  if(e) e.stopPropagation();
+  const item = getResourceItem(type,id);
+  if(!item) return;
+  openLb(item.closeup || item.swatch || '', item.naam, e);
+}
+
+function openResourceInfo(type,id,e){
+  if(e) e.stopPropagation();
+  const item = getResourceItem(type,id);
+  if(!item) return;
+  const media = document.getElementById('infoMedia');
+  media.style.display = '';
+  media.innerHTML = item.video ? `<video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"><source src="${item.video}" type="video/mp4"></video>` : `<img src="${item.closeup || item.swatch || ''}" alt="${item.naam}" onerror="this.parentElement.style.display='none'">`;
+  document.getElementById('infoContent').innerHTML = `
+    <div class="info-title">${item.naam}</div>
+    <div class="info-meta">${type === 'voering' ? 'Voering' : 'Knoop'}${item.materiaal ? ' · '+item.materiaal : ''}${item.kleur ? ' · '+item.kleur : ''}</div>
+    ${item.korteUitleg ? `<div class="info-section"><div class="info-section-title">Uitleg</div><div class="info-text">${item.korteUitleg}</div></div>` : ''}
+    ${item.advies ? `<div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${item.advies}</div></div>` : ''}
+    ${(item.klantLabels || item.labels || []).length ? `<div class="info-section"><div class="info-section-title">Labels</div><div class="info-text">${(item.klantLabels || item.labels || []).join(' · ')}</div></div>` : ''}
+    <div class="info-link-row"><button class="info-link" onclick="${type === 'voering' ? `selectVoering('${item.id}')` : `selectKnoop('${item.id}')`};closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze keuze</button></div>`;
+  document.getElementById('infoModal').style.display='flex';
 }
 
 function renderAfwerkingKeuze(){
@@ -2283,8 +2318,8 @@ function renderAfwerkingKeuze(){
 
     <div class="filter-section">
       <div class="filter-title">Voering kiezen</div>
-      <div class="filter-sub">Kies een voeringkleur of laat deze later op advies bepalen.</div>
-      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.voeringId?'active':''}" onclick="selectVoering(null)">Op advies / later kiezen</button></div>
+      <div class="filter-sub">Kies een voeringkleur of laat deze later op advies bepalen. De kaarten gebruiken dezelfde swatch/close-up/info-logica als de stoffen.</div>
+      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.voeringId?'active':''}" onclick="selectVoering(null)">Op advies / later kiezen</button><a class="chip" href="deoost_voeringenbibliotheek.html" target="_blank" rel="noopener">Open voeringenbibliotheek</a></div>
       ${renderResourceCards(voeringItems,'voering')}
     </div>
 
