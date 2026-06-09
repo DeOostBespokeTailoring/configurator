@@ -441,7 +441,7 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
     <div id="orderReviewContent"></div>
     <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
       <button class="btn btn-ghost" onclick="toonKlantGegevens()">← Terug naar klantgegevens</button>
-      <button class="btn btn-accent" onclick="showNotice('De Oost Bespoke','De flow is nu klaar tot en met controle. De volgende stap is deze aanvraag definitief aan de Apps Script orderverwerking koppelen.')">Aanvraag klaarzetten</button>
+      <button class="btn btn-accent" id="submitOrderBtn" onclick="verstuurAanvraag()">Aanvraag versturen</button>
     </div>
   </div>
 
@@ -518,7 +518,8 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
 const IMG = 'tekeningen/';
 // Publieke Web App URL voor veilige server-side lookup van vorige orderstoffen.
 // Deze lookup geeft alleen stofgegevens terug, geen klantgegevens of maten.
-const ORDER_LOOKUP_WEBHOOK = 'https://script.google.com/macros/s/AKfycbweMXbyNYC7bn0veCYqTxvkuQsoZ4KL2Ab8aIGHsFj-1BT3KYBVQqDn9qaZo_PoPd4fDw/exec';
+const ORDER_LOOKUP_WEBHOOK = 'https://script.google.com/macros/s/AKfycbxOrMnao68x5ep3-_NvpcF6z2ajHN3-GGsLC7450bUgKvDfRk35S7R27x0NvVZhXpxvog/exec';
+const ORDER_SUBMIT_WEBHOOK = ORDER_LOOKUP_WEBHOOK;
 
 const GELEGENHEDEN = [
   {
@@ -2407,7 +2408,7 @@ function toonDefinitieveControle(){
   const bo = getBestelOptie();
   const g = getGelegenheid();
   const json = getSamenvatting();
-  document.getElementById('orderReviewContent').innerHTML = `<div class="form-head"><div class="form-title">Controleer uw aanvraag</div><div class="form-sub">Dit is de volledige aanvraag tot en met stijl, stof, afwerking, maten en klantgegevens. De daadwerkelijke verzending koppelen we hierna aan de order-sheet.</div></div>
+  document.getElementById('orderReviewContent').innerHTML = `<div class="form-head"><div class="form-title">Controleer uw aanvraag</div><div class="form-sub">Dit is de volledige aanvraag tot en met stijl, stof, afwerking, maten en klantgegevens. Als alles klopt, kunt u de aanvraag naar De Oost versturen.</div></div>
     <div class="final-review-block"><div class="final-review-title">Startkeuze</div>
       <div class="final-review-row"><span>Gelegenheid:</span> ${g ? g.naam : '—'}</div>
       <div class="final-review-row"><span>Bestelling:</span> ${bo ? (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) : '—'}</div>
@@ -2421,6 +2422,108 @@ function toonDefinitieveControle(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+
+
+/* =========================
+   VERZENDEN NAAR APPS SCRIPT
+========================= */
+let aanvraagWordtVerstuurd = false;
+
+function buildAanvraagPayload(){
+  const payload = JSON.parse(getSamenvatting());
+  payload.type = 'stijlconfigurator';
+  payload.bron = 'deoost_stijlconfigurator';
+  payload.clientSubmittedAt = new Date().toISOString();
+  return payload;
+}
+
+function setSubmitState(active){
+  aanvraagWordtVerstuurd = !!active;
+  const btn = document.getElementById('submitOrderBtn');
+  if (btn) {
+    btn.disabled = !!active;
+    btn.textContent = active ? 'Aanvraag wordt verstuurd…' : 'Aanvraag versturen';
+  }
+}
+
+function verstuurAanvraag(){
+  if (aanvraagWordtVerstuurd) return;
+  if (!klantGegevens.naam || !klantGegevens.email) {
+    showNotice('De Oost Bespoke','Vul minimaal naam en e-mailadres in voordat u de aanvraag verstuurt.');
+    return;
+  }
+  if (!materiaalCompleet()) {
+    showNotice('De Oost Bespoke','Kies eerst een stof voordat u de aanvraag verstuurt.');
+    return;
+  }
+  if (!ORDER_SUBMIT_WEBHOOK) {
+    showNotice('De Oost Bespoke','Er is nog geen verzend-webhook ingesteld.');
+    return;
+  }
+
+  const payload = buildAanvraagPayload();
+  setSubmitState(true);
+  submitAanvraagViaIframe(payload);
+}
+
+function submitAanvraagViaIframe(payload){
+  const oldForm = document.getElementById('deoostSubmitForm');
+  if (oldForm) oldForm.remove();
+  const oldFrame = document.getElementById('deoostSubmitFrame');
+  if (oldFrame) oldFrame.remove();
+
+  const iframe = document.createElement('iframe');
+  iframe.name = 'deoostSubmitFrame';
+  iframe.id = 'deoostSubmitFrame';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  const form = document.createElement('form');
+  form.id = 'deoostSubmitForm';
+  form.method = 'POST';
+  form.action = ORDER_SUBMIT_WEBHOOK;
+  form.target = 'deoostSubmitFrame';
+  form.style.display = 'none';
+
+  const actionInput = document.createElement('input');
+  actionInput.type = 'hidden';
+  actionInput.name = 'action';
+  actionInput.value = 'submitAanvraag';
+  form.appendChild(actionInput);
+
+  const modeInput = document.createElement('input');
+  modeInput.type = 'hidden';
+  modeInput.name = 'responseMode';
+  modeInput.value = 'postMessage';
+  form.appendChild(modeInput);
+
+  const payloadInput = document.createElement('input');
+  payloadInput.type = 'hidden';
+  payloadInput.name = 'payload';
+  payloadInput.value = JSON.stringify(payload);
+  form.appendChild(payloadInput);
+
+  document.body.appendChild(form);
+  form.submit();
+
+  window.setTimeout(() => {
+    if (aanvraagWordtVerstuurd) {
+      setSubmitState(false);
+      showNotice('De Oost Bespoke','We hebben nog geen bevestiging van de server ontvangen. Controleer de Google Sheet of probeer het opnieuw.');
+    }
+  }, 25000);
+}
+
+window.addEventListener('message', function(event){
+  const data = event.data || {};
+  if (!data || data.type !== 'deoostOrderResult') return;
+  setSubmitState(false);
+  if (data.ok) {
+    showNotice('De Oost Bespoke','Aanvraag ontvangen. Ordernummer: ' + (data.orderId || '—') + (data.warning ? '\n\nLet op: ' + data.warning : ''));
+  } else {
+    showNotice('De Oost Bespoke','Het versturen is niet gelukt: ' + (data.error || 'onbekende fout'));
+  }
+});
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
