@@ -230,6 +230,42 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .library-cta-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;}
 .library-cta-text{font-size:12px;color:#6b6560;line-height:1.45;margin-top:3px;}
 .library-cta-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+
+/* AFWERKING / CONSTRUCTIE */
+.finish-screen{display:none;}
+.finish-head{border-bottom:.5px solid rgba(74,69,64,.2);padding-bottom:1rem;margin-bottom:1.25rem;}
+.finish-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;letter-spacing:.02em;}
+.finish-sub{font-size:13px;color:#6b6560;line-height:1.55;margin-top:4px;max-width:680px;}
+.finish-layout{display:grid;grid-template-columns:1fr;gap:1rem;}
+.choice-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:.75rem;}
+.choice-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;cursor:pointer;transition:.2s;position:relative;min-height:118px;}
+.choice-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.choice-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.choice-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.choice-card-icon{font-size:20px;color:#8B6F47;margin-bottom:.5rem;}
+.choice-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;margin-bottom:4px;color:#1a1814;}
+.choice-card-desc{font-size:11.5px;color:#6b6560;line-height:1.45;}
+.resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:.75rem;}
+.resource-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;cursor:pointer;overflow:hidden;transition:.2s;position:relative;}
+.resource-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.resource-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.resource-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;z-index:2;}
+.resource-img{height:96px;background:#f1ede6;display:flex;align-items:center;justify-content:center;border-bottom:.5px solid rgba(74,69,64,.12);}
+.resource-img img{width:100%;height:100%;object-fit:cover;}
+.resource-fallback{font-family:'Cormorant Garamond',serif;font-size:22px;color:#8B6F47;}
+.resource-info{padding:.8rem;}
+.resource-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;}
+.resource-meta{font-size:11px;color:#6b6560;line-height:1.4;margin-top:3px;}
+.notice-overlay{position:fixed;inset:0;background:rgba(26,24,20,.45);z-index:10000;display:none;align-items:center;justify-content:center;padding:1rem;}
+.notice-box{background:#faf8f5;border-radius:12px;border:.5px solid rgba(74,69,64,.25);max-width:420px;width:100%;padding:1.4rem;box-shadow:0 18px 60px rgba(0,0,0,.25);}
+.notice-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:.45rem;}
+.notice-text{font-size:13px;color:#6b6560;line-height:1.55;white-space:pre-line;}
+.notice-actions{display:flex;justify-content:flex-end;margin-top:1rem;}
+.final-review-block{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;margin-bottom:1rem;}
+.final-review-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:.6rem;}
+.final-review-row{font-size:12px;color:#6b6560;line-height:1.7;}
+.final-review-row span{color:#1a1814;}
+
 @media(max-width:760px){.fabric-library-overlay{padding:0}.fabric-library-box{height:100vh;border-radius:0}.fabric-library-toolbar{grid-template-columns:1fr}.fabric-library-toggle{justify-content:flex-start}.fabric-library-body{grid-template-columns:1fr}.fabric-library-filters{border-right:none;border-bottom:.5px solid rgba(74,69,64,.2);max-height:42vh}.library-cta{display:block}.library-cta-actions{justify-content:flex-start;margin-top:12px}}
 
 </style>
@@ -309,12 +345,32 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
   <div id="materialConfig" class="material-screen">
     <div class="material-head">
       <div class="material-title">Stof & materiaal kiezen</div>
-      <div class="material-sub">Kies de stof op basis van adviesvragen of blader zelf door de stoffenbibliotheek. Deze opzet is voorbereid op close-ups, informatiepanelen, bloglinks en video’s.</div>
+      <div class="material-sub">Kies de stof op basis van adviesvragen of blader zelf door de stoffenbibliotheek. Daarna kiest u voering, knopen en constructie.</div>
     </div>
     <div id="materialContent"></div>
     <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
       <button class="btn btn-ghost" onclick="toonSamenvatting()">← Terug naar samenvatting</button>
-      <button class="btn btn-accent" onclick="toonMateriaalSamenvatting()">Materiaalkeuze controleren →</button>
+      <button class="btn btn-accent" onclick="toonMateriaalSamenvatting()">Doorgaan naar voering & afwerking →</button>
+    </div>
+  </div>
+
+  <div id="finishingConfig" class="finish-screen">
+    <div class="finish-head">
+      <div class="finish-title">Voering, knopen & constructie</div>
+      <div class="finish-sub">Deze keuzes horen meer bij materiaal, maakwijze en draagcomfort dan bij het model. Daarom staan ze na de stofkeuze.</div>
+    </div>
+    <div id="finishContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="terugNaarMateriaal()">← Terug naar stofkeuze</button>
+      <button class="btn btn-accent" onclick="toonEindSamenvatting()">Controleer volledige keuze →</button>
+    </div>
+  </div>
+
+  <div id="finalReview" style="display:none">
+    <div id="finalReviewContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonAfwerkingKeuze()">← Terug naar voering & afwerking</button>
+      <button class="btn btn-primary" onclick="showNotice('Volgende stap','Hierna kunnen we de maten, klantgegevens en definitieve verzending naar de order-sheet toevoegen.')">Volgende stap later →</button>
     </div>
   </div>
 
@@ -370,6 +426,16 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
       <div class="fabric-library-filters" id="stoffenBibliotheekFilters"></div>
       <div class="fabric-library-results" id="stoffenBibliotheekResults"></div>
     </div>
+  </div>
+</div>
+
+
+<!-- EIGEN MELDINGMODAL: voorkomt browser-popup met github.io titel -->
+<div id="noticeModal" class="notice-overlay" onclick="if(event.target===this)closeNotice()">
+  <div class="notice-box">
+    <div class="notice-title" id="noticeTitle">De Oost Bespoke</div>
+    <div class="notice-text" id="noticeText"></div>
+    <div class="notice-actions"><button class="btn btn-primary" onclick="closeNotice()">Sluiten</button></div>
   </div>
 </div>
 
@@ -1019,11 +1085,11 @@ function getGelegenheid() {
 
 function startConfiguratie() {
   if (!gelegenheid) {
-    alert('Kies eerst een type kleding of gelegenheid.');
+    showNotice('De Oost Bespoke','Kies eerst een type kleding of gelegenheid.');
     return;
   }
   if (!bestelOptie) {
-    alert('Kies eerst wat u wilt bestellen.');
+    showNotice('De Oost Bespoke','Kies eerst wat u wilt bestellen.');
     return;
   }
   actieveKled = getActieveKledingstukken()[0] || 'Jas';
@@ -1036,13 +1102,15 @@ function startConfiguratie() {
 function terugNaarStart() {
   document.getElementById('finalSummary').style.display = 'none';
   document.getElementById('materialConfig').style.display = 'none';
+  document.getElementById('finishingConfig').style.display = 'none';
+  document.getElementById('finalReview').style.display = 'none';
   document.getElementById('mainConfig').style.display = 'none';
   document.getElementById('startScreen').style.display = 'block';
   renderGelegenheden();
 }
 
 function huidigeStappen() {
-  return STAPPEN[actieveKled] || [];
+  return (STAPPEN[actieveKled] || []).filter(s => s.id !== 'jas_constructie');
 }
 
 function huidigeStap() {
@@ -1193,7 +1261,7 @@ function updateProgress() {
 function volgendeStap() {
   const stap = huidigeStap();
   if (stap && stap.verplicht && !keuzes[stap.id]) {
-    alert('Maak eerst een keuze voor "' + stap.label + '" voordat u verder gaat.');
+    showNotice('De Oost Bespoke','Maak eerst een keuze voor “' + stap.label + '” voordat u verder gaat.');
     return;
   }
   if (actieveStap < huidigeStappen().length - 1) {
@@ -1300,7 +1368,8 @@ function getSamenvatting() {
     broekStof: materiaalKeuzes.broekStof,
     giletStof: materiaalKeuzes.giletStof,
     toonAlleStoffen: materiaalToonAlleStoffen,
-    avondAfwerking: getGelegenheid() && getGelegenheid().id === 'black_tie' ? avondAfwerking : null
+    avondAfwerking: getGelegenheid() && getGelegenheid().id === 'black_tie' ? avondAfwerking : null,
+    afwerking: {...afwerkingKeuzes}
   };
   getActieveKledingstukken().forEach(kled => {
     STAPPEN[kled].forEach(s => {
@@ -1414,6 +1483,8 @@ function toonMateriaalKeuze(){
   document.getElementById('startScreen').style.display = 'none';
   document.getElementById('mainConfig').style.display = 'none';
   document.getElementById('finalSummary').style.display = 'none';
+  document.getElementById('finishingConfig').style.display = 'none';
+  document.getElementById('finalReview').style.display = 'none';
   document.getElementById('materialConfig').style.display = 'block';
   bepaalMateriaalDoel();
   pasInitStofToeIndienAanwezig();
@@ -1702,6 +1773,7 @@ function selectStof(id){
   renderMateriaalKeuze();
   if (bibliotheekOpen) {
     closeStoffenBibliotheek();
+    closeNotice();
   }
 }
 
@@ -1737,22 +1809,212 @@ function openStofInfo(id,e){
 
 function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
 
-function toonMateriaalSamenvatting(){
+
+const VOERING_TYPE_OPTIES = [
+  {id:'volledig_gevoerd', naam:'Volledig gevoerd', desc:'Klassiek en netjes afgewerkt. Logische keuze voor formele pakken en avondkleding.', icon:'ti-layers-intersect'},
+  {id:'half_gevoerd', naam:'Half gevoerd', desc:'Lichter en soepeler, met behoud van nette afwerking.', icon:'ti-layout-sidebar'},
+  {id:'ongevoerd', naam:'Ongevoerd / unlined', desc:'Zeer licht en casual. Vooral geschikt voor zomerse of ongeconstrueerde jasjes.', icon:'ti-wind'},
+  {id:'op_advies', naam:'Op advies van De Oost', desc:'Wij kiezen de meest logische voeringwijze op basis van stof en gebruik.', icon:'ti-sparkles'}
+];
+
+const CONSTRUCTIE_OPTIES = [
+  {id:'full_canvas', naam:'Full canvas', desc:'Volledige canvasconstructie; de meest traditionele en duurzame opbouw.', icon:'ti-layers'},
+  {id:'half_canvas', naam:'Half canvas', desc:'Canvas in borst en revers; goede balans tussen vorm, comfort en prijs.', icon:'ti-layers-intersect'},
+  {id:'licht_ongeconstrueerd', naam:'Licht / ongeconstrueerd', desc:'Zachtere constructie met minder binnenwerk, geschikt voor casual jasjes en zomerstoffen.', icon:'ti-feather'},
+  {id:'op_advies', naam:'Op advies van De Oost', desc:'Wij stemmen de constructie af op stof, model en gebruik.', icon:'ti-sparkles'}
+];
+
+const KNOOP_TYPE_OPTIES = [
+  {id:'donker_hoorn', naam:'Donker hoorn', desc:'Klassieke keuze voor navy, grijs en veel zakelijke stoffen.', icon:'ti-circle'},
+  {id:'bruin_hoorn', naam:'Bruin hoorn', desc:'Warmer en natuurlijker, mooi bij bruin, groen, beige en casual jasjes.', icon:'ti-circle'},
+  {id:'parelmoer', naam:'Parelmoer', desc:'Lichter en iets uitgesprokener; vooral mooi bij lichte of zomerse stoffen.', icon:'ti-circle'},
+  {id:'gestoffeerd_revers', naam:'Gestoffeerd — zelfde als revers', desc:'Voor avondkleding: knopen volgen het gekozen reversmateriaal.', icon:'ti-circle-half-2'},
+  {id:'gestoffeerd_stof_in_stof', naam:'Gestoffeerd — stof-in-stof', desc:'Knopen worden overtrokken met de gekozen hoofdstof of een gekozen stof.', icon:'ti-circle-half-2'},
+  {id:'op_advies', naam:'Op advies van De Oost', desc:'Wij kiezen de meest passende knoop bij stof en gelegenheid.', icon:'ti-sparkles'}
+];
+
+let afwerkingKeuzes = {
+  voeringType:'volledig_gevoerd',
+  voeringId:null,
+  constructie:'half_canvas',
+  knoopType:'donker_hoorn',
+  knoopId:null,
+  knoopMateriaalBron:'standaard'
+};
+
+function hideAllMainScreens(){
+  ['startScreen','mainConfig','materialConfig','finishingConfig','finalSummary','finalReview'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function showNotice(title, text){
+  const m = document.getElementById('noticeModal');
+  if (!m) return;
+  document.getElementById('noticeTitle').textContent = title || 'De Oost Bespoke';
+  document.getElementById('noticeText').textContent = text || '';
+  m.style.display = 'flex';
+}
+function closeNotice(){
+  const m = document.getElementById('noticeModal');
+  if (m) m.style.display = 'none';
+}
+
+function materiaalCompleet(){
   const g = getGelegenheid();
-  const bo = getBestelOptie();
-  let msg = 'Materiaalkeuze\n\n';
-  if (bo) msg += 'Bestelling: ' + (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) + '\n';
-  if (vorigeOrderMatch) msg += 'Vorige order: ' + vorigeOrderMatch.ordernummer + '\n';
+  if (g && g.id === 'tenue_de_ville') {
+    return getMateriaalDoelen().every(k => !!materiaalKeuzes[k]);
+  }
+  return !!materiaalKeuzes.hoofdStof;
+}
+
+function toonMateriaalSamenvatting(){
+  if (!materiaalCompleet()) {
+    showNotice('De Oost Bespoke','Kies eerst een stof voordat u doorgaat naar voering, knopen en constructie.');
+    return;
+  }
+  toonAfwerkingKeuze();
+}
+
+function toonAfwerkingKeuze(){
+  hideAllMainScreens();
+  const screen = document.getElementById('finishingConfig');
+  screen.style.display = 'block';
+  renderAfwerkingKeuze();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function terugNaarMateriaal(){
+  hideAllMainScreens();
+  document.getElementById('materialConfig').style.display = 'block';
+  renderMateriaalKeuze();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function labelFrom(list,id){
+  const x = list.find(o => o.id === id);
+  return x ? x.naam : id;
+}
+
+function setAfwerking(key,val){
+  afwerkingKeuzes[key] = val;
+  if (key === 'knoopType') {
+    afwerkingKeuzes.knoopMateriaalBron = val.startsWith('gestoffeerd') ? val : 'standaard';
+  }
+  renderAfwerkingKeuze();
+}
+
+function selectVoering(id){ afwerkingKeuzes.voeringId = id; renderAfwerkingKeuze(); }
+function selectKnoop(id){ afwerkingKeuzes.knoopId = id; renderAfwerkingKeuze(); }
+
+function renderChoiceCards(list,key){
+  return `<div class="choice-card-grid">${list.map(o => `<div class="choice-card ${afwerkingKeuzes[key]===o.id?'selected':''}" onclick="setAfwerking('${key}','${o.id}')">
+    <div class="choice-card-icon"><i class="ti ${o.icon}"></i></div>
+    <div class="choice-card-title">${o.naam}</div>
+    <div class="choice-card-desc">${o.desc}</div>
+  </div>`).join('')}</div>`;
+}
+
+function renderResourceCards(items,type){
+  if (!items.length) return '<div class="inline-note">Nog geen '+(type==='voering'?'voeringen':'knopen')+' in het databestand. U kunt voorlopig “op advies” gebruiken of later records toevoegen.</div>';
+  return `<div class="resource-grid">${items.map(item => {
+    const selected = type==='voering' ? afwerkingKeuzes.voeringId===item.id : afwerkingKeuzes.knoopId===item.id;
+    const img = item.swatch || item.closeup || '';
+    const onclick = type==='voering' ? `selectVoering('${item.id}')` : `selectKnoop('${item.id}')`;
+    const meta = type==='voering' ? `${item.materiaal || ''} · ${item.kleur || ''}` : `${item.materiaal || ''} · ${item.kleur || ''}`;
+    return `<div class="resource-card ${selected?'selected':''}" onclick="${onclick}">
+      <div class="resource-img">${img ? `<img src="${img}" alt="${item.naam}" onerror="this.style.display='none'">` : `<div class="resource-fallback">${item.naam ? item.naam.slice(0,1) : '•'}</div>`}</div>
+      <div class="resource-info"><div class="resource-name">${item.naam}</div><div class="resource-meta">${meta}<br>${(item.klantLabels || item.labels || []).join(' · ')}</div></div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderAfwerkingKeuze(){
+  const g = getGelegenheid();
+  const content = document.getElementById('finishContent');
+  const voeringItems = VOERINGEN.length ? VOERINGEN : [];
+  const knoopItems = KNOPEN.length ? KNOPEN : [];
+  const avondExtra = g && g.id === 'black_tie' ? `<div class="inline-note" style="margin-top:.75rem">Bij black tie kan “gestoffeerd — zelfde als revers” automatisch aansluiten op uw avondafwerking: revers ${avondLabel(avondAfwerking.revers)}, knopen ${avondLabel(avondAfwerking.gestoffeerdeKnopen)}.</div>` : '';
+  content.innerHTML = `<div class="finish-layout">
+    <div class="filter-section">
+      <div class="filter-title">Voeringwijze</div>
+      <div class="filter-sub">Kies hoe het jasje gevoerd wordt. Dit bepaalt comfort, gewicht en afwerking.</div>
+      ${renderChoiceCards(VOERING_TYPE_OPTIES,'voeringType')}
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Voering kiezen</div>
+      <div class="filter-sub">Kies een voeringkleur of laat deze later op advies bepalen.</div>
+      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.voeringId?'active':''}" onclick="selectVoering(null)">Op advies / later kiezen</button></div>
+      ${renderResourceCards(voeringItems,'voering')}
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Constructie / canvas</div>
+      <div class="filter-sub">Deze keuze staat hier omdat canvas en binnenwerk meer met maakwijze en maatvoering te maken hebben dan met modelstijl.</div>
+      ${renderChoiceCards(CONSTRUCTIE_OPTIES,'constructie')}
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Knopen</div>
+      <div class="filter-sub">Kies het type knoop. Voor avondkleding kunnen gestoffeerde knopen gekoppeld worden aan revers of stof.</div>
+      ${renderChoiceCards(KNOOP_TYPE_OPTIES,'knoopType')}
+      ${avondExtra}
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Knoopselectie</div>
+      <div class="filter-sub">Optioneel: kies alvast een specifieke knoop uit de knopenbibliotheek.</div>
+      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.knoopId?'active':''}" onclick="selectKnoop(null)">Op advies / later kiezen</button></div>
+      ${renderResourceCards(knoopItems,'knoop')}
+    </div>
+  </div>`;
+}
+
+function getAfwerkingSamenvattingHtml(){
+  const voering = VOERINGEN.find(v => v.id === afwerkingKeuzes.voeringId);
+  const knoop = KNOPEN.find(k => k.id === afwerkingKeuzes.knoopId);
+  return `<div class="final-review-block"><div class="final-review-title">Voering, knopen & constructie</div>
+    <div class="final-review-row"><span>Voeringwijze:</span> ${labelFrom(VOERING_TYPE_OPTIES, afwerkingKeuzes.voeringType)}</div>
+    <div class="final-review-row"><span>Voering:</span> ${voering ? voering.naam : 'Op advies / later kiezen'}</div>
+    <div class="final-review-row"><span>Constructie:</span> ${labelFrom(CONSTRUCTIE_OPTIES, afwerkingKeuzes.constructie)}</div>
+    <div class="final-review-row"><span>Knopen:</span> ${labelFrom(KNOOP_TYPE_OPTIES, afwerkingKeuzes.knoopType)}</div>
+    <div class="final-review-row"><span>Specifieke knoop:</span> ${knoop ? knoop.naam : 'Op advies / later kiezen'}</div>
+  </div>`;
+}
+
+function getMateriaalSamenvattingHtml(){
+  const g = getGelegenheid();
+  let rows = '';
   if (g && g.id === 'tenue_de_ville') {
     getMateriaalDoelen().forEach(k => {
       const stof = getStof(materiaalKeuzes[k]);
-      msg += doelLabel(k)+': '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+      rows += `<div class="final-review-row"><span>${doelLabel(k)}:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
     });
   } else {
     const stof = getStof(materiaalKeuzes.hoofdStof);
-    msg += 'Stof: '+(stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen')+'\n';
+    rows += `<div class="final-review-row"><span>Stof:</span> ${stof ? stof.naam + ' (' + stof.stofnummer + ')' : 'nog niet gekozen'}</div>`;
   }
-  alert(msg + '\nVolgende stap wordt later: voering, knopen, maten en klantgegevens.');
+  if (g && g.id === 'black_tie') rows += `<div class="final-review-row"><span>Avondafwerking:</span> revers ${avondLabel(avondAfwerking.revers)}, paspelzakken ${avondLabel(avondAfwerking.paspelzakken)}, knopen ${avondLabel(avondAfwerking.gestoffeerdeKnopen)}, broekbiezen ${avondLabel(avondAfwerking.broekbiezen)}</div>`;
+  return `<div class="final-review-block"><div class="final-review-title">Stof & materiaal</div>${rows}</div>`;
+}
+
+function toonEindSamenvatting(){
+  hideAllMainScreens();
+  const box = document.getElementById('finalReview');
+  box.style.display = 'block';
+  const bo = getBestelOptie();
+  const g = getGelegenheid();
+  document.getElementById('finalReviewContent').innerHTML = `<div class="finish-head"><div class="finish-title">Controleer uw keuze</div><div class="finish-sub">Dit is de huidige combinatie van stijl, stof, voering, knopen en constructie.</div></div>
+    <div class="final-review-block"><div class="final-review-title">Startkeuze</div>
+      <div class="final-review-row"><span>Gelegenheid:</span> ${g ? g.naam : '—'}</div>
+      <div class="final-review-row"><span>Bestelling:</span> ${bo ? (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) : '—'}</div>
+      ${vorigeOrderMatch ? `<div class="final-review-row"><span>Vorige order:</span> ${vorigeOrderMatch.ordernummer}</div>` : ''}
+    </div>
+    ${getMateriaalSamenvattingHtml()}
+    ${getAfwerkingSamenvattingHtml()}`;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 
@@ -1761,6 +2023,7 @@ document.addEventListener('keydown', e => {
     document.getElementById('lb').style.display = 'none';
     closeInfoModal();
     closeStoffenBibliotheek();
+    closeNotice();
   }
 });
 
