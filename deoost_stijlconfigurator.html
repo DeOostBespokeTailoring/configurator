@@ -1326,7 +1326,13 @@ const STOFFEN = (window.DEOST_STOFFEN || []).filter(s => s.actief !== false);
 const VOERINGEN = (window.DEOST_VOERINGEN || []).filter(v => v.actief !== false);
 const KNOPEN = (window.DEOST_KNOPEN || []).filter(k => k.actief !== false);
 const PRIJZEN = window.DEOST_PRIJZEN || {};
-const INIT_STOF_ID = new URLSearchParams(window.location.search).get('stof') || '';
+const URL_PARAMS = new URLSearchParams(window.location.search);
+const INIT_STOF_ID = URL_PARAMS.get('stof') || '';
+const INIT_STOF_COMBO = {
+  jasStof: URL_PARAMS.get('jasStof') || '',
+  broekStof: URL_PARAMS.get('broekStof') || '',
+  giletStof: URL_PARAMS.get('giletStof') || ''
+};
 let initStofApplied = false;
 
 
@@ -1357,14 +1363,34 @@ let avondAfwerking = {
 
 
 function pasInitStofToeIndienAanwezig(){
-  if (initStofApplied || !INIT_STOF_ID) return;
-  const stof = getStof(INIT_STOF_ID);
-  if (!stof) return;
-  materiaalKeuzes.hoofdStof = stof.id;
-  materiaalKeuzes.jasStof = stof.id;
-  materiaalKeuzes.broekStof = stof.id;
-  materiaalKeuzes.giletStof = stof.id;
-  initStofApplied = true;
+  if (initStofApplied) return;
+  let toegepast = false;
+
+  if (INIT_STOF_ID) {
+    const stof = getStof(INIT_STOF_ID);
+    if (stof) {
+      materiaalKeuzes.hoofdStof = stof.id;
+      materiaalKeuzes.jasStof = stof.id;
+      materiaalKeuzes.broekStof = stof.id;
+      materiaalKeuzes.giletStof = stof.id;
+      toegepast = true;
+    }
+  }
+
+  ['jasStof','broekStof','giletStof'].forEach(key => {
+    const id = INIT_STOF_COMBO[key];
+    const stof = id ? getStof(id) : null;
+    if (stof) {
+      materiaalKeuzes[key] = stof.id;
+      toegepast = true;
+    }
+  });
+
+  if (!materiaalKeuzes.hoofdStof) {
+    materiaalKeuzes.hoofdStof = materiaalKeuzes.jasStof || materiaalKeuzes.broekStof || materiaalKeuzes.giletStof || null;
+  }
+
+  initStofApplied = toegepast;
 }
 
 function getDemoVorigeOrder(ordernummer, code){
