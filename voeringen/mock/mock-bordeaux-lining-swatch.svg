@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 240 173.33" preserveAspectRatio="none">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#651f2c"/><stop offset="1" stop-color="#111" stop-opacity="0.18"/></linearGradient></defs>
+<rect width="240" height="173.33" fill="url(#g)"/>
+<path d="M0 36 C60 12 120 60 240 28" fill="none" stroke="#d29ca6" stroke-width="4" opacity="0.22"/><path d="M0 128 C80 92 130 158 240 112" fill="none" stroke="#d29ca6" stroke-width="3" opacity="0.18"/>
+
+<rect x="0" y="0" width="240" height="173.33" fill="none" stroke="#000" stroke-opacity="0.08"/>
+<text x="12" y="158" font-family="Roboto, Arial" font-size="10" fill="#fff" opacity="0.68">Mock bordeaux voering</text>
+</svg>
