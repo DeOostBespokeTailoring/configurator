@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480">
+  <defs>
+    <radialGradient id="g" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#8b2639"/><stop offset=".55" stop-color="#4d1422"/><stop offset="1" stop-color="#230912"/></radialGradient>
+    <pattern id="dots" width="44" height="44" patternUnits="userSpaceOnUse"><circle cx="22" cy="22" r="4" fill="rgba(255,230,210,.25)"/></pattern>
+  </defs>
+  <rect width="480" height="480" fill="url(#g)"/><rect width="480" height="480" fill="url(#dots)"/>
+</svg>
