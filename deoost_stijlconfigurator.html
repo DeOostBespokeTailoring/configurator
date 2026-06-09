@@ -279,6 +279,34 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
 .choice-card-image img{width:100%;height:100%;object-fit:contain;display:block;background:white;padding:8px;}
 .choice-card.has-image .choice-card-icon{display:none}
 
+
+
+/* MATEN & KLANTGEGEVENS */
+.form-screen{display:none;}
+.form-head{margin-bottom:1.25rem;}
+.form-title{font-family:'Roboto', sans-serif;font-size:24px;font-weight:300;margin-bottom:6px;letter-spacing:.02em;}
+.form-sub{font-size:13px;color:#6b6560;line-height:1.6;max-width:680px;}
+.form-section{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;margin-bottom:1rem;}
+.form-section-title{font-family:'Roboto', sans-serif;font-size:16px;font-weight:300;margin-bottom:.35rem;color:#1a1814;}
+.form-section-sub{font-size:12px;color:#6b6560;line-height:1.5;margin-bottom:.9rem;}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px 12px;}
+.form-field{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#8B6F47;}
+.form-input,.form-select,.form-textarea{font-family:'Roboto', sans-serif;font-size:13px;font-weight:300;border:.5px solid rgba(74,69,64,.25);background:#faf8f5;border-radius:5px;padding:9px 10px;color:#1a1814;outline:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#8B6F47;background:white;}
+.form-textarea{min-height:88px;resize:vertical;line-height:1.5;}
+.measure-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:1rem;}
+.measure-mode-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;cursor:pointer;transition:all .2s;position:relative;}
+.measure-mode-card:hover{border-color:#4a4540;transform:translateY(-1px);}
+.measure-mode-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
+.measure-mode-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.measure-mode-icon{font-size:20px;color:#8B6F47;margin-bottom:.45rem;}
+.measure-mode-name{font-family:'Roboto', sans-serif;font-size:15px;font-weight:300;margin-bottom:4px;color:#1a1814;}
+.measure-mode-desc{font-size:11px;color:#6b6560;line-height:1.45;}
+.form-note{font-size:12px;color:#6b6560;background:#f7f4ef;border-left:2px solid #8B6F47;padding:.75rem .85rem;border-radius:6px;line-height:1.55;margin-bottom:1rem;}
+.final-json-box{background:#1a1814;color:#faf8f5;border-radius:8px;padding:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;line-height:1.5;white-space:pre-wrap;overflow:auto;max-height:280px;}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr;}.measure-mode-grid{grid-template-columns:1fr;}}
+
 </style>
 </head>
 <body>
@@ -381,7 +409,39 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
     <div id="finalReviewContent"></div>
     <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
       <button class="btn btn-ghost" onclick="toonAfwerkingKeuze()">← Terug naar voering & afwerking</button>
-      <button class="btn btn-primary" onclick="showNotice('Volgende stap','Hierna kunnen we de maten, klantgegevens en definitieve verzending naar de order-sheet toevoegen.')">Volgende stap later →</button>
+      <button class="btn btn-primary" onclick="toonMatenKeuze()">Doorgaan naar maten →</button>
+    </div>
+  </div>
+
+  <div id="measureConfig" class="form-screen">
+    <div class="form-head">
+      <div class="form-title">Maten</div>
+      <div class="form-sub">Kies hoe u de maten wilt aanleveren. Als u de maten nu invult, toont de configurator alleen de velden die passen bij de gekozen kledingstukken.</div>
+    </div>
+    <div id="measureContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonEindSamenvatting()">← Terug naar controle</button>
+      <button class="btn btn-primary" onclick="toonKlantGegevens()">Doorgaan naar klantgegevens →</button>
+    </div>
+  </div>
+
+  <div id="customerConfig" class="form-screen">
+    <div class="form-head">
+      <div class="form-title">Klantgegevens</div>
+      <div class="form-sub">Deze gegevens zijn nodig om de aanvraag te kunnen opvolgen. De definitieve verzending naar de order-sheet koppelen we in een volgende stap.</div>
+    </div>
+    <div id="customerContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonMatenKeuze()">← Terug naar maten</button>
+      <button class="btn btn-primary" onclick="toonDefinitieveControle()">Controleer aanvraag →</button>
+    </div>
+  </div>
+
+  <div id="orderReview" class="form-screen">
+    <div id="orderReviewContent"></div>
+    <div style="display:flex;gap:12px;margin-top:2rem;padding-top:1rem;border-top:0.5px solid rgba(74,69,64,.2);">
+      <button class="btn btn-ghost" onclick="toonKlantGegevens()">← Terug naar klantgegevens</button>
+      <button class="btn btn-accent" onclick="showNotice('De Oost Bespoke','De flow is nu klaar tot en met controle. De volgende stap is deze aanvraag definitief aan de Apps Script orderverwerking koppelen.')">Aanvraag klaarzetten</button>
     </div>
   </div>
 
@@ -1375,6 +1435,8 @@ function getSamenvatting() {
     avondAfwerking: getGelegenheid() && getGelegenheid().id === 'black_tie' ? avondAfwerking : null,
     afwerking: {...afwerkingKeuzes}
   };
+  if (typeof maatKeuzes !== 'undefined') result.maten = JSON.parse(JSON.stringify(maatKeuzes));
+  if (typeof klantGegevens !== 'undefined') result.klant = JSON.parse(JSON.stringify(klantGegevens));
   getActieveKledingstukken().forEach(kled => {
     STAPPEN[kled].forEach(s => {
       if (keuzes[s.id]) result[s.id] = keuzes[s.id];
@@ -1848,7 +1910,7 @@ let afwerkingKeuzes = {
 };
 
 function hideAllMainScreens(){
-  ['startScreen','mainConfig','materialConfig','finishingConfig','finalSummary','finalReview'].forEach(id => {
+  ['startScreen','mainConfig','materialConfig','finishingConfig','finalSummary','finalReview','measureConfig','customerConfig','orderReview'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
@@ -2131,6 +2193,231 @@ function toonEindSamenvatting(){
     </div>
     ${getMateriaalSamenvattingHtml()}
     ${getAfwerkingSamenvattingHtml()}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+/* =========================
+   MATEN & KLANTGEGEVENS
+========================= */
+const MAAT_AANLEVER_OPTIES = [
+  {id:'nu_invullen', naam:'Ik vul mijn maten nu in', desc:'Toon de maatvelden voor de gekozen kledingstukken.', icon:'ti-ruler-measure'},
+  {id:'bestaande_maten', naam:'De Oost heeft mijn maten al', desc:'Gebruik bestaande maten of een eerdere order als uitgangspunt.', icon:'ti-archive'},
+  {id:'langskomen', naam:'Ik kom langs om gemeten te worden', desc:'De maten worden tijdens een afspraak opgenomen.', icon:'ti-calendar'},
+  {id:'later', naam:'Ik lever de maten later aan', desc:'Maak de aanvraag alvast af en voeg maten later toe.', icon:'ti-clock'}
+];
+
+const MAAT_VELDEN = {
+  Jas: [
+    ['jas_borst','Borstomvang','cm'],
+    ['jas_taille','Taille / buik','cm'],
+    ['jas_heup','Zit / heup','cm'],
+    ['jas_schouder','Schouderbreedte','cm'],
+    ['jas_ruglengte','Ruglengte jas','cm'],
+    ['jas_mouwlengte','Mouwlengte','cm'],
+    ['jas_biceps','Bovenarm','cm']
+  ],
+  Broek: [
+    ['broek_taille','Taille','cm'],
+    ['broek_heup','Heup / zit','cm'],
+    ['broek_binnenbeen','Binnenbeenlengte','cm'],
+    ['broek_buitenbeen','Buitenbeenlengte','cm'],
+    ['broek_kruishoogte','Kruishoogte','cm'],
+    ['broek_dij','Dijwijdte','cm'],
+    ['broek_knie','Kniebreedte','cm'],
+    ['broek_voetwijdte','Voetwijdte','cm']
+  ],
+  Gilet: [
+    ['gilet_borst','Borstomvang','cm'],
+    ['gilet_taille','Taille','cm'],
+    ['gilet_ruglengte','Ruglengte gilet','cm'],
+    ['gilet_voorlengte','Voorlengte gilet','cm']
+  ]
+};
+
+let maatKeuzes = {
+  aanlevering:'nu_invullen',
+  toelichting:'',
+  velden:{}
+};
+
+let klantGegevens = {
+  naam:'', email:'', telefoon:'',
+  straat:'', postcode:'', plaats:'', land:'Nederland',
+  deadline:'', opmerkingen:''
+};
+
+function getMaatKledingstukken(){
+  return getActieveKledingstukken().filter(k => MAAT_VELDEN[k]);
+}
+
+function setMaatAanlevering(id){
+  maatKeuzes.aanlevering = id;
+  renderMatenKeuze();
+}
+
+function updateMaatVeld(id,value){
+  maatKeuzes.velden[id] = value;
+}
+
+function updateMaatToelichting(value){
+  maatKeuzes.toelichting = value;
+}
+
+function updateKlantVeld(id,value){
+  klantGegevens[id] = value;
+}
+
+function toonMatenKeuze(){
+  hideAllMainScreens();
+  const screen = document.getElementById('measureConfig');
+  screen.style.display = 'block';
+  renderMatenKeuze();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderMatenKeuze(){
+  const content = document.getElementById('measureContent');
+  if (!content) return;
+  const kled = getMaatKledingstukken();
+  const bo = getBestelOptie();
+  const isExtra = bo && bo.id === 'extra_bestaande_order';
+  const modeCards = MAAT_AANLEVER_OPTIES.map(o => `<div class="measure-mode-card ${maatKeuzes.aanlevering===o.id?'selected':''}" onclick="setMaatAanlevering('${o.id}')">
+    <div class="measure-mode-icon"><i class="ti ${o.icon}"></i></div>
+    <div class="measure-mode-name">${o.naam}</div>
+    <div class="measure-mode-desc">${o.desc}</div>
+  </div>`).join('');
+
+  let fieldsHtml = '';
+  if (maatKeuzes.aanlevering === 'nu_invullen') {
+    fieldsHtml = kled.map(k => `<div class="form-section">
+      <div class="form-section-title">${k}maten</div>
+      <div class="form-section-sub">Voorlopige maatvelden voor ${k.toLowerCase()}. Deze lijst kunnen we later exact gelijk trekken met jullie maatformulier.</div>
+      <div class="form-grid">
+        ${MAAT_VELDEN[k].map(([id,label,unit]) => `<label class="form-field">
+          <span class="form-label">${label}</span>
+          <input class="form-input" type="number" inputmode="decimal" step="0.1" placeholder="${unit}" value="${escapeHtml(maatKeuzes.velden[id] || '')}" oninput="updateMaatVeld('${id}',this.value)">
+        </label>`).join('')}
+      </div>
+    </div>`).join('');
+  } else if (maatKeuzes.aanlevering === 'bestaande_maten') {
+    fieldsHtml = `<div class="form-note">We gebruiken bestaande maten als uitgangspunt. Geef hieronder alleen wijzigingen of aandachtspunten door, bijvoorbeeld “broek 1 cm ruimer in taille” of “jasje iets korter”.</div>`;
+  } else if (maatKeuzes.aanlevering === 'langskomen') {
+    fieldsHtml = `<div class="form-note">De aanvraag kan alvast worden samengesteld. De maten worden tijdens een afspraak bij De Oost opgenomen.</div>`;
+  } else {
+    fieldsHtml = `<div class="form-note">De aanvraag kan alvast worden afgerond. De maten worden later per afspraak, e-mail of formulier aangeleverd.</div>`;
+  }
+
+  content.innerHTML = `<div class="form-section">
+    <div class="form-section-title">Hoe wilt u de maten aanleveren?</div>
+    <div class="form-section-sub">Gekozen kledingstukken: ${kled.join(', ') || '—'}${isExtra ? '. Bij een extra kledingstuk kan een eerdere order als referentie worden gebruikt.' : ''}</div>
+    <div class="measure-mode-grid">${modeCards}</div>
+  </div>
+  ${fieldsHtml}
+  <div class="form-section">
+    <div class="form-section-title">Aanvullende maatopmerking</div>
+    <div class="form-section-sub">Optioneel: noteer pasvormwensen, wijzigingen ten opzichte van vorige order of andere bijzonderheden.</div>
+    <textarea class="form-textarea" oninput="updateMaatToelichting(this.value)" placeholder="Bijvoorbeeld: iets hogere taille, broekspijp smaller, jasje comfortabeler over de borst...">${escapeHtml(maatKeuzes.toelichting || '')}</textarea>
+  </div>`;
+}
+
+function toonKlantGegevens(){
+  hideAllMainScreens();
+  const screen = document.getElementById('customerConfig');
+  screen.style.display = 'block';
+  renderKlantGegevens();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderKlantGegevens(){
+  const content = document.getElementById('customerContent');
+  if (!content) return;
+  content.innerHTML = `<div class="form-section">
+    <div class="form-section-title">Contactgegevens</div>
+    <div class="form-section-sub">Naam en e-mail zijn minimaal nodig om de aanvraag op te volgen.</div>
+    <div class="form-grid">
+      ${renderInput('naam','Naam','text','Voor- en achternaam')}
+      ${renderInput('email','E-mail','email','naam@voorbeeld.nl')}
+      ${renderInput('telefoon','Telefoon','tel','+31 ...')}
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-section-title">Adresgegevens</div>
+    <div class="form-section-sub">Optioneel in deze fase; handig als de aanvraag later direct naar orderverwerking gaat.</div>
+    <div class="form-grid">
+      ${renderInput('straat','Straat + huisnummer','text','')}
+      ${renderInput('postcode','Postcode','text','')}
+      ${renderInput('plaats','Plaats','text','')}
+      ${renderInput('land','Land','text','Nederland')}
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-section-title">Planning en opmerkingen</div>
+    <div class="form-grid">
+      ${renderInput('deadline','Gewenste datum / deadline','date','')}
+    </div>
+    <div style="margin-top:12px">
+      <label class="form-field"><span class="form-label">Opmerkingen</span><textarea class="form-textarea" oninput="updateKlantVeld('opmerkingen',this.value)" placeholder="Bijvoorbeeld gelegenheid, gewenste leverdatum, specifieke wensen of vragen...">${escapeHtml(klantGegevens.opmerkingen || '')}</textarea></label>
+    </div>
+  </div>`;
+}
+
+function renderInput(id,label,type,placeholder){
+  return `<label class="form-field"><span class="form-label">${label}</span><input class="form-input" type="${type}" value="${escapeHtml(klantGegevens[id] || '')}" placeholder="${escapeHtml(placeholder || '')}" oninput="updateKlantVeld('${id}',this.value)"></label>`;
+}
+
+function getMatenSamenvattingHtml(){
+  const aanlever = MAAT_AANLEVER_OPTIES.find(o => o.id === maatKeuzes.aanlevering);
+  let rows = `<div class="final-review-row"><span>Aanlevering:</span> ${aanlever ? aanlever.naam : maatKeuzes.aanlevering}</div>`;
+  const filled = Object.entries(maatKeuzes.velden || {}).filter(([,v]) => String(v || '').trim());
+  if (maatKeuzes.aanlevering === 'nu_invullen') {
+    rows += filled.length ? filled.map(([k,v]) => `<div class="final-review-row"><span>${maatLabel(k)}:</span> ${escapeHtml(v)} cm</div>`).join('') : `<div class="final-review-row"><span>Ingevulde maten:</span> Nog geen maatvelden ingevuld</div>`;
+  }
+  if (maatKeuzes.toelichting) rows += `<div class="final-review-row"><span>Opmerking:</span> ${escapeHtml(maatKeuzes.toelichting)}</div>`;
+  return `<div class="final-review-block"><div class="final-review-title">Maten</div>${rows}</div>`;
+}
+
+function maatLabel(id){
+  for (const groep of Object.values(MAAT_VELDEN)) {
+    const item = groep.find(x => x[0] === id);
+    if (item) return item[1];
+  }
+  return id;
+}
+
+function getKlantSamenvattingHtml(){
+  return `<div class="final-review-block"><div class="final-review-title">Klantgegevens</div>
+    <div class="final-review-row"><span>Naam:</span> ${escapeHtml(klantGegevens.naam || '—')}</div>
+    <div class="final-review-row"><span>E-mail:</span> ${escapeHtml(klantGegevens.email || '—')}</div>
+    <div class="final-review-row"><span>Telefoon:</span> ${escapeHtml(klantGegevens.telefoon || '—')}</div>
+    <div class="final-review-row"><span>Adres:</span> ${escapeHtml([klantGegevens.straat, klantGegevens.postcode, klantGegevens.plaats, klantGegevens.land].filter(Boolean).join(', ') || '—')}</div>
+    <div class="final-review-row"><span>Deadline:</span> ${escapeHtml(klantGegevens.deadline || '—')}</div>
+    <div class="final-review-row"><span>Opmerkingen:</span> ${escapeHtml(klantGegevens.opmerkingen || '—')}</div>
+  </div>`;
+}
+
+function toonDefinitieveControle(){
+  if (!klantGegevens.naam || !klantGegevens.email) {
+    showNotice('De Oost Bespoke','Vul minimaal naam en e-mailadres in voordat u de aanvraag controleert.');
+    return;
+  }
+  hideAllMainScreens();
+  const box = document.getElementById('orderReview');
+  box.style.display = 'block';
+  const bo = getBestelOptie();
+  const g = getGelegenheid();
+  const json = getSamenvatting();
+  document.getElementById('orderReviewContent').innerHTML = `<div class="form-head"><div class="form-title">Controleer uw aanvraag</div><div class="form-sub">Dit is de volledige aanvraag tot en met stijl, stof, afwerking, maten en klantgegevens. De daadwerkelijke verzending koppelen we hierna aan de order-sheet.</div></div>
+    <div class="final-review-block"><div class="final-review-title">Startkeuze</div>
+      <div class="final-review-row"><span>Gelegenheid:</span> ${g ? g.naam : '—'}</div>
+      <div class="final-review-row"><span>Bestelling:</span> ${bo ? (bo.id === 'extra_bestaande_order' ? bo.naam + ' — ' + extraItemType : bo.naam) : '—'}</div>
+      ${vorigeOrderMatch ? `<div class="final-review-row"><span>Vorige order:</span> ${vorigeOrderMatch.ordernummer}</div>` : ''}
+    </div>
+    ${getMateriaalSamenvattingHtml()}
+    ${getAfwerkingSamenvattingHtml()}
+    ${getMatenSamenvattingHtml()}
+    ${getKlantSamenvattingHtml()}
+    <div class="final-review-block"><div class="final-review-title">Technische export</div><div class="form-section-sub">Voor controle tijdens de bouw. Later sturen we deze data naar Apps Script/Google Sheets.</div><div class="final-json-box">${escapeHtml(JSON.stringify(JSON.parse(json), null, 2))}</div></div>`;
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
