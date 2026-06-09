@@ -238,13 +238,19 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 .finish-sub{font-size:13px;color:#6b6560;line-height:1.55;margin-top:4px;max-width:680px;}
 .finish-layout{display:grid;grid-template-columns:1fr;gap:1rem;}
 .choice-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:.75rem;}
-.choice-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;cursor:pointer;transition:.2s;position:relative;min-height:118px;}
+.choice-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;padding:1rem;cursor:pointer;transition:.2s;position:relative;min-height:118px;overflow:hidden;}
 .choice-card:hover{border-color:#4a4540;transform:translateY(-1px);}
 .choice-card.selected{border-color:#1a1814;border-width:1.5px;background:#f7f4ef;}
-.choice-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.choice-card.selected::after{content:'✓';position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;background:#1a1814;color:white;display:flex;align-items:center;justify-content:center;font-size:11px;z-index:4;}
+.choice-card.has-image{padding:0;}
+.choice-card.has-image .choice-card-body{padding:.85rem 1rem 1rem;}
 .choice-card-icon{font-size:20px;color:#8B6F47;margin-bottom:.5rem;}
 .choice-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;margin-bottom:4px;color:#1a1814;}
 .choice-card-desc{font-size:11.5px;color:#6b6560;line-height:1.45;}
+.choice-card-actions{position:absolute;left:6px;right:6px;bottom:6px;display:flex;justify-content:space-between;gap:6px;opacity:0;transition:opacity .2s;}
+.choice-card-image:hover .choice-card-actions{opacity:1;}
+.choice-card-info-btn{position:absolute;top:8px;right:8px;width:25px;height:25px;border-radius:4px;background:rgba(255,255,255,.92);border:.5px solid rgba(74,69,64,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1a1814;font-size:13px;z-index:3;}
+.choice-card-info-btn:hover{background:white;border-color:#1a1814;}
 .resource-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:.75rem;}
 .resource-card{border:.5px solid rgba(74,69,64,.2);border-radius:10px;background:white;cursor:pointer;overflow:hidden;transition:.2s;position:relative;}
 .resource-card:hover{border-color:#4a4540;transform:translateY(-1px);}
@@ -269,8 +275,8 @@ body{font-family:'Jost',sans-serif;font-weight:300;color:#1a1814;background:#faf
 @media(max-width:760px){.fabric-library-overlay{padding:0}.fabric-library-box{height:100vh;border-radius:0}.fabric-library-toolbar{grid-template-columns:1fr}.fabric-library-toggle{justify-content:flex-start}.fabric-library-body{grid-template-columns:1fr}.fabric-library-filters{border-right:none;border-bottom:.5px solid rgba(74,69,64,.2);max-height:42vh}.library-cta{display:block}.library-cta-actions{justify-content:flex-start;margin-top:12px}}
 
 
-.choice-card-image{width:100%;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#f6f3ee;margin-bottom:.85rem;border:0.5px solid rgba(74,69,64,.16)}
-.choice-card-image img{width:100%;height:100%;object-fit:contain;display:block;background:white}
+.choice-card-image{width:100%;aspect-ratio:4/3;overflow:hidden;background:#f6f3ee;border-bottom:0.5px solid rgba(74,69,64,.16);position:relative;}
+.choice-card-image img{width:100%;height:100%;object-fit:contain;display:block;background:white;padding:8px;}
 .choice-card.has-image .choice-card-icon{display:none}
 
 </style>
@@ -1805,21 +1811,21 @@ function openStofInfo(id,e){
   document.getElementById('infoModal').style.display='flex';
 }
 
-function closeInfoModal(){ document.getElementById('infoModal').style.display='none'; }
+function closeInfoModal(){ const m=document.getElementById('infoModal'); if(m)m.style.display='none'; const media=document.getElementById('infoMedia'); if(media) media.style.display=''; }
 
 
 const VOERING_TYPE_OPTIES = [
-  {id:'volledig_gevoerd', naam:'Volledig gevoerd', desc:'Klassiek en netjes afgewerkt. Logische keuze voor formele pakken en avondkleding.', img:'tekeningen/voering/voering-volledig.png', icon:'ti-layers-intersect'},
-  {id:'half_gevoerd', naam:'Half gevoerd', desc:'Lichter en soepeler, met behoud van nette afwerking in borst en rug.', img:'tekeningen/voering/voering-half.png', icon:'ti-layout-sidebar'},
-  {id:'quarter_lined', naam:'Quarter lined', desc:'Zeer lichte afwerking met minimale voering; luchtig maar nog steeds netjes afgewerkt.', img:'tekeningen/voering/voering-quarter.png', icon:'ti-square-half'},
-  {id:'ongevoerd', naam:'Ongevoerd / unlined', desc:'Zeer licht en casual. Vooral geschikt voor zomerse of ongeconstrueerde jasjes.', img:'tekeningen/voering/voering-ongevoerd.png', icon:'ti-wind'},
+  {id:'volledig_gevoerd', naam:'Volledig gevoerd', desc:'Klassiek en netjes afgewerkt. Logische keuze voor formele pakken en avondkleding.', img:'tekeningen/voering/volledig-gevoerd.png', icon:'ti-layers-intersect'},
+  {id:'half_gevoerd', naam:'Half gevoerd', desc:'Lichter en soepeler, met behoud van nette afwerking in borst en rug.', img:'tekeningen/voering/half-gevoerd.png', icon:'ti-layout-sidebar'},
+  {id:'quarter_lined', naam:'Quarter lined', desc:'Zeer lichte afwerking met minimale voering; luchtig maar nog steeds netjes afgewerkt.', img:'tekeningen/voering/quarter-lined.png', icon:'ti-square-half'},
+  {id:'ongevoerd', naam:'Ongevoerd / unlined', desc:'Zeer licht en casual. Vooral geschikt voor zomerse of ongeconstrueerde jasjes.', img:'tekeningen/voering/ongevoerd.png', icon:'ti-wind'},
   {id:'op_advies', naam:'Op advies van De Oost', desc:'Wij kiezen de meest logische voeringwijze op basis van stof, gebruik en constructie.', icon:'ti-sparkles'}
 ];
 
 const CONSTRUCTIE_OPTIES = [
-  {id:'full_canvas', naam:'Full canvas', desc:'Volledige canvasconstructie; de meest traditionele en duurzame opbouw.', icon:'ti-layers'},
-  {id:'half_canvas', naam:'Half canvas', desc:'Canvas in borst en revers; goede balans tussen vorm, comfort en prijs.', icon:'ti-layers-intersect'},
-  {id:'licht_ongeconstrueerd', naam:'Licht / ongeconstrueerd', desc:'Zachtere constructie met minder binnenwerk, geschikt voor casual jasjes en zomerstoffen.', icon:'ti-feather'},
+  {id:'full_canvas', naam:'Full canvas', desc:'Volledige canvasconstructie; de meest traditionele opbouw met veel vorm en drape.', img:'tekeningen/constructie/full-canvas.png', icon:'ti-layers'},
+  {id:'half_canvas', naam:'Half canvas', desc:'Canvas in borst en revers; goede balans tussen vorm, comfort en toegankelijkheid.', img:'tekeningen/constructie/half-canvas.png', icon:'ti-layers-intersect'},
+  {id:'licht_ongeconstrueerd', naam:'Licht geconstrueerd', desc:'Zachtere constructie met minder binnenwerk; lichter, soepeler en informeler.', img:'tekeningen/constructie/licht-geconstrueerd.png', icon:'ti-feather'},
   {id:'op_advies', naam:'Op advies van De Oost', desc:'Wij stemmen de constructie af op stof, model en gebruik.', icon:'ti-sparkles'}
 ];
 
@@ -1913,12 +1919,119 @@ function selectVoering(id){ afwerkingKeuzes.voeringId = id; renderAfwerkingKeuze
 function selectKnoop(id){ afwerkingKeuzes.knoopId = id; renderAfwerkingKeuze(); }
 
 function renderChoiceCards(list,key){
-  return `<div class="choice-card-grid">${list.map(o => `<div class="choice-card ${o.img?'has-image':''} ${afwerkingKeuzes[key]===o.id?'selected':''}" onclick="setAfwerking('${key}','${o.id}')">
-    ${o.img ? `<div class="choice-card-image"><img src="${o.img}" alt="${o.naam}" onerror="this.parentElement.style.display='none'"></div>` : `<div class="choice-card-icon"><i class="ti ${o.icon}"></i></div>`}
-    <div class="choice-card-title">${o.naam}</div>
-    <div class="choice-card-desc">${o.desc}</div>
-  </div>`).join('')}</div>`;
+  return `<div class="choice-card-grid">${list.map(o => {
+    const selected = afwerkingKeuzes[key]===o.id;
+    const img = o.img || '';
+    const imgHtml = img ? `<div class="choice-card-image">
+      <img src="${img}" alt="${o.naam}" onerror="this.closest('.choice-card-image').classList.add('missing-image');this.style.display='none'">
+      <div class="choice-card-actions">
+        <button class="fabric-icon-btn" onclick="openLb('${img}','${o.naam}',event)" title="Vergroot"><i class="ti ti-zoom-in"></i></button>
+        <button class="fabric-icon-btn" onclick="openAfwerkingInfo('${key}','${o.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button>
+      </div>
+    </div>` : `<button class="choice-card-info-btn" onclick="openAfwerkingInfo('${key}','${o.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button><div class="choice-card-icon"><i class="ti ${o.icon}"></i></div>`;
+    return `<div class="choice-card ${img?'has-image':''} ${selected?'selected':''}" onclick="setAfwerking('${key}','${o.id}')">
+      ${imgHtml}
+      <div class="choice-card-body">
+        <div class="choice-card-title">${o.naam}</div>
+        <div class="choice-card-desc">${o.desc}</div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
+
+function getAfwerkingList(key){
+  if (key === 'voeringType') return VOERING_TYPE_OPTIES;
+  if (key === 'constructie') return CONSTRUCTIE_OPTIES;
+  if (key === 'knoopType') return KNOOP_TYPE_OPTIES;
+  return [];
+}
+
+function getAfwerkingInfoText(key,id){
+  const texts = {
+    voeringType: {
+      volledig_gevoerd: {
+        title:'Effect van volledig gevoerd',
+        body:'Het jasje voelt gladder aan bij aantrekken en heeft een klassieke, nette binnenafwerking. Het geeft iets meer structuur en gewicht en is logisch voor formele pakken, avondkleding en kouder weer.',
+        advies:'Meest veilige keuze wanneer de klant een traditionele afwerking wil of het jasje vaak over een overhemd draagt.'
+      },
+      half_gevoerd: {
+        title:'Effect van half gevoerd',
+        body:'De bovenrug, schouders en voorpand blijven netjes afgewerkt, terwijl het jasje lichter en luchtiger wordt. De stof valt natuurlijker en het draagcomfort is beter bij warmere omstandigheden.',
+        advies:'Mooi compromis voor veel maatpakken, losse jasjes en zomerse wollen stoffen.'
+      },
+      quarter_lined: {
+        title:'Effect van quarter lined',
+        body:'Alleen de meest noodzakelijke delen worden gevoerd. Het jasje blijft heel licht en ademt goed, maar toont aan de binnenkant meer van de constructie en naden.',
+        advies:'Voor klanten die bewust een lichte, ambachtelijke en minder formele afwerking zoeken.'
+      },
+      ongevoerd: {
+        title:'Effect van ongevoerd / unlined',
+        body:'De meest luchtige en soepele keuze. Het jasje voelt minder opgebouwd en casualer. De binnenafwerking moet zeer netjes zijn omdat er vrijwel geen voering is die naden verbergt.',
+        advies:'Vooral geschikt voor linnen, lichte zomerstoffen, casual jasjes en zachte constructies.'
+      },
+      op_advies: {
+        title:'Op advies van De Oost',
+        body:'Wij stemmen de voeringwijze af op stof, gelegenheid, constructie en gewenst draaggevoel.',
+        advies:'Handig wanneer de klant niet zeker weet of de stof beter volledig, half of ongevoerd verwerkt kan worden.'
+      }
+    },
+    constructie: {
+      full_canvas: {
+        title:'Effect van full canvas',
+        body:'De canvaslaag loopt door het hele voorpand. Het jasje vormt zich met dragen naar het lichaam, behoudt mooi zijn vorm en krijgt een natuurlijke drape. Dit is de meest traditionele constructie.',
+        advies:'Aanrader voor formele pakken, zakelijke garderobe en klanten die maximale levensduur en vorm willen.'
+      },
+      half_canvas: {
+        title:'Effect van half canvas',
+        body:'Canvas in borst en revers geeft structuur waar dat het meest zichtbaar is, terwijl het jasje lichter en toegankelijker blijft dan full canvas.',
+        advies:'Voor de meeste maatpakken de beste balans tussen vorm, comfort, prijs en duurzaamheid.'
+      },
+      licht_ongeconstrueerd: {
+        title:'Effect van licht / ongeconstrueerd',
+        body:'Minder binnenwerk geeft een zachter, losser en informeler draaggevoel. De stof beweegt meer mee en het jasje oogt minder strak opgebouwd.',
+        advies:'Geschikt voor casual jasjes, zomerstoffen, linnen, hopsack en klanten die comfort boven strakke structuur kiezen.'
+      },
+      op_advies: {
+        title:'Constructie op advies',
+        body:'De optimale constructie hangt sterk af van stofgewicht, gebruik, schouderlijn, gewenste formaliteit en budget.',
+        advies:'Veilige keuze als de klant vooral de uitstraling kiest en de technische opbouw aan De Oost wil overlaten.'
+      }
+    },
+    knoopType: {
+      donker_hoorn:{title:'Donker hoorn',body:'Rustige klassieke knoop voor navy, grijs, zwart en veel zakelijke stoffen.',advies:'Een veilige keuze wanneer de knoop niet te veel aandacht moet vragen.'},
+      bruin_hoorn:{title:'Bruin hoorn',body:'Warmer en natuurlijker dan donker hoorn. Werkt goed bij aardetinten, groen, beige en casual jasjes.',advies:'Geeft een iets informelere, ambachtelijke uitstraling.'},
+      parelmoer:{title:'Parelmoer',body:'Lichter en luxer in uitstraling, met subtiele glans.',advies:'Mooi bij lichte zomerse stoffen of wanneer een frissere knoop gewenst is.'},
+      gestoffeerd_revers:{title:'Gestoffeerd — zelfde als revers',body:'Voor avondkleding kunnen knopen worden overtrokken in hetzelfde materiaal als het revers, zoals satijn of grosgrain.',advies:'Zorgt voor een coherente black-tie afwerking.'},
+      gestoffeerd_stof_in_stof:{title:'Gestoffeerd — stof-in-stof',body:'De knoop wordt overtrokken met de hoofdstof of een gekozen stof uit het assortiment.',advies:'Rustig en chic, vooral wanneer zichtbare contrastknopen ongewenst zijn.'},
+      op_advies:{title:'Knopen op advies',body:'De Oost kiest de knoop die het beste past bij stof, gelegenheid en afwerking.',advies:'Handig als de klant niet zeker weet welke knoop het meest passend is.'}
+    }
+  };
+  return (texts[key] && texts[key][id]) || null;
+}
+
+function openAfwerkingInfo(key,id,e){
+  if (e) e.stopPropagation();
+  const list = getAfwerkingList(key);
+  const opt = list.find(o => o.id === id);
+  if (!opt) return;
+  const extra = getAfwerkingInfoText(key,id);
+  const media = document.getElementById('infoMedia');
+  if (opt.img) {
+    media.style.display = '';
+    media.innerHTML = `<img src="${opt.img}" alt="${opt.naam}" style="object-fit:contain;background:white;padding:14px" onerror="this.parentElement.style.display='none'">`;
+  } else {
+    media.style.display = 'none';
+    media.innerHTML = '';
+  }
+  document.getElementById('infoContent').innerHTML = `
+    <div class="info-title">${opt.naam}</div>
+    <div class="info-meta">${key === 'voeringType' ? 'Voeringwijze' : key === 'constructie' ? 'Constructie / canvas' : 'Knopen'}</div>
+    <div class="info-section"><div class="info-section-title">Omschrijving</div><div class="info-text">${opt.desc}</div></div>
+    ${extra ? `<div class="info-section"><div class="info-section-title">${extra.title}</div><div class="info-text">${extra.body}</div></div><div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${extra.advies}</div></div>` : ''}
+    <div class="info-link-row"><button class="info-link" onclick="setAfwerking('${key}','${id}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze keuze</button></div>`;
+  document.getElementById('infoModal').style.display='flex';
+}
+
 
 function renderResourceCards(items,type){
   if (!items.length) return '<div class="inline-note">Nog geen '+(type==='voering'?'voeringen':'knopen')+' in het databestand. U kunt voorlopig “op advies” gebruiken of later records toevoegen.</div>';
