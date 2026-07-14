@@ -1087,26 +1087,45 @@ const STOFFEN_IMG = '';
 
 const STOFBOEKEN = (window.DEOST_STOFBOEKEN || []).filter(b => b.actief !== false);
 const STOFBOEK_MAP = new Map(STOFBOEKEN.map(boek => [boek.id, boek]));
+const ARTIKELEN = (window.DEOST_ARTIKELEN || []).filter(artikel => artikel.actief !== false);
+
+function normaliseerKennisTag(value){
+  return String(value || '').trim().toLowerCase();
+}
+
+function relevanteArtikelenVoor(stof, boek){
+  const tags = new Set([
+    ...((stof && stof.kennisTags) || []),
+    ...((boek && boek.kennisTags) || [])
+  ].map(normaliseerKennisTag).filter(Boolean));
+
+  if (!tags.size) return [];
+
+  return ARTIKELEN.filter(artikel =>
+    (artikel.tags || []).some(tag => tags.has(normaliseerKennisTag(tag)))
+  ).slice(0, 2);
+}
 
 function verrijkStofMetBoek(stof){
   const boek = stof && stof.boekId ? STOFBOEK_MAP.get(stof.boekId) : null;
-  if (!boek) return {...stof, stofboek:null};
 
-  const defaults = {
+  const defaults = boek ? {
     leverancier: boek.leverancier,
     bunch: boek.naam,
-    materiaal: boek.materiaal,
-    samenstelling: boek.samenstelling,
-    gewicht: boek.gewicht,
     weving: boek.weving || boek.type,
     seizoen: boek.seizoen,
     uitstraling: boek.uitstraling,
     korteUitleg: boek.korteUitleg,
     advies: boek.advies,
     minderGeschiktVoor: boek.minderGeschiktVoor
-  };
+  } : {};
 
-  return {...defaults, ...stof, stofboek:boek};
+  return {
+    ...defaults,
+    ...stof,
+    stofboek: boek || null,
+    kennisArtikelen: relevanteArtikelenVoor(stof, boek)
+  };
 }
 
 const STOFFEN = (window.DEOST_STOFFEN || []).map(verrijkStofMetBoek).filter(s => s.actief !== false);
@@ -1532,7 +1551,7 @@ function openStofInfo(id,e){
   document.getElementById('infoContent').innerHTML = `
     <div class="info-title">${escapeHtml(stof.naam)}</div>
     <div class="info-meta">${escapeHtml(stof.leverancier || stof.merk || '')} · ${stof.bunch ? escapeHtml(stof.bunch) + ' · ' : ''}${escapeHtml(stof.stofnummer)} · Prijsgroep ${escapeHtml(stof.prijsGroep)}</div>
-    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${escapeHtml((stof.materiaal || []).join(', '))}<br>Weving: ${escapeHtml(stof.weving)}<br>Patroon: ${escapeHtml(stof.patroon)}<br>Kleur: ${escapeHtml(stof.kleur)}${stof.patroonkleur ? '<br>Patroonkleur: '+escapeHtml(stof.patroonkleur) : ''}</div></div>
+    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${escapeHtml((stof.materiaal || []).join(', '))}${stof.samenstelling ? '<br>Samenstelling: '+escapeHtml(stof.samenstelling) : ''}${stof.gewicht ? '<br>Gewicht: '+escapeHtml(stof.gewicht) : ''}<br>Weving: ${escapeHtml(stof.weving)}<br>Patroon: ${escapeHtml(stof.patroon)}<br>Kleur: ${escapeHtml(stof.kleur)}${stof.patroonkleur ? '<br>Patroonkleur: '+escapeHtml(stof.patroonkleur) : ''}</div></div>
     <div class="info-section"><div class="info-section-title">Korte uitleg</div><div class="info-text">${escapeHtml(stof.korteUitleg || '')}</div></div>
     <div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${escapeHtml(stof.advies || '')}</div></div>
     ${stof.minderGeschiktVoor ? `<div class="info-section"><div class="info-section-title">Minder geschikt voor</div><div class="info-text">${escapeHtml(stof.minderGeschiktVoor)}</div></div>` : ''}
@@ -1553,7 +1572,9 @@ function openStofInfo(id,e){
     <div class="info-link-row">
       ${stof.closeup ? `<a class="info-link" href="${escapeHtml(closeupPath)}" target="_blank" rel="noopener"><i class="ti ti-zoom-in"></i> Open close-up</a>` : ''}
       ${videoPath ? `<a class="info-link" href="${escapeHtml(videoPath)}" target="_blank" rel="noopener"><i class="ti ti-player-play"></i> Open lichtvideo</a>` : ''}
-      ${stof.blogUrl ? `<a class="info-link" href="${escapeHtml(stof.blogUrl)}" target="_blank" rel="noopener"><i class="ti ti-article"></i> Gerelateerde blog</a>` : ''}
+      ${stof.blogUrl ? `<a class="info-link" href="${escapeHtml(stof.blogUrl)}" target="_blank" rel="noopener"><i class="ti ti-article"></i> ${escapeHtml(stof.blogTitel || 'Bekijk deze stof in de praktijk')}</a>` : ''}
+      ${stof.stofboek && stof.stofboek.blogUrl ? `<a class="info-link" href="${escapeHtml(stof.stofboek.blogUrl)}" target="_blank" rel="noopener"><i class="ti ti-books"></i> ${escapeHtml(stof.stofboek.blogTitel || 'Lees meer over dit stofboek')}</a>` : ''}
+      ${(stof.kennisArtikelen || []).map(artikel => `<a class="info-link" href="${escapeHtml(artikel.url)}" target="_blank" rel="noopener"><i class="ti ti-bulb"></i> ${escapeHtml(artikel.knopTekst || artikel.titel || 'Meer achtergrond')}</a>`).join('')}
       ${stof.videoUrl ? `<a class="info-link" href="${escapeHtml(stof.videoUrl)}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
       <button class="info-link" onclick="selectStof('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
     </div>`;

@@ -3,26 +3,45 @@ function closeNotice(){const m=document.getElementById('noticeModal'); if(m)m.st
 
 const STOFBOEKEN = (window.DEOST_STOFBOEKEN || []).filter(b => b.actief !== false);
 const STOFBOEK_MAP = new Map(STOFBOEKEN.map(boek => [boek.id, boek]));
+const ARTIKELEN = (window.DEOST_ARTIKELEN || []).filter(artikel => artikel.actief !== false);
+
+function normaliseerKennisTag(value){
+  return String(value || '').trim().toLowerCase();
+}
+
+function relevanteArtikelenVoor(stof, boek){
+  const tags = new Set([
+    ...((stof && stof.kennisTags) || []),
+    ...((boek && boek.kennisTags) || [])
+  ].map(normaliseerKennisTag).filter(Boolean));
+
+  if (!tags.size) return [];
+
+  return ARTIKELEN.filter(artikel =>
+    (artikel.tags || []).some(tag => tags.has(normaliseerKennisTag(tag)))
+  ).slice(0, 2);
+}
 
 function verrijkStofMetBoek(stof){
   const boek = stof && stof.boekId ? STOFBOEK_MAP.get(stof.boekId) : null;
-  if (!boek) return {...stof, stofboek:null};
 
-  const defaults = {
+  const defaults = boek ? {
     leverancier: boek.leverancier,
     bunch: boek.naam,
-    materiaal: boek.materiaal,
-    samenstelling: boek.samenstelling,
-    gewicht: boek.gewicht,
     weving: boek.weving || boek.type,
     seizoen: boek.seizoen,
     uitstraling: boek.uitstraling,
     korteUitleg: boek.korteUitleg,
     advies: boek.advies,
     minderGeschiktVoor: boek.minderGeschiktVoor
-  };
+  } : {};
 
-  return {...defaults, ...stof, stofboek:boek};
+  return {
+    ...defaults,
+    ...stof,
+    stofboek: boek || null,
+    kennisArtikelen: relevanteArtikelenVoor(stof, boek)
+  };
 }
 
 const STOFFEN = (window.DEOST_STOFFEN || []).map(verrijkStofMetBoek).filter(s => s.actief !== false);
@@ -74,7 +93,7 @@ function filteredStoffen(){
     if(!recommended(stof)) return false;
     for(const [key,val] of Object.entries(state.filters)){ if(!matchFilter(stof,key,val)) return false; }
     if(q){
-      const hay = [stof.id, stof.naam, stof.leverancier, stof.bunch, stof.stofnummer, stof.samenstelling, stof.weving, stof.patroon, stof.kleur, stof.patroonkleur, ...(stof.klantLabels||[]), ...(stof.gebruik||[]), ...(stof.materiaal||[])].join(' ').toLowerCase();
+      const hay = [stof.id, stof.naam, stof.leverancier, stof.bunch, stof.stofnummer, stof.samenstelling, stof.weving, stof.patroon, stof.kleur, stof.patroonkleur, stof.stofboek?.langeUitleg, ...(stof.klantLabels||[]), ...(stof.gebruik||[]), ...(stof.materiaal||[]), ...(stof.kennisTags||[]), ...((stof.kennisArtikelen||[]).map(a=>a.titel))].join(' ').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -206,7 +225,9 @@ function openInfo(id){
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem">
         <button class="btn" onclick="toggleCombo('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-plus"></i> Toevoegen aan combinatie</button>
         <a class="btn secondary" href="deoost_stijlconfigurator.html?stof=${encodeURIComponent(stof.id)}"><i class="ti ti-shirt"></i> Gebruik in configurator</a>
-        ${stof.blogUrl ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(stof.blogUrl)}"><i class="ti ti-article"></i> Meer lezen</a>` : ''}
+        ${stof.blogUrl ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(stof.blogUrl)}"><i class="ti ti-article"></i> ${escapeHtml(stof.blogTitel || 'Bekijk deze stof in de praktijk')}</a>` : ''}
+        ${stof.stofboek && stof.stofboek.blogUrl ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(stof.stofboek.blogUrl)}"><i class="ti ti-books"></i> ${escapeHtml(stof.stofboek.blogTitel || 'Lees meer over dit stofboek')}</a>` : ''}
+        ${(stof.kennisArtikelen || []).map(artikel => `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(artikel.url)}"><i class="ti ti-bulb"></i> ${escapeHtml(artikel.knopTekst || artikel.titel || 'Meer achtergrond')}</a>`).join('')}
         ${externalVideo ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(externalVideo)}"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
       </div>
     </div>`;
