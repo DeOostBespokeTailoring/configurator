@@ -166,8 +166,8 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
 .material-selection-title{font-family:'Roboto', sans-serif;font-size:16px;font-weight:300;margin-bottom:8px;}
 .material-selection-row{font-size:12px;color:#1a1814;margin-bottom:4px;}
 .material-selection-row span{color:#6b6560;}
-.info-overlay{position:fixed;inset:0;background:rgba(10,8,6,.78);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem;}
-.info-box{background:#faf8f5;border-radius:10px;max-width:620px;width:100%;max-height:90vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.info-overlay{position:fixed;inset:0;background:rgba(10,8,6,.78);z-index:9998;display:flex;align-items:flex-start;justify-content:center;padding:24px 1rem;overflow-y:auto;}
+.info-box{background:#faf8f5;border-radius:10px;max-width:620px;width:100%;max-height:calc(100vh - 48px);overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
 .info-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:#1a1814;color:white;cursor:pointer;font-size:18px;line-height:1;}
 .info-media{width:100%;background:#fbfaf7;overflow:hidden;border-radius:10px 10px 0 0;padding:1rem;border-bottom:.5px solid rgba(74,69,64,.16);}
 .info-hero{border:.5px solid rgba(74,69,64,.2);border-radius:9px;background:#f0ece4;overflow:hidden;margin-bottom:12px;}
@@ -178,7 +178,7 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
 .info-media-item{position:relative;min-width:0;background:#f0ece4;border:.5px solid rgba(74,69,64,.2);border-radius:9px;overflow:hidden;}
 .info-media-item img,.info-media-item video{width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;display:block;background:#f0ece4;}
 .info-media-label{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.92);border:.5px solid rgba(74,69,64,.18);border-radius:999px;padding:4px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b6560;z-index:2;}
-@media(max-width:620px){.info-media{padding:.75rem}.info-hero img{height:220px}.info-media-grid,.info-media-grid.single{grid-template-columns:1fr}}
+@media(max-width:620px){.info-overlay{padding:.6rem;align-items:flex-start}.info-box{max-height:calc(100vh - 1.2rem)}.info-media{padding:.75rem}.info-hero img{height:220px}.info-media-grid,.info-media-grid.single{grid-template-columns:1fr}}
 .info-content{padding:1.25rem;}
 .info-title{font-family:'Roboto', sans-serif;font-size:22px;font-weight:300;margin-bottom:3px;}
 .info-meta{font-size:12px;color:#6b6560;margin-bottom:1rem;}
@@ -2023,6 +2023,7 @@ function openStofInfo(id,e){
   if(e) e.stopPropagation();
   const stof = getStof(id);
   if (!stof) return;
+  const heroPath = STOFFEN_IMG + (stof.hero || stof.swatch || stof.closeup || '');
   const swatchPath = STOFFEN_IMG + (stof.swatch || stof.closeup || '');
   const closeupPath = STOFFEN_IMG + (stof.closeup || stof.swatch || '');
   const videoPath = stof.video ? STOFFEN_IMG + stof.video : '';
@@ -2030,7 +2031,7 @@ function openStofInfo(id,e){
   media.className = 'info-media';
   media.style.display = '';
   media.innerHTML = `
-    ${swatchPath ? `<div class="info-hero"><div class="info-hero-label">Swatch</div><img src="${escapeHtml(swatchPath)}" alt="${escapeHtml(stof.naam)} swatch" onerror="this.style.display='none'"></div>` : ''}
+    ${heroPath ? `<div class="info-hero"><div class="info-hero-label">Stofbeeld</div><img src="${escapeHtml(heroPath)}" alt="${escapeHtml(stof.naam)} stofbeeld" onerror="this.style.display='none'"></div>` : ''}
     <div class="info-media-grid ${videoPath ? '' : 'single'}">
       <div class="info-media-item">
         <div class="info-media-label">Close-up</div>
@@ -2057,7 +2058,9 @@ function openStofInfo(id,e){
       ${stof.videoUrl ? `<a class="info-link" href="${escapeHtml(stof.videoUrl)}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
       <button class="info-link" onclick="selectStof('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
     </div>`;
-  document.getElementById('infoModal').style.display='flex';
+  const infoModal = document.getElementById('infoModal');
+  infoModal.style.display='flex';
+  infoModal.scrollTop = 0;
 }
 
 function closeInfoModal(){ const m=document.getElementById('infoModal'); if(m)m.style.display='none'; const media=document.getElementById('infoMedia'); if(media){ media.className='info-media'; media.style.display=''; media.innerHTML=''; } }
@@ -2278,7 +2281,9 @@ function openAfwerkingInfo(key,id,e){
     <div class="info-section"><div class="info-section-title">Omschrijving</div><div class="info-text">${opt.desc}</div></div>
     ${extra ? `<div class="info-section"><div class="info-section-title">${extra.title}</div><div class="info-text">${extra.body}</div></div><div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${extra.advies}</div></div>` : ''}
     <div class="info-link-row"><button class="info-link" onclick="setAfwerking('${key}','${id}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze keuze</button></div>`;
-  document.getElementById('infoModal').style.display='flex';
+  const infoModal = document.getElementById('infoModal');
+  infoModal.style.display='flex';
+  infoModal.scrollTop = 0;
 }
 
 

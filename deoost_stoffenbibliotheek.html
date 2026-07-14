@@ -68,8 +68,8 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:var(--ink);backgroun
 .slot-text b{display:block;color:var(--ink);font-weight:400;}
 .slot-remove{position:absolute;right:4px;top:4px;border:0;background:rgba(255,255,255,.9);color:var(--muted);cursor:pointer;border-radius:50%;width:18px;height:18px;}
 .combo-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
-.modal{position:fixed;inset:0;background:rgba(26,24,20,.55);display:none;align-items:center;justify-content:center;z-index:80;padding:1.2rem;}
-.modal-card{background:#fff;max-width:920px;width:100%;max-height:90vh;overflow:auto;border-radius:10px;border:0.5px solid var(--line);box-shadow:0 18px 60px rgba(0,0,0,.18);}
+.modal{position:fixed;inset:0;background:rgba(26,24,20,.55);display:none;align-items:flex-start;justify-content:center;z-index:80;padding:24px 1.2rem;overflow-y:auto;}
+.modal-card{background:#fff;max-width:920px;width:100%;max-height:calc(100vh - 48px);overflow:auto;border-radius:10px;border:0.5px solid var(--line);box-shadow:0 18px 60px rgba(0,0,0,.18);}
 .modal-head{display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--line);padding:1rem 1.1rem;}
 .modal-title{font-family:'Roboto', sans-serif;font-size:24px;font-weight:300;}
 .modal-body{padding:1.2rem;}
@@ -96,7 +96,7 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:var(--ink);backgroun
 @media(max-width:760px){.info-hero-img{height:230px}.info-media-grid,.info-media-grid.single{grid-template-columns:1fr}}
 .empty-state{border:0.5px dashed rgba(74,69,64,.25);border-radius:8px;padding:2rem;text-align:center;color:var(--muted);background:white;}
 @media(max-width:920px){.layout{grid-template-columns:1fr}.side{position:static}.fabric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.combo-inner{grid-template-columns:1fr}.combo-actions{justify-content:flex-start}.preview-swatch{width:300px;height:210px}.preview-swatch:nth-child(2){left:95px}.preview-swatch:nth-child(3){left:170px}.combo-list{grid-template-columns:1fr}}
-@media(max-width:560px){body{padding:1rem .75rem}.cfg-header{display:block}.header-actions{justify-content:flex-start;margin-top:.8rem}.fabric-grid{grid-template-columns:1fr}.swatch{height:170px}.slot{width:100%;}.preview-swatch{width:245px;height:175px}.preview-swatch:nth-child(1){left:0}.preview-swatch:nth-child(2){left:45px}.preview-swatch:nth-child(3){left:85px}.combo-preview{min-height:310px}.modal{padding:.6rem}.modal-body{padding:.9rem}}
+@media(max-width:560px){body{padding:1rem .75rem}.cfg-header{display:block}.header-actions{justify-content:flex-start;margin-top:.8rem}.fabric-grid{grid-template-columns:1fr}.swatch{height:170px}.slot{width:100%;}.preview-swatch{width:245px;height:175px}.preview-swatch:nth-child(1){left:0}.preview-swatch:nth-child(2){left:45px}.preview-swatch:nth-child(3){left:85px}.combo-preview{min-height:310px}.modal{padding:.6rem;align-items:flex-start}.modal-card{max-height:calc(100vh - 1.2rem)}.modal-body{padding:.9rem}}
 </style>
 </head>
 <body>
@@ -336,15 +336,16 @@ async function copyComboLink(){
 }
 function openInfo(id){
   const stof = getStof(id); if(!stof) return;
+  const heroPath = stof.hero || stof.swatch || stof.closeup || '';
   const swatchPath = stof.swatch || stof.closeup || '';
   const closeupPath = stof.closeup || stof.swatch || '';
   const videoPath = stof.video || '';
   const externalVideo = stof.videoUrl || '';
   document.getElementById('infoTitle').textContent = stof.naam;
   document.getElementById('infoBody').innerHTML = `
-    ${swatchPath ? `<div class="info-hero">
-      <div class="info-hero-label">Swatch</div>
-      <img class="info-hero-img" src="${escapeHtml(swatchPath)}" alt="${escapeHtml(stof.naam)} swatch" onerror="this.outerHTML='<div class=&quot;empty-state&quot;>Swatch niet gevonden</div>'">
+    ${heroPath ? `<div class="info-hero">
+      <div class="info-hero-label">Stofbeeld</div>
+      <img class="info-hero-img" src="${escapeHtml(heroPath)}" alt="${escapeHtml(stof.naam)} stofbeeld" onerror="this.outerHTML='<div class=&quot;empty-state&quot;>Stofbeeld niet gevonden</div>'">
     </div>` : ''}
     <div class="info-media-grid ${videoPath ? '' : 'single'}">
       <div class="info-media-block">
@@ -372,8 +373,11 @@ function openInfo(id){
         ${externalVideo ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(externalVideo)}"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
       </div>
     </div>`;
-  document.getElementById('infoModal').style.display='flex';
+  const infoModal = document.getElementById('infoModal');
+  infoModal.style.display='flex';
+  infoModal.scrollTop = 0;
 }
+
 function closeInfoModal(){document.getElementById('infoModal').style.display='none';}
 function applyUrlParams(){
   const p = new URLSearchParams(window.location.search);
