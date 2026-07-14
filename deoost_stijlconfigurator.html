@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>De Oost — Stijlconfigurator</title>
-<!-- versie: startflow-blacktie-counter-sidebar-20260609 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -170,8 +169,16 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:#1a1814;background:#
 .info-overlay{position:fixed;inset:0;background:rgba(10,8,6,.78);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1rem;}
 .info-box{background:#faf8f5;border-radius:10px;max-width:620px;width:100%;max-height:90vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
 .info-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:#1a1814;color:white;cursor:pointer;font-size:18px;line-height:1;}
-.info-media{width:100%;aspect-ratio:16/9;background:#f0ece4;overflow:hidden;border-radius:10px 10px 0 0;}
-.info-media img{width:100%;height:100%;object-fit:cover;}
+.info-media{width:100%;background:#fbfaf7;overflow:hidden;border-radius:10px 10px 0 0;padding:1rem;border-bottom:.5px solid rgba(74,69,64,.16);}
+.info-hero{border:.5px solid rgba(74,69,64,.2);border-radius:9px;background:#f0ece4;overflow:hidden;margin-bottom:12px;}
+.info-hero-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b6560;padding:8px 10px;border-bottom:.5px solid rgba(74,69,64,.16);background:white;}
+.info-hero img{width:100%;height:290px;object-fit:cover;display:block;}
+.info-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.info-media-grid.single{grid-template-columns:minmax(0,420px);}
+.info-media-item{position:relative;min-width:0;background:#f0ece4;border:.5px solid rgba(74,69,64,.2);border-radius:9px;overflow:hidden;}
+.info-media-item img,.info-media-item video{width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;display:block;background:#f0ece4;}
+.info-media-label{position:absolute;left:8px;top:8px;background:rgba(255,255,255,.92);border:.5px solid rgba(74,69,64,.18);border-radius:999px;padding:4px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b6560;z-index:2;}
+@media(max-width:620px){.info-media{padding:.75rem}.info-hero img{height:220px}.info-media-grid,.info-media-grid.single{grid-template-columns:1fr}}
 .info-content{padding:1.25rem;}
 .info-title{font-family:'Roboto', sans-serif;font-size:22px;font-weight:300;margin-bottom:3px;}
 .info-meta{font-size:12px;color:#6b6560;margin-bottom:1rem;}
@@ -2013,27 +2020,47 @@ function resetMateriaalFilters(){
 }
 
 function openStofInfo(id,e){
-  e.stopPropagation();
+  if(e) e.stopPropagation();
   const stof = getStof(id);
   if (!stof) return;
+  const swatchPath = STOFFEN_IMG + (stof.swatch || stof.closeup || '');
+  const closeupPath = STOFFEN_IMG + (stof.closeup || stof.swatch || '');
+  const videoPath = stof.video ? STOFFEN_IMG + stof.video : '';
   const media = document.getElementById('infoMedia');
-  media.innerHTML = `<img src="${STOFFEN_IMG + (stof.closeup || stof.swatch)}" alt="${stof.naam}" onerror="this.style.display='none'">`;
+  media.className = 'info-media';
+  media.style.display = '';
+  media.innerHTML = `
+    ${swatchPath ? `<div class="info-hero"><div class="info-hero-label">Swatch</div><img src="${escapeHtml(swatchPath)}" alt="${escapeHtml(stof.naam)} swatch" onerror="this.style.display='none'"></div>` : ''}
+    <div class="info-media-grid ${videoPath ? '' : 'single'}">
+      <div class="info-media-item">
+        <div class="info-media-label">Close-up</div>
+        ${closeupPath ? `<img src="${escapeHtml(closeupPath)}" alt="${escapeHtml(stof.naam)} close-up" onerror="this.style.display='none'">` : ''}
+      </div>
+      ${videoPath ? `<div class="info-media-item">
+        <div class="info-media-label">Lichtvideo</div>
+        <video controls muted loop playsinline preload="metadata">
+          <source src="${escapeHtml(videoPath)}" type="video/mp4">
+        </video>
+      </div>` : ''}
+    </div>`;
   document.getElementById('infoContent').innerHTML = `
-    <div class="info-title">${stof.naam}</div>
-    <div class="info-meta">${stof.leverancier || stof.merk || ''} · ${stof.bunch ? stof.bunch + ' · ' : ''}${stof.stofnummer} · Prijsgroep ${stof.prijsGroep}</div>
-    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${(stof.materiaal || []).join(', ')}<br>Weving: ${stof.weving}<br>Patroon: ${stof.patroon}<br>Kleur: ${stof.kleur}${stof.patroonkleur ? '<br>Patroonkleur: '+stof.patroonkleur : ''}</div></div>
-    <div class="info-section"><div class="info-section-title">Korte uitleg</div><div class="info-text">${stof.korteUitleg}</div></div>
-    <div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${stof.advies}</div></div>
-    ${stof.minderGeschiktVoor ? `<div class="info-section"><div class="info-section-title">Minder geschikt voor</div><div class="info-text">${stof.minderGeschiktVoor}</div></div>` : ''}
+    <div class="info-title">${escapeHtml(stof.naam)}</div>
+    <div class="info-meta">${escapeHtml(stof.leverancier || stof.merk || '')} · ${stof.bunch ? escapeHtml(stof.bunch) + ' · ' : ''}${escapeHtml(stof.stofnummer)} · Prijsgroep ${escapeHtml(stof.prijsGroep)}</div>
+    <div class="info-section"><div class="info-section-title">Eigenschappen</div><div class="info-text">Materiaal: ${escapeHtml((stof.materiaal || []).join(', '))}<br>Weving: ${escapeHtml(stof.weving)}<br>Patroon: ${escapeHtml(stof.patroon)}<br>Kleur: ${escapeHtml(stof.kleur)}${stof.patroonkleur ? '<br>Patroonkleur: '+escapeHtml(stof.patroonkleur) : ''}</div></div>
+    <div class="info-section"><div class="info-section-title">Korte uitleg</div><div class="info-text">${escapeHtml(stof.korteUitleg || '')}</div></div>
+    <div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${escapeHtml(stof.advies || '')}</div></div>
+    ${stof.minderGeschiktVoor ? `<div class="info-section"><div class="info-section-title">Minder geschikt voor</div><div class="info-text">${escapeHtml(stof.minderGeschiktVoor)}</div></div>` : ''}
     <div class="info-link-row">
-      ${stof.blogUrl ? `<a class="info-link" href="${stof.blogUrl}" target="_blank" rel="noopener"><i class="ti ti-article"></i> Gerelateerde blog</a>` : ''}
-      ${stof.videoUrl ? `<a class="info-link" href="${stof.videoUrl}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Video bekijken</a>` : ''}
-      <button class="info-link" onclick="selectStof('${stof.id}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
+      ${stof.closeup ? `<a class="info-link" href="${escapeHtml(closeupPath)}" target="_blank" rel="noopener"><i class="ti ti-zoom-in"></i> Open close-up</a>` : ''}
+      ${videoPath ? `<a class="info-link" href="${escapeHtml(videoPath)}" target="_blank" rel="noopener"><i class="ti ti-player-play"></i> Open lichtvideo</a>` : ''}
+      ${stof.blogUrl ? `<a class="info-link" href="${escapeHtml(stof.blogUrl)}" target="_blank" rel="noopener"><i class="ti ti-article"></i> Gerelateerde blog</a>` : ''}
+      ${stof.videoUrl ? `<a class="info-link" href="${escapeHtml(stof.videoUrl)}" target="_blank" rel="noopener"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
+      <button class="info-link" onclick="selectStof('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze stof</button>
     </div>`;
   document.getElementById('infoModal').style.display='flex';
 }
 
-function closeInfoModal(){ const m=document.getElementById('infoModal'); if(m)m.style.display='none'; const media=document.getElementById('infoMedia'); if(media) media.style.display=''; }
+function closeInfoModal(){ const m=document.getElementById('infoModal'); if(m)m.style.display='none'; const media=document.getElementById('infoMedia'); if(media){ media.className='info-media'; media.style.display=''; media.innerHTML=''; } }
 
 
 const VOERING_TYPE_OPTIES = [
@@ -2261,46 +2288,12 @@ function renderResourceCards(items,type){
     const selected = type==='voering' ? afwerkingKeuzes.voeringId===item.id : afwerkingKeuzes.knoopId===item.id;
     const img = item.swatch || item.closeup || '';
     const onclick = type==='voering' ? `selectVoering('${item.id}')` : `selectKnoop('${item.id}')`;
-    const meta = `${item.materiaal || ''}${item.kleur ? ' · '+item.kleur : ''}`;
+    const meta = type==='voering' ? `${item.materiaal || ''} · ${item.kleur || ''}` : `${item.materiaal || ''} · ${item.kleur || ''}`;
     return `<div class="resource-card ${selected?'selected':''}" onclick="${onclick}">
-      <div class="resource-img">
-        ${img ? `<img src="${img}" alt="${item.naam}" onerror="this.style.display='none'">` : `<div class="resource-fallback">${item.naam ? item.naam.slice(0,1) : '•'}</div>`}
-        <div class="fabric-actions">
-          <button class="fabric-icon-btn" onclick="openResourceZoom('${type}','${item.id}',event)" title="Close-up"><i class="ti ti-zoom-in"></i></button>
-          <button class="fabric-icon-btn" onclick="openResourceInfo('${type}','${item.id}',event)" title="Meer informatie"><i class="ti ti-info-circle"></i></button>
-        </div>
-      </div>
+      <div class="resource-img">${img ? `<img src="${img}" alt="${item.naam}" onerror="this.style.display='none'">` : `<div class="resource-fallback">${item.naam ? item.naam.slice(0,1) : '•'}</div>`}</div>
       <div class="resource-info"><div class="resource-name">${item.naam}</div><div class="resource-meta">${meta}<br>${(item.klantLabels || item.labels || []).join(' · ')}</div></div>
     </div>`;
   }).join('')}</div>`;
-}
-
-function getResourceItem(type,id){
-  return type === 'voering' ? VOERINGEN.find(v => v.id === id) : KNOPEN.find(k => k.id === id);
-}
-
-function openResourceZoom(type,id,e){
-  if(e) e.stopPropagation();
-  const item = getResourceItem(type,id);
-  if(!item) return;
-  openLb(item.closeup || item.swatch || '', item.naam, e);
-}
-
-function openResourceInfo(type,id,e){
-  if(e) e.stopPropagation();
-  const item = getResourceItem(type,id);
-  if(!item) return;
-  const media = document.getElementById('infoMedia');
-  media.style.display = '';
-  media.innerHTML = item.video ? `<video autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"><source src="${item.video}" type="video/mp4"></video>` : `<img src="${item.closeup || item.swatch || ''}" alt="${item.naam}" onerror="this.parentElement.style.display='none'">`;
-  document.getElementById('infoContent').innerHTML = `
-    <div class="info-title">${item.naam}</div>
-    <div class="info-meta">${type === 'voering' ? 'Voering' : 'Knoop'}${item.materiaal ? ' · '+item.materiaal : ''}${item.kleur ? ' · '+item.kleur : ''}</div>
-    ${item.korteUitleg ? `<div class="info-section"><div class="info-section-title">Uitleg</div><div class="info-text">${item.korteUitleg}</div></div>` : ''}
-    ${item.advies ? `<div class="info-section"><div class="info-section-title">Advies</div><div class="info-text">${item.advies}</div></div>` : ''}
-    ${(item.klantLabels || item.labels || []).length ? `<div class="info-section"><div class="info-section-title">Labels</div><div class="info-text">${(item.klantLabels || item.labels || []).join(' · ')}</div></div>` : ''}
-    <div class="info-link-row"><button class="info-link" onclick="${type === 'voering' ? `selectVoering('${item.id}')` : `selectKnoop('${item.id}')`};closeInfoModal()"><i class="ti ti-check"></i> Selecteer deze keuze</button></div>`;
-  document.getElementById('infoModal').style.display='flex';
 }
 
 function renderAfwerkingKeuze(){
@@ -2318,8 +2311,8 @@ function renderAfwerkingKeuze(){
 
     <div class="filter-section">
       <div class="filter-title">Voering kiezen</div>
-      <div class="filter-sub">Kies een voeringkleur of laat deze later op advies bepalen. De kaarten gebruiken dezelfde swatch/close-up/info-logica als de stoffen.</div>
-      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.voeringId?'active':''}" onclick="selectVoering(null)">Op advies / later kiezen</button><a class="chip" href="deoost_voeringenbibliotheek.html" target="_blank" rel="noopener">Open voeringenbibliotheek</a></div>
+      <div class="filter-sub">Kies een voeringkleur of laat deze later op advies bepalen.</div>
+      <div class="chip-row"><button class="chip ${!afwerkingKeuzes.voeringId?'active':''}" onclick="selectVoering(null)">Op advies / later kiezen</button></div>
       ${renderResourceCards(voeringItems,'voering')}
     </div>
 

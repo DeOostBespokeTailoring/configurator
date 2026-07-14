@@ -85,12 +85,15 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:var(--ink);backgroun
 .combo-item{border:0.5px solid var(--line);border-radius:8px;padding:10px;background:#fbfaf7;font-size:12px;color:var(--muted);line-height:1.45;}
 .combo-item b{display:block;color:var(--ink);font-family:'Roboto', sans-serif;font-size:18px;font-weight:300;line-height:1.05;margin-bottom:4px;}
 
+.info-hero{border:0.5px solid var(--line);border-radius:10px;background:#fbfaf7;overflow:hidden;margin-bottom:12px;}
+.info-hero-label,.info-media-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;border-bottom:0.5px solid var(--line);background:white;}
+.info-hero-img{width:100%;height:300px;object-fit:cover;display:block;background:#f0ece4;}
 .info-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+.info-media-grid.single{grid-template-columns:minmax(0,420px);}
 .info-media-block{border:0.5px solid var(--line);border-radius:8px;background:#fbfaf7;overflow:hidden;min-width:0;}
-.info-media-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;border-bottom:0.5px solid var(--line);background:white;}
-.info-modal-img,.info-modal-video{width:100%;height:260px;object-fit:cover;display:block;background:#f0ece4;}
+.info-modal-img,.info-modal-video{width:100%;aspect-ratio:1/1;height:auto;object-fit:cover;display:block;background:#f0ece4;}
 .info-media-actions{display:flex;gap:6px;flex-wrap:wrap;padding:9px 10px;border-top:0.5px solid var(--line);background:white;}
-@media(max-width:760px){.info-media-grid{grid-template-columns:1fr}.info-modal-img,.info-modal-video{height:230px}}
+@media(max-width:760px){.info-hero-img{height:230px}.info-media-grid,.info-media-grid.single{grid-template-columns:1fr}}
 .empty-state{border:0.5px dashed rgba(74,69,64,.25);border-radius:8px;padding:2rem;text-align:center;color:var(--muted);background:white;}
 @media(max-width:920px){.layout{grid-template-columns:1fr}.side{position:static}.fabric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.combo-inner{grid-template-columns:1fr}.combo-actions{justify-content:flex-start}.preview-swatch{width:300px;height:210px}.preview-swatch:nth-child(2){left:95px}.preview-swatch:nth-child(3){left:170px}.combo-list{grid-template-columns:1fr}}
 @media(max-width:560px){body{padding:1rem .75rem}.cfg-header{display:block}.header-actions{justify-content:flex-start;margin-top:.8rem}.fabric-grid{grid-template-columns:1fr}.swatch{height:170px}.slot{width:100%;}.preview-swatch{width:245px;height:175px}.preview-swatch:nth-child(1){left:0}.preview-swatch:nth-child(2){left:45px}.preview-swatch:nth-child(3){left:85px}.combo-preview{min-height:310px}.modal{padding:.6rem}.modal-body{padding:.9rem}}
@@ -333,12 +336,17 @@ async function copyComboLink(){
 }
 function openInfo(id){
   const stof = getStof(id); if(!stof) return;
+  const swatchPath = stof.swatch || stof.closeup || '';
   const closeupPath = stof.closeup || stof.swatch || '';
   const videoPath = stof.video || '';
   const externalVideo = stof.videoUrl || '';
   document.getElementById('infoTitle').textContent = stof.naam;
   document.getElementById('infoBody').innerHTML = `
-    <div class="info-media-grid">
+    ${swatchPath ? `<div class="info-hero">
+      <div class="info-hero-label">Swatch</div>
+      <img class="info-hero-img" src="${escapeHtml(swatchPath)}" alt="${escapeHtml(stof.naam)} swatch" onerror="this.outerHTML='<div class=&quot;empty-state&quot;>Swatch niet gevonden</div>'">
+    </div>` : ''}
+    <div class="info-media-grid ${videoPath ? '' : 'single'}">
       <div class="info-media-block">
         <div class="info-media-label">Close-up</div>
         ${closeupPath ? `<img class="info-modal-img" src="${escapeHtml(closeupPath)}" alt="${escapeHtml(stof.naam)} close-up" onerror="this.outerHTML='<div class=&quot;empty-state&quot;>Close-up niet gevonden</div>'">` : `<div class="empty-state">Geen close-up gekoppeld</div>`}
