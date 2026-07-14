@@ -1,6 +1,8 @@
 /* De Oost — stofboeken.js
-   Algemene informatie per stofboek/bunch.
-   Iedere individuele stof in stoffen.js verwijst hiernaar via boekId.
+   Algemene informatie die voor een compleet stofboek/collectie geldt.
+
+   Gewicht, samenstelling en prijs horen ALTIJD bij de individuele stof
+   in het leveranciersbestand onder js/data/stoffen/.
 */
 
 window.DEOST_STOFBOEKEN = [
@@ -10,9 +12,6 @@ window.DEOST_STOFBOEKEN = [
     naam: "Oxbridge Flannel 1",
     nummerreeks: "22000–22074",
 
-    materiaal: ["wol"],
-    samenstelling: "100% Super 120's wol",
-    gewicht: "370 g/m² / 13 oz",
     type: "Vintage wollen flannel",
     constructie: "Worsted-woollen hybride",
     weving: "flanel",
@@ -26,6 +25,7 @@ window.DEOST_STOFBOEKEN = [
     seizoen: ["herfst", "winter"],
     uitstraling: ["zacht", "mat", "klassiek", "Brits", "vintage"],
     patronen: ["effen", "krijtstreep", "pied-de-poule", "ruit", "glen check"],
+    kennisTags: ["flannel", "engelse-stof", "made-in-england"],
 
     korteUitleg:
       "Oxbridge Flannel is een robuuste Engelse wollen flannel met een zachte, matte uitstraling. De collectie is geïnspireerd op historische ontwerpen uit de Standeven-archieven.",
@@ -39,9 +39,41 @@ window.DEOST_STOFBOEKEN = [
     minderGeschiktVoor:
       "Minder geschikt voor warme zomerdagen, ultralichte pakken en zeer formele black-tie kleding waarvoor een gladdere avondstof gewenst is.",
 
+    blogUrl: "",
+    blogTitel: "Lees meer over Oxbridge Flannel",
+
     bronvermelding:
       "Informatie overgenomen uit het Standeven Oxbridge Flannel 1-stofboek.",
 
     actief: true
   }
 ];
+
+/*
+TEMPLATE NIEUW STOFBOEK
+
+window.DEOST_STOFBOEKEN.push({
+  id: "LEVERANCIER-STOFBOEK",
+  leverancier: "Volledige leveranciersnaam",
+  naam: "Volledige naam stofboek",
+  nummerreeks: "",
+  type: "",
+  constructie: "",
+  weving: "",
+  afwerking: "",
+  herkomst: "",
+  fabriek: "",
+  productie: "",
+  seizoen: [],
+  uitstraling: [],
+  patronen: [],
+  kennisTags: [],
+  korteUitleg: "",
+  langeUitleg: "",
+  advies: "",
+  minderGeschiktVoor: "",
+  blogUrl: "",
+  blogTitel: "Lees meer over deze collectie",
+  actief: false
+});
+*/
