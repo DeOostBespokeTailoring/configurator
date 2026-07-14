@@ -84,6 +84,13 @@ body{font-family:'Roboto', sans-serif;font-weight:300;color:var(--ink);backgroun
 .combo-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .combo-item{border:0.5px solid var(--line);border-radius:8px;padding:10px;background:#fbfaf7;font-size:12px;color:var(--muted);line-height:1.45;}
 .combo-item b{display:block;color:var(--ink);font-family:'Roboto', sans-serif;font-size:18px;font-weight:300;line-height:1.05;margin-bottom:4px;}
+
+.info-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+.info-media-block{border:0.5px solid var(--line);border-radius:8px;background:#fbfaf7;overflow:hidden;min-width:0;}
+.info-media-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 10px;border-bottom:0.5px solid var(--line);background:white;}
+.info-modal-img,.info-modal-video{width:100%;height:260px;object-fit:cover;display:block;background:#f0ece4;}
+.info-media-actions{display:flex;gap:6px;flex-wrap:wrap;padding:9px 10px;border-top:0.5px solid var(--line);background:white;}
+@media(max-width:760px){.info-media-grid{grid-template-columns:1fr}.info-modal-img,.info-modal-video{height:230px}}
 .empty-state{border:0.5px dashed rgba(74,69,64,.25);border-radius:8px;padding:2rem;text-align:center;color:var(--muted);background:white;}
 @media(max-width:920px){.layout{grid-template-columns:1fr}.side{position:static}.fabric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.combo-inner{grid-template-columns:1fr}.combo-actions{justify-content:flex-start}.preview-swatch{width:300px;height:210px}.preview-swatch:nth-child(2){left:95px}.preview-swatch:nth-child(3){left:170px}.combo-list{grid-template-columns:1fr}}
 @media(max-width:560px){body{padding:1rem .75rem}.cfg-header{display:block}.header-actions{justify-content:flex-start;margin-top:.8rem}.fabric-grid{grid-template-columns:1fr}.swatch{height:170px}.slot{width:100%;}.preview-swatch{width:245px;height:175px}.preview-swatch:nth-child(1){left:0}.preview-swatch:nth-child(2){left:45px}.preview-swatch:nth-child(3){left:85px}.combo-preview{min-height:310px}.modal{padding:.6rem}.modal-body{padding:.9rem}}
@@ -326,20 +333,35 @@ async function copyComboLink(){
 }
 function openInfo(id){
   const stof = getStof(id); if(!stof) return;
+  const closeupPath = stof.closeup || stof.swatch || '';
+  const videoPath = stof.video || '';
+  const externalVideo = stof.videoUrl || '';
   document.getElementById('infoTitle').textContent = stof.naam;
   document.getElementById('infoBody').innerHTML = `
-    <div style="display:grid;grid-template-columns:260px 1fr;gap:1rem;align-items:start">
-      <div class="swatch" style="height:260px;border:0.5px solid var(--line);border-radius:8px"><img src="${escapeHtml(stof.closeup || stof.swatch || '')}" alt="${escapeHtml(stof.naam)}"></div>
-      <div>
-        <div class="meta">${escapeHtml(stof.leverancier||'')} · ${escapeHtml(stof.bunch||'')} · ${escapeHtml(stof.stofnummer||'')}</div>
-        <div class="details" style="font-size:13px;margin-top:.5rem">Materiaal: ${escapeHtml(valueList(stof,'materiaal').map(prettify).join(', '))}<br>Weving: ${escapeHtml(prettify(stof.weving||''))}<br>Patroon: ${escapeHtml(prettify(stof.patroon||''))}<br>Kleur: ${escapeHtml(prettify(stof.kleur||''))}${stof.patroonkleur?'<br>Patroonkleur: '+escapeHtml(prettify(stof.patroonkleur)):''}</div>
-        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:1rem">${escapeHtml(stof.korteUitleg || '')}</p>
-        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:.6rem">${escapeHtml(stof.advies || '')}</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem">
-          <button class="btn" onclick="toggleCombo('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-plus"></i> Toevoegen aan combinatie</button>
-          <a class="btn secondary" href="deoost_stijlconfigurator.html?stof=${encodeURIComponent(stof.id)}"><i class="ti ti-shirt"></i> Gebruik in configurator</a>
-          ${stof.blogUrl ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(stof.blogUrl)}"><i class="ti ti-article"></i> Meer lezen</a>` : ''}
-        </div>
+    <div class="info-media-grid">
+      <div class="info-media-block">
+        <div class="info-media-label">Close-up</div>
+        ${closeupPath ? `<img class="info-modal-img" src="${escapeHtml(closeupPath)}" alt="${escapeHtml(stof.naam)} close-up" onerror="this.outerHTML='<div class=&quot;empty-state&quot;>Close-up niet gevonden</div>'">` : `<div class="empty-state">Geen close-up gekoppeld</div>`}
+        ${closeupPath ? `<div class="info-media-actions"><a class="icon-btn" target="_blank" rel="noopener" href="${escapeHtml(closeupPath)}"><i class="ti ti-zoom-in"></i> Open close-up</a></div>` : ''}
+      </div>
+      ${videoPath ? `<div class="info-media-block">
+        <div class="info-media-label">Lichtvideo</div>
+        <video class="info-modal-video" controls muted loop playsinline preload="metadata">
+          <source src="${escapeHtml(videoPath)}" type="video/mp4">
+        </video>
+        <div class="info-media-actions"><a class="icon-btn" target="_blank" rel="noopener" href="${escapeHtml(videoPath)}"><i class="ti ti-player-play"></i> Open video</a></div>
+      </div>` : ''}
+    </div>
+    <div>
+      <div class="meta">${escapeHtml(stof.leverancier||'')} · ${escapeHtml(stof.bunch||'')} · ${escapeHtml(stof.stofnummer||'')}</div>
+      <div class="details" style="font-size:13px;margin-top:.5rem">Materiaal: ${escapeHtml(valueList(stof,'materiaal').map(prettify).join(', '))}<br>Weving: ${escapeHtml(prettify(stof.weving||''))}<br>Patroon: ${escapeHtml(prettify(stof.patroon||''))}<br>Kleur: ${escapeHtml(prettify(stof.kleur||''))}${stof.patroonkleur?'<br>Patroonkleur: '+escapeHtml(prettify(stof.patroonkleur)):''}</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:1rem">${escapeHtml(stof.korteUitleg || '')}</p>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:.6rem">${escapeHtml(stof.advies || '')}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem">
+        <button class="btn" onclick="toggleCombo('${escapeHtml(stof.id)}');closeInfoModal()"><i class="ti ti-plus"></i> Toevoegen aan combinatie</button>
+        <a class="btn secondary" href="deoost_stijlconfigurator.html?stof=${encodeURIComponent(stof.id)}"><i class="ti ti-shirt"></i> Gebruik in configurator</a>
+        ${stof.blogUrl ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(stof.blogUrl)}"><i class="ti ti-article"></i> Meer lezen</a>` : ''}
+        ${externalVideo ? `<a class="btn secondary" target="_blank" rel="noopener" href="${escapeHtml(externalVideo)}"><i class="ti ti-brand-youtube"></i> Externe video</a>` : ''}
       </div>
     </div>`;
   document.getElementById('infoModal').style.display='flex';
